@@ -2,5 +2,5 @@
   "NEOWS_BLESSING.title": "Neow's Blessing",
   "NEOWS_BLESSING.description": "Grants the player their standard Neow's relic reward directly at the start of a custom run.",
   "ENCHANTER.title": "Enchanter",
-  "ENCHANTER.description": "Allows the player to enchant their card rewards with available enchantments."
+  "ENCHANTER.description": "Card rewards have a random enchantment."
 }

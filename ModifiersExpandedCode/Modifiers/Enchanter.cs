@@ -103,5 +103,5 @@ public class Enchanter : ModifierModel
         return true;
     }
 
-    protected override string IconPath => "neows_blessing.png".ModifierImagePath();
+    protected override string IconPath => "enchanter.png".ModifierImagePath();
 }
