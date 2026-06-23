@@ -1,11 +1,10 @@
-using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
 
 namespace ModifiersExpanded.ModifiersExpandedCode;
 
 [ModInitializer(nameof(Initialize))]
-public partial class MainFile : Node
+public class MainFile
 {
     public const string ModId = "ModifiersExpanded"; //Used for resource filepath
     public const string ResPath = $"res://{ModId}";
