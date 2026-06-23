@@ -11,26 +11,34 @@ public class HarmonyPatches
     [HarmonyPatch(typeof(ModelDb), nameof(ModelDb.MutuallyExclusiveModifiers), MethodType.Getter)]
     public static class MutuallyExclusiveModifiersPatch
     {
+        [HarmonyPatch(typeof(ModelDb), nameof(ModelDb.GoodModifiers), MethodType.Getter)]
+        public static class GoodModifiersPatch
+        {
+            public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
+            {
+                MainFile.Logger.Info(
+                    "Patching ModelDb.GoodModifiers to add Neow's Blessing and Enchanter"
+                );
+                var patched = new List<ModifierModel>(__result)
+                {
+                    ModelDb.Modifier<NeowsBlessing>(),
+                    ModelDb.Modifier<Enchanter>(),
+                };
+                __result = patched;
+            }
+        }
+
         public static void Postfix(ref IReadOnlyList<IReadOnlySet<ModifierModel>> __result)
         {
-            MainFile.Logger.Info("Patching ModelDb.MutuallyExclusiveModifiers to add NeowRelic");
+            MainFile.Logger.Info(
+                "Patching ModelDb.MutuallyExclusiveModifiers to add Neow's Blessing"
+            );
             var patched = new List<IReadOnlySet<ModifierModel>>(__result);
             var existingSet = new HashSet<ModifierModel>(patched[0])
             {
                 ModelDb.Modifier<NeowsBlessing>(),
             };
             patched[0] = existingSet;
-            __result = patched;
-        }
-    }
-
-    [HarmonyPatch(typeof(ModelDb), nameof(ModelDb.GoodModifiers), MethodType.Getter)]
-    public static class GoodModifiersPatch
-    {
-        public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
-        {
-            MainFile.Logger.Info("Patching ModelDb.GoodModifiers to add NeowRelic");
-            var patched = new List<ModifierModel>(__result) { ModelDb.Modifier<NeowsBlessing>() };
             __result = patched;
         }
     }
