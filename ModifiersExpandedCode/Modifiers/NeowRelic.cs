@@ -23,5 +23,5 @@ public class NeowRelic : ModifierModel
         await Task.FromResult(false);
     }
 
-    protected override string IconPath => "NEOW_RELIC.png".ModifierImagePath();
+    protected override string IconPath => "neow_relic.png".ModifierImagePath();
 }
