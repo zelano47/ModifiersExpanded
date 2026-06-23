@@ -72,15 +72,6 @@ public class Enchanter : ModifierModel
         /* Events to remove
         * Drowning Beacon (Fresnel Lens)
         */
-
-        /* Ancient rewards to remove
-        * Silken Tress
-        * Electric Shrymp
-        * Pael's Growth
-        * Beautiful Bracelet
-        * Glitter
-        * Tri-Boomerang
-        */
     }
 
     public override bool TryModifyCardRewardOptionsLate(

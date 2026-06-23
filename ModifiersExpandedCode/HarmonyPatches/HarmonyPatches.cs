@@ -1,7 +1,11 @@
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
+using MegaCrit.Sts2.Core.Models.Relics;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
@@ -14,10 +18,13 @@ public class HarmonyPatches
         public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
         {
             MainFile.Logger.Info(
-                "Patching ModelDb.GoodModifiers to add Neow's Blessing and Enchanter"
+                MainFile.CreateLogMessage(
+                    "Patching ModelDb.GoodModifiers to add Neow's Blessing, Enchanter, and Colorless Cards"
+                )
             );
             var patched = new List<ModifierModel>(__result)
             {
+                ModelDb.Modifier<ColorlessCards>(),
                 ModelDb.Modifier<NeowsBlessing>(),
                 ModelDb.Modifier<Enchanter>(),
             };
@@ -30,7 +37,7 @@ public class HarmonyPatches
     {
         public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
         {
-            MainFile.Logger.Info("Patching ModelDb.BadModifiers to add Unmovable Monsters");
+            MainFile.Logger.Info(MainFile.CreateLogMessage("Patching ModelDb.BadModifiers"));
             var patched = new List<ModifierModel>(__result)
             {
                 ModelDb.Modifier<UnmovableMonsters>(),
@@ -45,7 +52,7 @@ public class HarmonyPatches
         public static void Postfix(ref IReadOnlyList<IReadOnlySet<ModifierModel>> __result)
         {
             MainFile.Logger.Info(
-                "Patching ModelDb.MutuallyExclusiveModifiers to add Neow's Blessing"
+                MainFile.CreateLogMessage("Patching ModelDb.MutuallyExclusiveModifiers")
             );
             var patched = new List<IReadOnlySet<ModifierModel>>(__result);
             var existingSet = new HashSet<ModifierModel>(patched[0])
@@ -68,7 +75,9 @@ public class HarmonyPatches
         )
         {
             MainFile.Logger.Info(
-                "Patching Neow.GenerateInitialOptions to offer normal options when NeowRelic is present"
+                MainFile.CreateLogMessage(
+                    "Patching Neow.GenerateInitialOptions to offer normal options when NeowRelic is present"
+                )
             );
             var codes = new List<CodeInstruction>(instructions);
             var hasNeowRelic = AccessTools.Method(
@@ -126,5 +135,35 @@ public class HarmonyPatches
 
         private static bool HasNeowRelic(Neow neow) =>
             neow.Owner?.RunState?.Modifiers?.Any(m => m is NeowsBlessing) ?? false;
+    }
+
+    // Nonupeipe already guards BeautifulBracelet with Swift.CanEnchant >= 4.
+    // Glitter is in the fixed pool with no guard — patch it to match the same pattern.
+    [HarmonyPatch(typeof(Nonupeipe), "OptionPool", MethodType.Getter)]
+    public static class NonupeipeOptionPoolPatch
+    {
+        public static void Postfix(Nonupeipe __instance, ref IEnumerable<EventOption> __result)
+        {
+            var cards = __instance.Owner?.Deck?.Cards;
+            if (cards == null)
+                return;
+            if (cards.Count(ModelDb.Enchantment<Glam>().CanEnchant) == 0)
+                __result = __result.Where(o => o.Relic is not Glitter);
+        }
+    }
+
+    // Orobas has no guard for ElectricShrymp (Imbued), which uses CardSelectCmd.FromDeckForEnchantment.
+    // Offering it with 0 Imbued-enchantable cards would cause a UI soft-lock.
+    [HarmonyPatch(typeof(Orobas), "OptionPool1", MethodType.Getter)]
+    public static class OrobasOptionPool1Patch
+    {
+        public static void Postfix(Orobas __instance, ref IEnumerable<EventOption> __result)
+        {
+            var cards = __instance.Owner?.Deck?.Cards;
+            if (cards == null)
+                return;
+            if (cards.Count(ModelDb.Enchantment<Imbued>().CanEnchant) == 0)
+                __result = __result.Where(o => o.Relic is not ElectricShrymp);
+        }
     }
 }
