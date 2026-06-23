@@ -38,6 +38,30 @@ public class Enchanter : ModifierModel
         [typeof(Vigorous)] = 8,
     };
 
+    private static readonly Dictionary<Type, int> EnchantmentWeights = new()
+    {
+        [typeof(Adroit)] = 2,
+        [typeof(Corrupted)] = 1,
+        [typeof(Glam)] = 1,
+        [typeof(Goopy)] = 2,
+        [typeof(Imbued)] = 1,
+        [typeof(Inky)] = 2,
+        [typeof(Instinct)] = 1,
+        [typeof(Momentum)] = 2,
+        [typeof(Nimble)] = 3,
+        [typeof(PerfectFit)] = 2,
+        [typeof(RoyallyApproved)] = 2,
+        [typeof(Sharp)] = 3,
+        [typeof(Slither)] = 2,
+        [typeof(SlumberingEssence)] = 2,
+        [typeof(SoulsPower)] = 2,
+        [typeof(Sown)] = 2,
+        [typeof(Spiral)] = 1,
+        [typeof(Steady)] = 2,
+        [typeof(Swift)] = 2,
+        [typeof(Vigorous)] = 3,
+    };
+
     public override bool TryModifyCardRewardOptionsLate(
         Player player,
         List<CardCreationResult> cardRewards,
@@ -51,29 +75,27 @@ public class Enchanter : ModifierModel
         var enchantments = ModelDb
             .DebugEnchantments.Where(e => EnchantmentAmounts.ContainsKey(e.GetType()))
             .ToArray();
-        var enchanmentIndexes = Enumerable.Range(0, enchantments.Length).ToArray();
-        for (int i = enchanmentIndexes.Length - 1; i > 0; i--)
-        {
-            int j = Random.Shared.Next(i + 1);
-            (enchanmentIndexes[i], enchanmentIndexes[j]) = (
-                enchanmentIndexes[j],
-                enchanmentIndexes[i]
-            );
-        }
-        int currEnchantmentIndex = 0;
         foreach (CardCreationResult cardReward in cardRewards)
         {
             CardModel card = cardReward.Card;
-            for (int i = currEnchantmentIndex; i < enchanmentIndexes.Length; i++)
+            var eligible = enchantments.Where(e => e.CanEnchant(card)).ToArray();
+            if (eligible.Length == 0)
+                continue;
+
+            int totalWeight = eligible.Sum(e =>
+                EnchantmentWeights.GetValueOrDefault(e.GetType(), 1)
+            );
+            int roll = Random.Shared.Next(totalWeight);
+            int cumulative = 0;
+            foreach (var enchantment in eligible)
             {
-                var enchantment = enchantments[enchanmentIndexes[i]];
-                if (enchantment.CanEnchant(card))
+                cumulative += EnchantmentWeights.GetValueOrDefault(enchantment.GetType(), 1);
+                if (roll < cumulative)
                 {
                     CardModel card2 = player.RunState.CloneCard(card);
                     decimal amount = EnchantmentAmounts[enchantment.GetType()];
                     CardCmd.Enchant(enchantment.ToMutable(), card2, amount);
                     cardReward.ModifyCard(card2);
-                    currEnchantmentIndex = i + 1;
                     break;
                 }
             }
