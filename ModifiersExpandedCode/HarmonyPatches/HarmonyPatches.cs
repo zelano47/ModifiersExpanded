@@ -14,10 +14,12 @@ public class HarmonyPatches
         public static void Postfix(ref IReadOnlyList<IReadOnlySet<ModifierModel>> __result)
         {
             MainFile.Logger.Info("Patching ModelDb.MutuallyExclusiveModifiers to add NeowRelic");
-            var patched = new List<IReadOnlySet<ModifierModel>>(__result)
+            var patched = new List<IReadOnlySet<ModifierModel>>(__result);
+            var existingSet = new HashSet<ModifierModel>(patched[0])
             {
-                new HashSet<ModifierModel> { ModelDb.Modifier<NeowRelic>() },
+                ModelDb.Modifier<NeowRelic>(),
             };
+            patched[0] = existingSet;
             __result = patched;
         }
     }
