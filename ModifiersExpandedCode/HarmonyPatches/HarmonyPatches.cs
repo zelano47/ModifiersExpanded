@@ -8,26 +8,40 @@ namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
 
 public class HarmonyPatches
 {
+    [HarmonyPatch(typeof(ModelDb), nameof(ModelDb.GoodModifiers), MethodType.Getter)]
+    public static class GoodModifiersPatch
+    {
+        public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
+        {
+            MainFile.Logger.Info(
+                "Patching ModelDb.GoodModifiers to add Neow's Blessing and Enchanter"
+            );
+            var patched = new List<ModifierModel>(__result)
+            {
+                ModelDb.Modifier<NeowsBlessing>(),
+                ModelDb.Modifier<Enchanter>(),
+            };
+            __result = patched;
+        }
+    }
+
+    [HarmonyPatch(typeof(ModelDb), nameof(ModelDb.BadModifiers), MethodType.Getter)]
+    public static class BadModifiersPatch
+    {
+        public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
+        {
+            MainFile.Logger.Info("Patching ModelDb.BadModifiers to add Unmovable Monsters");
+            var patched = new List<ModifierModel>(__result)
+            {
+                ModelDb.Modifier<UnmovableMonsters>(),
+            };
+            __result = patched;
+        }
+    }
+
     [HarmonyPatch(typeof(ModelDb), nameof(ModelDb.MutuallyExclusiveModifiers), MethodType.Getter)]
     public static class MutuallyExclusiveModifiersPatch
     {
-        [HarmonyPatch(typeof(ModelDb), nameof(ModelDb.GoodModifiers), MethodType.Getter)]
-        public static class GoodModifiersPatch
-        {
-            public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
-            {
-                MainFile.Logger.Info(
-                    "Patching ModelDb.GoodModifiers to add Neow's Blessing and Enchanter"
-                );
-                var patched = new List<ModifierModel>(__result)
-                {
-                    ModelDb.Modifier<NeowsBlessing>(),
-                    ModelDb.Modifier<Enchanter>(),
-                };
-                __result = patched;
-            }
-        }
-
         public static void Postfix(ref IReadOnlyList<IReadOnlySet<ModifierModel>> __result)
         {
             MainFile.Logger.Info(

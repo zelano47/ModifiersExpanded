@@ -1,6 +1,8 @@
 {
   "NEOWS_BLESSING.title": "Neow's Blessing",
-  "NEOWS_BLESSING.description": "Grants the player their standard Neow's relic reward directly at the start of a custom run.",
+  "NEOWS_BLESSING.description": "Grants the player their standard Neow's relic reward at the start of a custom run.",
   "ENCHANTER.title": "Enchanter",
-  "ENCHANTER.description": "Card rewards have a random enchantment."
+  "ENCHANTER.description": "Card rewards have a random enchantment.",
+  "UNMOVABLE_MONSTERS.title": "Unmovable Monsters",
+  "UNMOVABLE_MONSTERS.description": "Monsters gain barricade and plating at the start of combat."
 }
