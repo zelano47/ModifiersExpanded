@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Enchantments;
+using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
@@ -21,7 +22,6 @@ public class Enchanter : ModifierModel
         [typeof(Glam)] = 1,
         [typeof(Goopy)] = 1,
         [typeof(Imbued)] = 1,
-        [typeof(Inky)] = 1,
         [typeof(Instinct)] = 1,
         [typeof(Momentum)] = 5,
         [typeof(Nimble)] = 2,
@@ -45,7 +45,6 @@ public class Enchanter : ModifierModel
         [typeof(Glam)] = 1,
         [typeof(Goopy)] = 2,
         [typeof(Imbued)] = 1,
-        [typeof(Inky)] = 2,
         [typeof(Instinct)] = 1,
         [typeof(Momentum)] = 2,
         [typeof(Nimble)] = 3,
@@ -61,6 +60,28 @@ public class Enchanter : ModifierModel
         [typeof(Swift)] = 2,
         [typeof(Vigorous)] = 3,
     };
+
+    protected override void AfterRunCreated(RunState runState)
+    {
+        runState.SharedRelicGrabBag.Remove<Kifuda>();
+        runState.SharedRelicGrabBag.Remove<GnarledHammer>();
+        runState.SharedRelicGrabBag.Remove<PunchDagger>();
+        runState.SharedRelicGrabBag.Remove<RoyalStamp>();
+        runState.SharedRelicGrabBag.Remove<WingCharm>();
+
+        /* Events to remove
+        * Drowning Beacon (Fresnel Lens)
+        */
+
+        /* Ancient rewards to remove
+        * Silken Tress
+        * Electric Shrymp
+        * Pael's Growth
+        * Beautiful Bracelet
+        * Glitter
+        * Tri-Boomerang
+        */
+    }
 
     public override bool TryModifyCardRewardOptionsLate(
         Player player,

@@ -4,5 +4,7 @@
   "ENCHANTER.title": "Enchanter",
   "ENCHANTER.description": "Card rewards have a random enchantment.",
   "UNMOVABLE_MONSTERS.title": "Unmovable Monsters",
-  "UNMOVABLE_MONSTERS.description": "Monsters gain barricade and plating at the start of combat."
+  "UNMOVABLE_MONSTERS.description": "Monsters gain barricade and plating at the start of combat.",
+  "COLORLESS_CARDS.title": "Colorless Cards",
+  "COLORLESS_CARDS.description": "Colorless cards will now appear in rewards and shops."
 }
