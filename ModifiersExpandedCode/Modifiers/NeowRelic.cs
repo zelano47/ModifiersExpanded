@@ -9,10 +9,6 @@ namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
 public class NeowRelic : ModifierModel
 {
-    // public override LocString Title => new LocString("Neow Relic", base.Id.Entry + ".title");
-    // public override LocString Description =>
-    //     new LocString("Grants neow relic rewards", base.Id.Entry + ".description");
-
     public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {
         return () =>
