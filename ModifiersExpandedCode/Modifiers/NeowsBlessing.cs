@@ -7,7 +7,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class NeowRelic : ModifierModel
+public class NeowsBlessing : ModifierModel
 {
     public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {
@@ -23,5 +23,5 @@ public class NeowRelic : ModifierModel
         await Task.FromResult(false);
     }
 
-    protected override string IconPath => "neow_relic.png".ModifierImagePath();
+    protected override string IconPath => "neows_blessing.png".ModifierImagePath();
 }

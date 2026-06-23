@@ -17,7 +17,7 @@ public class HarmonyPatches
             var patched = new List<IReadOnlySet<ModifierModel>>(__result);
             var existingSet = new HashSet<ModifierModel>(patched[0])
             {
-                ModelDb.Modifier<NeowRelic>(),
+                ModelDb.Modifier<NeowsBlessing>(),
             };
             patched[0] = existingSet;
             __result = patched;
@@ -30,7 +30,7 @@ public class HarmonyPatches
         public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
         {
             MainFile.Logger.Info("Patching ModelDb.GoodModifiers to add NeowRelic");
-            var patched = new List<ModifierModel>(__result) { ModelDb.Modifier<NeowRelic>() };
+            var patched = new List<ModifierModel>(__result) { ModelDb.Modifier<NeowsBlessing>() };
             __result = patched;
         }
     }
@@ -103,6 +103,6 @@ public class HarmonyPatches
         }
 
         private static bool HasNeowRelic(Neow neow) =>
-            neow.Owner?.RunState?.Modifiers?.Any(m => m is NeowRelic) ?? false;
+            neow.Owner?.RunState?.Modifiers?.Any(m => m is NeowsBlessing) ?? false;
     }
 }

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5etyeq7eia5h"
-path="res://.godot/imported/neow_relic.png-87e0b3c0c64a3d0d2be5156cd976e966.ctex"
+uid="uid://b23dcyf4idmw3"
+path="res://.godot/imported/neows_blessing.png-b65b3d103ea9f4ae49e596b613f00bf0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ModifiersExpanded/images/modifiers/neow_relic.png"
-dest_files=["res://.godot/imported/neow_relic.png-87e0b3c0c64a3d0d2be5156cd976e966.ctex"]
+source_file="res://ModifiersExpanded/images/modifiers/neows_blessing.png"
+dest_files=["res://.godot/imported/neows_blessing.png-b65b3d103ea9f4ae49e596b613f00bf0.ctex"]
 
 [params]
 
