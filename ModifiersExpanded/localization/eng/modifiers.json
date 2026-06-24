@@ -6,5 +6,7 @@
   "UNMOVABLE_MONSTERS.title": "Unmovable Monsters",
   "UNMOVABLE_MONSTERS.description": "Monsters gain barricade and plating at the start of combat.",
   "COLORLESS_CARDS.title": "Colorless Cards",
-  "COLORLESS_CARDS.description": "Colorless cards will now appear in rewards and shops."
+  "COLORLESS_CARDS.description": "Colorless cards will now appear in rewards and shops.",
+  "MARATHON.title": "Marathon",
+  "MARATHON.description": "Maps are longer, with fewer rest sites and more elites."
 }

@@ -41,6 +41,7 @@ public class HarmonyPatches
             var patched = new List<ModifierModel>(__result)
             {
                 ModelDb.Modifier<UnmovableMonsters>(),
+                ModelDb.Modifier<Marathon>(),
             };
             __result = patched;
         }
