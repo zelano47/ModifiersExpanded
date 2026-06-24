@@ -68,10 +68,6 @@ public class Enchanter : ModifierModel
         runState.SharedRelicGrabBag.Remove<PunchDagger>();
         runState.SharedRelicGrabBag.Remove<RoyalStamp>();
         runState.SharedRelicGrabBag.Remove<WingCharm>();
-
-        /* Events to remove
-        * Drowning Beacon (Fresnel Lens)
-        */
     }
 
     public override bool TryModifyCardRewardOptionsLate(
