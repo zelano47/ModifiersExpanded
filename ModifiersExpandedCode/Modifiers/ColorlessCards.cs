@@ -73,5 +73,6 @@ public class ColorlessCards : ModifierModel
         );
     }
 
-    protected override string IconPath => "colorless_cards.png".ModifierImagePath();
+    protected override string IconPath =>
+        nameof(ColorlessCards).ToSnakeCasePng().ModifierImagePath();
 }

@@ -107,5 +107,5 @@ public class Enchanter : ModifierModel
         return true;
     }
 
-    protected override string IconPath => "enchanter.png".ModifierImagePath();
+    protected override string IconPath => nameof(Enchanter).ToSnakeCasePng().ModifierImagePath();
 }

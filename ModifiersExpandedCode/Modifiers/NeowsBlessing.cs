@@ -9,5 +9,6 @@ namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
 public class NeowsBlessing : ModifierModel
 {
-    protected override string IconPath => "neows_blessing.png".ModifierImagePath();
+    protected override string IconPath =>
+        nameof(NeowsBlessing).ToSnakeCasePng().ModifierImagePath();
 }

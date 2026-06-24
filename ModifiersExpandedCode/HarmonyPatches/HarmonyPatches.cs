@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Relics;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
+using ModifiersExpandedCode.Modifiers;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
 
@@ -42,6 +43,7 @@ public class HarmonyPatches
             {
                 ModelDb.Modifier<UnmovableMonsters>(),
                 ModelDb.Modifier<Marathon>(),
+                ModelDb.Modifier<Pauper>(),
             };
             __result = patched;
         }

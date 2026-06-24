@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Text.RegularExpressions;
+using Godot;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
@@ -78,5 +79,14 @@ public static class StringExtensions
     public static string ModifierImagePath(this string path)
     {
         return Path.Join(MainFile.ResPath, "images", "modifiers", path);
+    }
+
+    public static string ToSnakeCasePng(this string str)
+    {
+        if (string.IsNullOrEmpty(str))
+            return str;
+
+        // Match lowercase followed by uppercase, or numbers followed by uppercase
+        return Regex.Replace(str, @"(?<!^)(?=[A-Z])", "_").ToLower() + ".png";
     }
 }

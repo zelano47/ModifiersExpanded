@@ -8,5 +8,7 @@
   "COLORLESS_CARDS.title": "Colorless Cards",
   "COLORLESS_CARDS.description": "Colorless cards will now appear in rewards and shops.",
   "MARATHON.title": "Marathon",
-  "MARATHON.description": "Maps are longer, with fewer rest sites and more elites."
+  "MARATHON.description": "Maps are longer, with fewer rest sites and more elites.",
+  "PAUPER.title": "Pauper",
+  "PAUPER.description": "All rewards are halved."
 }

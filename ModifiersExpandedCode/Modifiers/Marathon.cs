@@ -24,5 +24,5 @@ public class Marathon : ModifierModel
         );
     }
 
-    protected override string IconPath => "marathon_icon.png".ModifierImagePath();
+    protected override string IconPath => nameof(Marathon).ToSnakeCasePng().ModifierImagePath();
 }
