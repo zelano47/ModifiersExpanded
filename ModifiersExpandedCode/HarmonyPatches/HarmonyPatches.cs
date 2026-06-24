@@ -189,20 +189,20 @@ public class HarmonyPatches
     }
 
     // TESTING ONLY: cycle event rooms through DrowningBeacon → Orobas → Nonupeipe. Delete before shipping.
-    [HarmonyPatch(typeof(ActModel), nameof(ActModel.PullNextEvent))]
-    public static class ForceEventCyclePatch
-    {
-        private static int _index = 0;
-        private static readonly EventModel[] _events = new EventModel[]
-        {
-            ModelDb.Event<Orobas>(),
-            ModelDb.Event<Nonupeipe>(),
-        };
+    // [HarmonyPatch(typeof(ActModel), nameof(ActModel.PullNextEvent))]
+    // public static class ForceEventCyclePatch
+    // {
+    //     private static int _index = 0;
+    //     private static readonly EventModel[] _events = new EventModel[]
+    //     {
+    //         ModelDb.Event<Orobas>(),
+    //         ModelDb.Event<Nonupeipe>(),
+    //     };
 
-        public static void Postfix(ref EventModel __result)
-        {
-            __result = _events[_index % _events.Length];
-            _index++;
-        }
-    }
+    //     public static void Postfix(ref EventModel __result)
+    //     {
+    //         __result = _events[_index % _events.Length];
+    //         _index++;
+    //     }
+    // }
 }
