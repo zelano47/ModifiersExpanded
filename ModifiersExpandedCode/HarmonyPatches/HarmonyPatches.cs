@@ -166,4 +166,43 @@ public class HarmonyPatches
                 __result = __result.Where(o => o.Relic is not ElectricShrymp);
         }
     }
+
+    // DrowningBeacon's Climb option costs max HP and awards FresnelLens (Nimble enchantment relic).
+    // With Enchanter active, all card rewards are already enchanted — FresnelLens.CanEnchant returns
+    // false for every card and the relic does nothing. Remove the Climb option so the player isn't
+    // offered a worthless relic at the cost of max HP.
+    [HarmonyPatch(typeof(DrowningBeacon), "GenerateInitialOptions")]
+    public static class DrowningBeaconGenerateInitialOptionsPatch
+    {
+        public static void Postfix(
+            DrowningBeacon __instance,
+            ref IReadOnlyList<EventOption> __result
+        )
+        {
+            var modifiers = __instance.Owner?.RunState?.Modifiers;
+            if (modifiers == null || !modifiers.Any(m => m is Enchanter))
+                return;
+            __result = __result
+                .Where(o => o.TextKey != "DROWNING_BEACON.pages.INITIAL.options.CLIMB")
+                .ToList();
+        }
+    }
+
+    // TESTING ONLY: cycle event rooms through DrowningBeacon → Orobas → Nonupeipe. Delete before shipping.
+    [HarmonyPatch(typeof(ActModel), nameof(ActModel.PullNextEvent))]
+    public static class ForceEventCyclePatch
+    {
+        private static int _index = 0;
+        private static readonly EventModel[] _events = new EventModel[]
+        {
+            ModelDb.Event<Orobas>(),
+            ModelDb.Event<Nonupeipe>(),
+        };
+
+        public static void Postfix(ref EventModel __result)
+        {
+            __result = _events[_index % _events.Length];
+            _index++;
+        }
+    }
 }
