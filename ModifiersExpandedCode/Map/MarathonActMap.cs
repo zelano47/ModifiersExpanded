@@ -72,8 +72,7 @@ public class MarathonActMap : ActMap
     {
         int baseRooms = actModel.GetNumberOfRooms(isMultiplayer);
         _mapLength = (int)Math.Ceiling(baseRooms * _lengthModifier) + 1;
-        int baseMapLength = baseRooms + 1; // what _mapLength would be for a standard map
-        _treasureRow = (int)Math.Round((double)(baseMapLength - 7) / baseMapLength * _mapLength);
+        _treasureRow = _mapLength / 2;
         _shouldReplaceTreasureWithElites = shouldReplaceTreasureWithElites;
         Grid = new MapPoint[_mapWidth, _mapLength];
         _rng = mapRng;
