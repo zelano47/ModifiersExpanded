@@ -33,6 +33,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<NeowsBlessing>(),
                 ModelDb.Modifier<Enchanter>(),
                 ModelDb.Modifier<BodyDouble>(),
+                ModelDb.Modifier<PraiseSnecko>(),
             };
             __result = patched;
         }

@@ -14,5 +14,7 @@
   "LONE_WOLF.title": "ローンウルフ",
   "LONE_WOLF.description": "戦闘のスケールが2人プレイ用になる。",
   "BODY_DOUBLE.title": "ボディダブル",
-  "BODY_DOUBLE.description": "すべての初期アタックを削除。クローン付きのアップグレード済みボディスラムを1枚得る。アタックのピック・購入不可。"
+  "BODY_DOUBLE.description": "すべての初期アタックを削除。クローン付きのアップグレード済みボディスラムを1枚得る。アタックのピック・購入不可。",
+  "PRAISE_SNECKO.title": "スネッコを讃えよ",
+  "PRAISE_SNECKO.description": "スネッコの目を持った状態で開始する。"
 }

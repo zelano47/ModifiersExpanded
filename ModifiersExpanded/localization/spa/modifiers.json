@@ -1,0 +1,20 @@
+{
+  "NEOWS_BLESSING.title": "Bendición de Neow",
+  "NEOWS_BLESSING.description": "Otorga la recompensa de reliquia estándar de Neow al inicio de una partida personalizada.",
+  "ENCHANTER.title": "Encantador",
+  "ENCHANTER.description": "Las recompensas de cartas tienen un encantamiento aleatorio.",
+  "PHALANX.title": "Falange",
+  "PHALANX.description": "Los enemigos ganan Barricada y Placas al inicio del combate.",
+  "COLORLESS_CARDS.title": "Cartas Incoloras",
+  "COLORLESS_CARDS.description": "Las cartas incoloras ahora aparecerán en recompensas y tiendas.",
+  "MARATHON.title": "Maratón",
+  "MARATHON.description": "Los mapas son más largos, con menos puntos de descanso y más élites.",
+  "PAUPER.title": "Indigente",
+  "PAUPER.description": "Todas las recompensas se reducen a la mitad.",
+  "LONE_WOLF.title": "Lobo Solitario",
+  "LONE_WOLF.description": "Los encuentros de combate se escalan como si jugaran 2 jugadores.",
+  "BODY_DOUBLE.title": "Doble Cuerpo",
+  "BODY_DOUBLE.description": "Elimina todos los Ataques iniciales. Añade 1 Placaje mejorado con Clonar. Los Ataques no se pueden elegir ni comprar.",
+  "PRAISE_SNECKO.title": "Alabado sea Snecko",
+  "PRAISE_SNECKO.description": "Comienza con el Ojo de Snecko."
+}
