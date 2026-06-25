@@ -10,5 +10,7 @@
   "MARATHON.title": "Marathon",
   "MARATHON.description": "Maps are longer, with fewer rest sites and more elites.",
   "PAUPER.title": "Pauper",
-  "PAUPER.description": "All rewards are halved."
+  "PAUPER.description": "All rewards are halved.",
+  "LONE_WOLF.title": "Lone Wolf",
+  "LONE_WOLF.description": "Combat encounters are scaled as if playing with 2 players."
 }

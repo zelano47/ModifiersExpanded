@@ -1,11 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Relics;
+using MegaCrit.Sts2.Core.Models.Singleton;
+using MegaCrit.Sts2.Core.ValueProps;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 using ModifiersExpandedCode.Modifiers;
 
@@ -44,6 +48,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<UnmovableMonsters>(),
                 ModelDb.Modifier<Marathon>(),
                 ModelDb.Modifier<Pauper>(),
+                ModelDb.Modifier<LoneWolf>(),
             };
             __result = patched;
         }
@@ -167,6 +172,35 @@ public class HarmonyPatches
                 return;
             if (cards.Count(ModelDb.Enchantment<Imbued>().CanEnchant) == 0)
                 __result = __result.Where(o => o.Relic is not ElectricShrymp);
+        }
+    }
+
+    // Scale enemy block gains as if 2 players are present when LoneWolf is active.
+    [HarmonyPatch(
+        typeof(MultiplayerScalingModel),
+        nameof(MultiplayerScalingModel.ModifyBlockMultiplicative)
+    )]
+    public static class LoneWolfBlockScalingPatch
+    {
+        public static void Postfix(Creature target, ValueProp props, ref decimal __result)
+        {
+            if (__result != 1m)
+                return; // already multiplayer-scaled
+            if (target == null || (!target.IsPrimaryEnemy && !target.IsSecondaryEnemy))
+                return;
+            if (!props.IsPoweredCardOrMonsterMoveBlock())
+                return;
+            var runState = target.CombatState?.RunState;
+            if (runState == null || runState.Players.Count != 1)
+                return;
+            if (!runState.Modifiers.Any(m => m is LoneWolf))
+                return;
+            __result =
+                2m
+                * MultiplayerScalingModel.GetMultiplayerScaling(
+                    target.CombatState?.Encounter,
+                    runState.CurrentActIndex
+                );
         }
     }
 

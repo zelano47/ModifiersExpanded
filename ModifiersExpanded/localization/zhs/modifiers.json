@@ -1,0 +1,16 @@
+{
+  "NEOWS_BLESSING.title": "涅奥的祝福",
+  "NEOWS_BLESSING.description": "在自定义模式开始时，获得标准的涅奥遗物奖励。",
+  "ENCHANTER.title": "附魔师",
+  "ENCHANTER.description": "卡牌奖励会带有随机附魔。",
+  "UNMOVABLE_MONSTERS.title": "纹丝不动",
+  "UNMOVABLE_MONSTERS.description": "怪物在战斗开始时获得壁垒和金属化。",
+  "COLORLESS_CARDS.title": "无色卡牌",
+  "COLORLESS_CARDS.description": "无色卡牌现在会出现在奖励和商店中。",
+  "MARATHON.title": "马拉松",
+  "MARATHON.description": "地图变得更长，休息点更少，精英敌人更多。",
+  "PAUPER.title": "贫民",
+  "PAUPER.description": "所有奖励减半。",
+  "LONE_WOLF.title": "孤狼",
+  "LONE_WOLF.description": "战斗遭遇的难度将按照2人游玩进行缩放。"
+}
