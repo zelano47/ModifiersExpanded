@@ -1,0 +1,18 @@
+{
+  "NEOWS_BLESSING.title": "Благословение Нео",
+  "NEOWS_BLESSING.description": "Дает стандартную реликвию Нео на старте пользовательского забега.",
+  "ENCHANTER.title": "Чародей",
+  "ENCHANTER.description": "Карты в наградах получают случайное зачарование.",
+  "PHALANX.title": "Фаланга",
+  "PHALANX.description": "Враги получают Баррикаду и Пластины в начале боя.",
+  "COLORLESS_CARDS.title": "Бесцветные карты",
+  "COLORLESS_CARDS.description": "Бесцветные карты появляются в наградах и магазинах.",
+  "MARATHON.title": "Марафон",
+  "MARATHON.description": "Карты длиннее, костров меньше, элитных врагов больше.",
+  "PAUPER.title": "Нищий",
+  "PAUPER.description": "Все награды уменьшены вдвое.",
+  "LONE_WOLF.title": "Одинокий волк",
+  "LONE_WOLF.description": "Сложность боев масштабируется как для 2 игроков.",
+  "BODY_DOUBLE.title": "Двойник",
+  "BODY_DOUBLE.description": "Удаляет все стартовые Атаки. Дает 1 улучшенный Силовой удар с Клонированием. Атаки нельзя выбрать или купить."
+}

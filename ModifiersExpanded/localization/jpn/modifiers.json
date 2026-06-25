@@ -1,16 +1,18 @@
 {
-  "NEOWS_BLESSING.title": "ネオウの祝福",
-  "NEOWS_BLESSING.description": "カスタムランの開始時、通常のネオウの遺物報酬を獲得する。",
+  "NEOWS_BLESSING.title": "ネオーの祝福",
+  "NEOWS_BLESSING.description": "カスタムラン開始時、通常のネオーのレリック報酬を得る。",
   "ENCHANTER.title": "エンチャンター",
-  "ENCHANTER.description": "カード報酬にランダムなエンチャント（付加効果）が付与される。",
-  "UNMOVABLE_MONSTERS.title": "不動の怪物",
-  "UNMOVABLE_MONSTERS.description": "モンスターは戦闘開始時、バリケードと金属化を獲得する。",
+  "ENCHANTER.description": "カード報酬にランダムなエンチャントが付与される。",
+  "PHALANX.title": "ファランクス",
+  "PHALANX.description": "戦闘開始時、敵がバリケードとプレートを得る。",
   "COLORLESS_CARDS.title": "無色カード",
-  "COLORLESS_CARDS.description": "無色カードが報酬やショップに出現するようになる。",
+  "COLORLESS_CARDS.description": "報酬やショップに無色カードが出現するようになる。",
   "MARATHON.title": "マラソン",
-  "MARATHON.description": "マップが長くなり、休憩エリアが減少、エリートが出現しやすくなる。",
+  "MARATHON.description": "マップが長くなり、休憩が減り、エリートが増える。",
   "PAUPER.title": "ポーパー",
   "PAUPER.description": "すべての報酬が半減する。",
-  "LONE_WOLF.title": "一匹狼",
-  "LONE_WOLF.description": "敵との遭遇（戦闘）が、2人プレイ時のスケールに調整される。"
+  "LONE_WOLF.title": "ローンウルフ",
+  "LONE_WOLF.description": "戦闘のスケールが2人プレイ用になる。",
+  "BODY_DOUBLE.title": "ボディダブル",
+  "BODY_DOUBLE.description": "すべての初期アタックを削除。クローン付きのアップグレード済みボディスラムを1枚得る。アタックのピック・購入不可。"
 }
