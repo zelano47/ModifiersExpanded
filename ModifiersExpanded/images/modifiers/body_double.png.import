@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4cfmxbwr7cex"
-path="res://.godot/imported/unmovable_monsters.png-bb5aa5ef8299e82c410934d490fc20a4.ctex"
+uid="uid://culvv8njqf6ye"
+path="res://.godot/imported/body_double.png-276d88c6548c422533148d862295ceae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ModifiersExpanded/images/modifiers/unmovable_monsters.png"
-dest_files=["res://.godot/imported/unmovable_monsters.png-bb5aa5ef8299e82c410934d490fc20a4.ctex"]
+source_file="res://ModifiersExpanded/images/modifiers/body_double.png"
+dest_files=["res://.godot/imported/body_double.png-276d88c6548c422533148d862295ceae.ctex"]
 
 [params]
 

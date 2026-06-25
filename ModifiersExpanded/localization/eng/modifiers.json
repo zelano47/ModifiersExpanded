@@ -3,8 +3,8 @@
   "NEOWS_BLESSING.description": "Grants the player their standard Neow's relic reward at the start of a custom run.",
   "ENCHANTER.title": "Enchanter",
   "ENCHANTER.description": "Card rewards have a random enchantment.",
-  "UNMOVABLE_MONSTERS.title": "Unmovable Monsters",
-  "UNMOVABLE_MONSTERS.description": "Monsters gain barricade and plating at the start of combat.",
+  "PHALANX.title": "Phalanx",
+  "PHALANX.description": "Enemies gain barricade and plating at the start of combat.",
   "COLORLESS_CARDS.title": "Colorless Cards",
   "COLORLESS_CARDS.description": "Colorless cards will now appear in rewards and shops.",
   "MARATHON.title": "Marathon",
@@ -12,5 +12,7 @@
   "PAUPER.title": "Pauper",
   "PAUPER.description": "All rewards are halved.",
   "LONE_WOLF.title": "Lone Wolf",
-  "LONE_WOLF.description": "Combat encounters are scaled as if playing with 2 players."
+  "LONE_WOLF.description": "Combat encounters are scaled as if playing with 2 players.",
+  "BODY_DOUBLE.title": "Body Double",
+  "BODY_DOUBLE.description": "Remove all starting Attacks. Add 1 upgraded Body Slam with Clone. Attacks cannot be drafted or bought."
 }

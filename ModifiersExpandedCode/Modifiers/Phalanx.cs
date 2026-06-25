@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -10,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class UnmovableMonsters : ModifierModel
+public class Phalanx : ModifierModel
 {
     public override async Task AfterRoomEntered(AbstractRoom room)
     {
@@ -56,5 +54,5 @@ public class UnmovableMonsters : ModifierModel
         );
     }
 
-    protected override string IconPath => "unmovable_monsters.png".ModifierImagePath();
+    protected override string IconPath => nameof(Phalanx).ToSnakeCasePng().ModifierImagePath();
 }

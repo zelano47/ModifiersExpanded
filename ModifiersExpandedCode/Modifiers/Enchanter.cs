@@ -96,10 +96,10 @@ public class Enchanter : ModifierModel
                 cumulative += EnchantmentWeights.GetValueOrDefault(enchantment.GetType(), 1);
                 if (roll < cumulative)
                 {
-                    CardModel card2 = player.RunState.CloneCard(card);
+                    CardModel enchantedCard = player.RunState.CloneCard(card);
                     decimal amount = EnchantmentAmounts[enchantment.GetType()];
-                    CardCmd.Enchant(enchantment.ToMutable(), card2, amount);
-                    cardReward.ModifyCard(card2);
+                    CardCmd.Enchant(enchantment.ToMutable(), enchantedCard, amount);
+                    cardReward.ModifyCard(enchantedCard);
                     break;
                 }
             }

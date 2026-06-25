@@ -2,11 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Events;
+using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
+using MegaCrit.Sts2.Core.Models.Modifiers;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Models.Singleton;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -28,6 +32,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<ColorlessCards>(),
                 ModelDb.Modifier<NeowsBlessing>(),
                 ModelDb.Modifier<Enchanter>(),
+                ModelDb.Modifier<BodyDouble>(),
             };
             __result = patched;
         }
@@ -41,7 +46,7 @@ public class HarmonyPatches
             MainFile.Logger.Info(MainFile.CreateLogMessage("Patching ModelDb.BadModifiers"));
             var patched = new List<ModifierModel>(__result)
             {
-                ModelDb.Modifier<UnmovableMonsters>(),
+                ModelDb.Modifier<Phalanx>(),
                 ModelDb.Modifier<Marathon>(),
                 ModelDb.Modifier<Pauper>(),
                 ModelDb.Modifier<LoneWolf>(),
@@ -62,6 +67,7 @@ public class HarmonyPatches
             var existingSet = new HashSet<ModifierModel>(patched[0])
             {
                 ModelDb.Modifier<NeowsBlessing>(),
+                ModelDb.Modifier<BodyDouble>(),
             };
             patched[0] = existingSet;
             __result = patched;
@@ -218,6 +224,24 @@ public class HarmonyPatches
             __result = __result
                 .Where(o => o.TextKey != "DROWNING_BEACON.pages.INITIAL.options.CLIMB")
                 .ToList();
+        }
+    }
+
+    // Bulwark removes attacks from the card pool. The merchant has hardcoded Attack-type slots
+    // that would throw if the pool contains no attacks. Redirect those slots to Skill instead.
+    [HarmonyPatch(
+        typeof(CardFactory),
+        nameof(CardFactory.CreateForMerchant),
+        new[] { typeof(Player), typeof(IEnumerable<CardModel>), typeof(CardType) }
+    )]
+    public static class BulwarkMerchantAttackSlotPatch
+    {
+        public static void Prefix(Player player, ref CardType type)
+        {
+            if (type != CardType.Attack)
+                return;
+            if (player.RunState.Modifiers.Any(m => m is BodyDouble))
+                type = CardType.Skill;
         }
     }
 
