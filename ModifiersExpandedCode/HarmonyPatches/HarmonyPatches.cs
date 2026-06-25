@@ -22,11 +22,7 @@ public class HarmonyPatches
     {
         public static void Postfix(ref IReadOnlyList<ModifierModel> __result)
         {
-            MainFile.Logger.Info(
-                MainFile.CreateLogMessage(
-                    "Patching ModelDb.GoodModifiers to add Neow's Blessing, Enchanter, and Colorless Cards"
-                )
-            );
+            MainFile.Logger.Info(MainFile.CreateLogMessage("Patching ModelDb.GoodModifiers"));
             var patched = new List<ModifierModel>(__result)
             {
                 ModelDb.Modifier<ColorlessCards>(),
