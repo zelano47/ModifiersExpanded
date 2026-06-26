@@ -18,5 +18,7 @@
   "PRAISE_SNECKO.title": "Praise Snecko",
   "PRAISE_SNECKO.description": "Start with Snecko Eye.",
   "HUBRIS.title": "Hubris",
-  "HUBRIS.description": "Start the game with 1 max HP."
+  "HUBRIS.description": "Start the game with 1 max HP.",
+  "POLYMATH.title": "Polymath",
+  "POLYMATH.description": "Start the game with the starter relic of all characters."
 }

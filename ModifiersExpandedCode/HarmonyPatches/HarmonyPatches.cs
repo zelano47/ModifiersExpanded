@@ -34,6 +34,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<Enchanter>(),
                 ModelDb.Modifier<BodyDouble>(),
                 ModelDb.Modifier<PraiseSnecko>(),
+                ModelDb.Modifier<Polymath>(),
             };
             __result = patched;
         }

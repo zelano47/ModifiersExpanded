@@ -18,5 +18,7 @@
   "PRAISE_SNECKO.title": "Alabado sea Snecko",
   "PRAISE_SNECKO.description": "Comienza con el Ojo de Snecko.",
   "HUBRIS.title": "Arrogancia",
-  "HUBRIS.description": "Comienza la partida con 1 de PV máx."
+  "HUBRIS.description": "Comienza la partida con 1 de PV máx.",
+  "POLYMATH.title": "Erudito",
+  "POLYMATH.description": "Comienza la partida con la reliquia inicial de todos los personajes."
 }

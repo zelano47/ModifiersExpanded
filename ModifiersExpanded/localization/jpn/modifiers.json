@@ -18,5 +18,7 @@
   "PRAISE_SNECKO.title": "スネッコを讃えよ",
   "PRAISE_SNECKO.description": "スネッコの目を持った状態で開始する。",
   "HUBRIS.title": "傲慢",
-  "HUBRIS.description": "最大HPが1の状態游戏を開始する。"
+  "HUBRIS.description": "最大HPが1の状態游戏を開始する。",
+  "POLYMATH.title": "博学者",
+  "POLYMATH.description": "すべてのキャラクターの初期レリックを持った状態で開始する。"
 }

@@ -18,5 +18,7 @@
   "PRAISE_SNECKO.title": "Хвала Снекко",
   "PRAISE_SNECKO.description": "Вы начинаете со Оком Снекко.",
   "HUBRIS.title": "Высокомерие",
-  "HUBRIS.description": "Вы начинаете игру с 1 макс. ОЗ."
+  "HUBRIS.description": "Вы начинаете игру с 1 макс. ОЗ.",
+  "POLYMATH.title": "Эрудит",
+  "POLYMATH.description": "Вы начинаете игру со стартовой реликвией всех персонажей."
 }

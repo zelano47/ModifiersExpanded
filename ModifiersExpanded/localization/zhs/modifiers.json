@@ -18,5 +18,7 @@
   "PRAISE_SNECKO.title": "赞美异蛇",
   "PRAISE_SNECKO.description": "初始自带异蛇之眼。",
   "HUBRIS.title": "傲慢",
-  "HUBRIS.description": "游戏开始时只有1点生命值上限。"
+  "HUBRIS.description": "游戏开始时只有1点生命值上限。",
+  "POLYMATH.title": "博学者",
+  "POLYMATH.description": "游戏开始时拥有所有角色的初始遗物。"
 }
