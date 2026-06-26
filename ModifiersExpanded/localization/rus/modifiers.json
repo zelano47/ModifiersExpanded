@@ -16,5 +16,7 @@
   "BODY_DOUBLE.title": "Двойник",
   "BODY_DOUBLE.description": "Удаляет все стартовые Атаки. Дает 1 улучшенный Силовой удар с Клонированием. Атаки нельзя выбрать или купить.",
   "PRAISE_SNECKO.title": "Хвала Снекко",
-  "PRAISE_SNECKO.description": "Вы начинаете со Оком Снекко."
+  "PRAISE_SNECKO.description": "Вы начинаете со Оком Снекко.",
+  "HUBRIS.title": "Высокомерие",
+  "HUBRIS.description": "Вы начинаете игру с 1 макс. ОЗ."
 }

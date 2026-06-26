@@ -16,5 +16,7 @@
   "BODY_DOUBLE.title": "替身",
   "BODY_DOUBLE.description": "移除所有初始攻击牌。获得1张带有克隆的强化版全身撞击。攻击牌不再通过选牌或购买出现。",
   "PRAISE_SNECKO.title": "赞美异蛇",
-  "PRAISE_SNECKO.description": "初始自带异蛇之眼。"
+  "PRAISE_SNECKO.description": "初始自带异蛇之眼。",
+  "HUBRIS.title": "傲慢",
+  "HUBRIS.description": "游戏开始时只有1点生命值上限。"
 }

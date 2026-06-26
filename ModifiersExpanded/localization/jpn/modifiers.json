@@ -16,5 +16,7 @@
   "BODY_DOUBLE.title": "ボディダブル",
   "BODY_DOUBLE.description": "すべての初期アタックを削除。クローン付きのアップグレード済みボディスラムを1枚得る。アタックのピック・購入不可。",
   "PRAISE_SNECKO.title": "スネッコを讃えよ",
-  "PRAISE_SNECKO.description": "スネッコの目を持った状態で開始する。"
+  "PRAISE_SNECKO.description": "スネッコの目を持った状態で開始する。",
+  "HUBRIS.title": "傲慢",
+  "HUBRIS.description": "最大HPが1の状態游戏を開始する。"
 }

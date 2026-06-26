@@ -16,5 +16,7 @@
   "BODY_DOUBLE.title": "Doble Cuerpo",
   "BODY_DOUBLE.description": "Elimina todos los Ataques iniciales. Añade 1 Placaje mejorado con Clonar. Los Ataques no se pueden elegir ni comprar.",
   "PRAISE_SNECKO.title": "Alabado sea Snecko",
-  "PRAISE_SNECKO.description": "Comienza con el Ojo de Snecko."
+  "PRAISE_SNECKO.description": "Comienza con el Ojo de Snecko.",
+  "HUBRIS.title": "Arrogancia",
+  "HUBRIS.description": "Comienza la partida con 1 de PV máx."
 }

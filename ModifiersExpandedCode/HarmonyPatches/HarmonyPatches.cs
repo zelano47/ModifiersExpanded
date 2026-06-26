@@ -51,6 +51,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<Marathon>(),
                 ModelDb.Modifier<Pauper>(),
                 ModelDb.Modifier<LoneWolf>(),
+                ModelDb.Modifier<Hubris>(),
             };
             __result = patched;
         }
@@ -246,15 +247,32 @@ public class HarmonyPatches
         }
     }
 
-    // TESTING ONLY: cycle event rooms through DrowningBeacon → Orobas → Nonupeipe. Delete before shipping.
+    // Hubris sets max HP to 1. With WearyTraveler, Neow heals 80% of max HP (0.8), which
+    // truncates to 0 via (int) cast in SetCurrentHpInternal. Ensure a positive heal from 0 HP
+    // always results in at least 1 HP when Hubris is active.
+    [HarmonyPatch(typeof(Creature), nameof(Creature.HealInternal))]
+    public static class HubrisMinHpPatch
+    {
+        public static void Prefix(Creature __instance, ref decimal amount)
+        {
+            if (amount <= 0 || __instance.Player == null)
+                return;
+            if ((int)(__instance.CurrentHp + amount) != 0)
+                return;
+            if (__instance.Player.RunState.Modifiers.Any(m => m is Hubris))
+                amount = 1m - __instance.CurrentHp;
+        }
+    }
+
+    // // TESTING ONLY: cycle event rooms through DrowningBeacon → Orobas → Nonupeipe. Delete before shipping.
     // [HarmonyPatch(typeof(ActModel), nameof(ActModel.PullNextEvent))]
     // public static class ForceEventCyclePatch
     // {
     //     private static int _index = 0;
     //     private static readonly EventModel[] _events = new EventModel[]
     //     {
-    //         ModelDb.Event<Orobas>(),
-    //         ModelDb.Event<Nonupeipe>(),
+    //         ModelDb.Event<SapphireSeed>(),
+    //         ModelDb.Event<AbyssalBaths>(),
     //     };
 
     //     public static void Postfix(ref EventModel __result)
