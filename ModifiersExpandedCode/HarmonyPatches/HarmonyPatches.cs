@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -53,6 +51,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<Pauper>(),
                 ModelDb.Modifier<LoneWolf>(),
                 ModelDb.Modifier<Hubris>(),
+                ModelDb.Modifier<Ephemeral>(),
             };
             __result = patched;
         }

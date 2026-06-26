@@ -20,5 +20,7 @@
   "HUBRIS.title": "Arrogancia",
   "HUBRIS.description": "Comienza la partida con 1 de PV máx.",
   "POLYMATH.title": "Erudito",
-  "POLYMATH.description": "Comienza la partida con la reliquia inicial de todos los personajes."
+  "POLYMATH.description": "Comienza la partida con la reliquia inicial de todos los personajes.",
+  "EPHEMERAL.title": "Efímero",
+  "EPHEMERAL.description": "Todas las cartas ganan Etérea. (No afecta a las cartas de Estado, Maldición o Misión.)"
 }

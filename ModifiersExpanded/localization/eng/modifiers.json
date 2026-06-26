@@ -20,5 +20,7 @@
   "HUBRIS.title": "Hubris",
   "HUBRIS.description": "Start the game with 1 max HP.",
   "POLYMATH.title": "Polymath",
-  "POLYMATH.description": "Start the game with the starter relic of all characters."
+  "POLYMATH.description": "Start the game with the starter relic of all characters.",
+  "EPHEMERAL.title": "Ephemeral",
+  "EPHEMERAL.description": "All cards gain Ethereal. (Does not affect Status, Curse, or Quest cards.)"
 }

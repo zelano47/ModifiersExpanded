@@ -20,5 +20,7 @@
   "HUBRIS.title": "傲慢",
   "HUBRIS.description": "最大HPが1の状態游戏を開始する。",
   "POLYMATH.title": "博学者",
-  "POLYMATH.description": "すべてのキャラクターの初期レリックを持った状態で開始する。"
+  "POLYMATH.description": "すべてのキャラクターの初期レリックを持った状態で開始する。",
+  "EPHEMERAL.title": "エフェメラル",
+  "EPHEMERAL.description": "すべてのカードに虚生を付与する。（ステータス、呪い、クエストカードには影響しない。）"
 }
