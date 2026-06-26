@@ -32,7 +32,7 @@ public class ColorlessCards : ModifierModel
     {
         CardPoolModel cardPool = player.Character.CardPool;
         List<CardModel> cardModels = options.ToList();
-        if (cardModels.Any((CardModel c) => c.Pool != cardPool))
+        if (!cardModels.Any(c => c.Pool == cardPool))
         {
             return cardModels;
         }
