@@ -22,5 +22,7 @@
   "POLYMATH.title": "博学者",
   "POLYMATH.description": "すべてのキャラクターの初期レリックを持った状態で開始する。",
   "EPHEMERAL.title": "エフェメラル",
-  "EPHEMERAL.description": "すべてのカードに虚生を付与する。（ステータス、呪い、クエストカードには影響しない。）"
+  "EPHEMERAL.description": "すべてのカードに虚生を付与する。（ステータス、呪い、クエストカードには影響しない。）",
+  "CHIMERA.title": "キマイラ",
+  "CHIMERA.description": "初期デッキが5人のキャラクターの融合になる。"
 }

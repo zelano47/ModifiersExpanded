@@ -22,5 +22,7 @@
   "POLYMATH.title": "博学者",
   "POLYMATH.description": "游戏开始时拥有所有角色的初始遗物。",
   "EPHEMERAL.title": "转瞬即逝",
-  "EPHEMERAL.description": "所有卡牌获得虚无。（不影响状态牌、诅咒牌或任务牌。）"
+  "EPHEMERAL.description": "所有卡牌获得虚无。（不影响状态牌、诅咒牌或任务牌。）",
+  "CHIMERA.title": "奇美拉",
+  "CHIMERA.description": "你的初始卡组由5个角色的卡牌融合而成。"
 }

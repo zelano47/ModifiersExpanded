@@ -33,6 +33,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<BodyDouble>(),
                 ModelDb.Modifier<PraiseSnecko>(),
                 ModelDb.Modifier<Polymath>(),
+                ModelDb.Modifier<Chimera>(),
             };
             __result = patched;
         }
@@ -70,6 +71,7 @@ public class HarmonyPatches
             {
                 ModelDb.Modifier<NeowsBlessing>(),
                 ModelDb.Modifier<BodyDouble>(),
+                ModelDb.Modifier<Chimera>(),
             };
             patched[0] = existingSet;
             __result = patched;

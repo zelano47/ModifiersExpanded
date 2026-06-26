@@ -22,5 +22,7 @@
   "POLYMATH.title": "Polymath",
   "POLYMATH.description": "Start the game with the starter relic of all characters.",
   "EPHEMERAL.title": "Ephemeral",
-  "EPHEMERAL.description": "All cards gain Ethereal. (Does not affect Status, Curse, or Quest cards.)"
+  "EPHEMERAL.description": "All cards gain Ethereal. (Does not affect Status, Curse, or Quest cards.)",
+  "CHIMERA.title": "Chimera",
+  "CHIMERA.description": "Your starting deck is a fusion of 5 characters."
 }
