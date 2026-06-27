@@ -24,5 +24,7 @@
   "EPHEMERAL.title": "转瞬即逝",
   "EPHEMERAL.description": "所有卡牌获得虚无。（不影响状态牌、诅咒牌或任务牌。）",
   "CHIMERA.title": "奇美拉",
-  "CHIMERA.description": "你的初始卡组由5个角色的卡牌融合而成。"
+  "CHIMERA.description": "你的初始卡组由5个角色的卡牌融合而成。",
+  "RUNIC_DOME.title": "符文圆顶",
+  "RUNIC_DOME.description": "每回合开始时获得1点能量。你无法再看到敌人的意图。"
 }

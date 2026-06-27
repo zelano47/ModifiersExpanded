@@ -24,5 +24,7 @@
   "EPHEMERAL.title": "エフェメラル",
   "EPHEMERAL.description": "すべてのカードに虚生を付与する。（ステータス、呪い、クエストカードには影響しない。）",
   "CHIMERA.title": "キマイラ",
-  "CHIMERA.description": "初期デッキが5人のキャラクターの融合になる。"
+  "CHIMERA.description": "初期デッキが5人のキャラクターの融合になる。",
+  "RUNIC_DOME.title": "ルーニックドーム",
+  "RUNIC_DOME.description": "毎ターン開始時に1エナジーを得る。敵の意図が見えなくなる。"
 }

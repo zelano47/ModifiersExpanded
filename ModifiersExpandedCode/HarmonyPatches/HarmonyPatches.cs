@@ -1,16 +1,21 @@
+using System.Reflection;
 using System.Reflection.Emit;
+using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Modifiers;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Models.Singleton;
+using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.ValueProps;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 using ModifiersExpandedCode.Modifiers;
@@ -53,6 +58,7 @@ public class HarmonyPatches
                 ModelDb.Modifier<LoneWolf>(),
                 ModelDb.Modifier<Hubris>(),
                 ModelDb.Modifier<Ephemeral>(),
+                ModelDb.Modifier<RunicDome>(),
             };
             __result = patched;
         }
@@ -107,7 +113,7 @@ public class HarmonyPatches
                 // Form A: ldc.i4.0; bgt ELSE  — fall-through is normal path, branch is else
                 if (codes[i + 1].opcode == OpCodes.Bgt || codes[i + 1].opcode == OpCodes.Bgt_S)
                 {
-                    var elseLabel = (Label)codes[i + 1].operand;
+                    var elseLabel = (System.Reflection.Emit.Label)codes[i + 1].operand;
                     var normalLabel = gen.DefineLabel();
 
                     // ble NORMAL branches when count <= 0 (same as the original condition)
@@ -130,7 +136,7 @@ public class HarmonyPatches
                 // Form B: ldc.i4.0; ble NORMAL — branch is normal path, fall-through is else
                 if (codes[i + 1].opcode == OpCodes.Ble || codes[i + 1].opcode == OpCodes.Ble_S)
                 {
-                    var normalLabel = (Label)codes[i + 1].operand;
+                    var normalLabel = (System.Reflection.Emit.Label)codes[i + 1].operand;
                     codes.InsertRange(
                         i + 2,
                         new[]
@@ -310,4 +316,80 @@ public class HarmonyPatches
     //         _index++;
     //     }
     // }
+
+    // RunicDome relic: hide intent visuals after each visual update.
+    [HarmonyPatch(typeof(NIntent), "UpdateVisuals")]
+    public static class RunicDomeHideIntentVisualsPatch
+    {
+        private static readonly FieldInfo _intentHolderField = AccessTools.Field(
+            typeof(NIntent),
+            "_intentHolder"
+        );
+
+        private static readonly FieldInfo _ownerField = AccessTools.Field(
+            typeof(NIntent),
+            "_owner"
+        );
+
+        public static void Postfix(NIntent __instance)
+        {
+            var owner = _ownerField.GetValue(__instance) as Creature;
+            if (owner?.CombatState == null)
+                return;
+
+            var localPlayer = LocalContext.GetMe(owner.CombatState);
+            if (localPlayer == null)
+                return;
+
+            if (!localPlayer.RunState.Modifiers.Any(m => m is RunicDome))
+                return;
+
+            if (_intentHolderField.GetValue(__instance) is CanvasItem intentHolder)
+                intentHolder.Modulate = Colors.Transparent;
+        }
+    }
+
+    // RunicDome relic: suppress hover tips on hidden intents.
+    [HarmonyPatch(typeof(NIntent), "OnHovered")]
+    public static class RunicDomeHideIntentTipPatch
+    {
+        private static readonly FieldInfo _ownerField = AccessTools.Field(
+            typeof(NIntent),
+            "_owner"
+        );
+
+        public static bool Prefix(NIntent __instance)
+        {
+            var owner = _ownerField.GetValue(__instance) as Creature;
+            if (owner?.CombatState == null)
+                return true;
+
+            var localPlayer = LocalContext.GetMe(owner.CombatState);
+            if (localPlayer == null)
+                return true;
+
+            // Return false (skip original) when RunicDome is active.
+            return !localPlayer.RunState.Modifiers.Any(m => m is RunicDome);
+        }
+    }
+
+    // RunicDome relic: strip intent tips from creature hover tips shown when hovering the enemy sprite.
+    [HarmonyPatch(typeof(Creature), "get_HoverTips")]
+    public static class RunicDomeHideCreatureIntentTipsPatch
+    {
+        public static void Postfix(Creature __instance, ref IEnumerable<IHoverTip> __result)
+        {
+            if (!__instance.IsMonster)
+                return;
+
+            var localPlayer = LocalContext.GetMe(__instance.CombatState);
+            if (localPlayer == null || !localPlayer.RunState.Modifiers.Any(m => m is RunicDome))
+                return;
+
+            // Intent tips are prepended before power tips; count and skip them.
+            int intentTipCount =
+                __instance.Monster?.NextMove?.Intents?.Count(i => i.HasIntentTip) ?? 0;
+            __result = __result.Skip(intentTipCount);
+        }
+    }
 }

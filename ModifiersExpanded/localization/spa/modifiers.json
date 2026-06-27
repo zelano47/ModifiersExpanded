@@ -24,5 +24,7 @@
   "EPHEMERAL.title": "Efímero",
   "EPHEMERAL.description": "Todas las cartas ganan Etérea. (No afecta a las cartas de Estado, Maldición o Misión.)",
   "CHIMERA.title": "Quimera",
-  "CHIMERA.description": "Tu baraja inicial es una fusión de 5 personajes."
+  "CHIMERA.description": "Tu baraja inicial es una fusión de 5 personajes.",
+  "RUNIC_DOME.title": "Cúpula Rúnica",
+  "RUNIC_DOME.description": "Gana 1 de Energía al comienzo de cada turno. Ya no puedes ver las intenciones de los enemigos."
 }

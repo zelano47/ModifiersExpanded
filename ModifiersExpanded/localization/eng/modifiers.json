@@ -24,5 +24,7 @@
   "EPHEMERAL.title": "Ephemeral",
   "EPHEMERAL.description": "All cards gain Ethereal. (Does not affect Status, Curse, or Quest cards.)",
   "CHIMERA.title": "Chimera",
-  "CHIMERA.description": "Your starting deck is a fusion of 5 characters."
+  "CHIMERA.description": "Your starting deck is a fusion of 5 characters.",
+  "RUNIC_DOME.title": "Runic Dome",
+  "RUNIC_DOME.description": "Gain 1 Energy at the start of each turn. You can no longer see enemy Intents."
 }
