@@ -54,6 +54,7 @@ public class LoneWolf : ModifierModel
     {
         if (
             !canonicalPower.ShouldScaleInMultiplayer
+            || amount <= 0
             || target == null
             || (!target.IsPrimaryEnemy && !target.IsSecondaryEnemy)
         )

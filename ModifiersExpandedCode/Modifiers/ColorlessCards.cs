@@ -61,16 +61,13 @@ public class ColorlessCards : ModifierModel
         {
             return options;
         }
-        if (options.CustomCardPool != null)
-        {
-            return options;
-        }
-        return options.WithCardPools(
-            options
-                .CardPools.ToList()
-                .Concat(new List<CardPoolModel>() { ModelDb.CardPool<ColorlessCardPool>() }),
-            options.CardPoolFilter
-        );
+        return options
+            .WithCardPools(
+                options
+                    .CardPools.ToList()
+                    .Concat(new List<CardPoolModel>() { ModelDb.CardPool<ColorlessCardPool>() })
+            )
+            .WithFilter(options.CardPoolFilter);
     }
 
     protected override string IconPath =>
