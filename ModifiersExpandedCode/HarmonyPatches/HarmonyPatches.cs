@@ -431,6 +431,8 @@ public class HarmonyPatches
             );
 
             PreviousRunModifiers.LastRunButton = lastRunButton;
+            if (PreviousRunModifiers.Modifiers == null || PreviousRunModifiers.Modifiers.Count == 0)
+                lastRunButton.Disable();
             MainFile.Logger.Info(MainFile.CreateLogMessage("Last Run button injected."));
         }
 
@@ -482,6 +484,8 @@ public class HarmonyPatches
             if (
                 PreviousRunModifiers.LastRunButton != null
                 && GodotObject.IsInstanceValid(PreviousRunModifiers.LastRunButton)
+                && PreviousRunModifiers.Modifiers != null
+                && PreviousRunModifiers.Modifiers.Count > 0
             )
                 PreviousRunModifiers.LastRunButton.Enable();
         }
