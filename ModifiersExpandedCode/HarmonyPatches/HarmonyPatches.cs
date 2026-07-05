@@ -365,6 +365,14 @@ public class HarmonyPatches
             "_modifiersList"
         );
 
+        // _shaderMaterial is cached in NCustomRunRandomizeButton._Ready and used by
+        // OnFocus/OnUnfocus. After Duplicate() both buttons share the same ShaderMaterial
+        // instance, so we must replace it with a copy and update the cached field.
+        private static readonly FieldInfo _shaderMaterialField = AccessTools.Field(
+            typeof(NCustomRunRandomizeButton),
+            "_shaderMaterial"
+        );
+
         public static void Postfix(NCustomRunScreen __instance)
         {
             var randomizeButton =
@@ -389,7 +397,20 @@ public class HarmonyPatches
             ((Node)(object)lastRunButton).Name = "LastRunModifiersButton";
 
             // AddSiblingSafely places the new node right after its sibling in the parent.
+            // After this call _Ready has run on the duplicate (synchronous because the
+            // parent is already ready), so _shaderMaterial has been cached.
             ((Node)(object)randomizeButton).AddSiblingSafely((Node?)(object)lastRunButton);
+
+            // Duplicate() leaves the ShaderMaterial as a shared resource — both buttons
+            // would otherwise react to each other's hover events.  Give the new button its
+            // own material copy and refresh the field that _Ready already cached.
+            var bgControl = ((Node)(object)lastRunButton).GetNode<Control>("Background");
+            if (((CanvasItem)(object)bgControl).Material is ShaderMaterial sharedMat)
+            {
+                var uniqueMat = (ShaderMaterial)sharedMat.Duplicate();
+                ((CanvasItem)(object)bgControl).Material = uniqueMat;
+                _shaderMaterialField.SetValue(lastRunButton, uniqueMat);
+            }
 
             // _Ready on the duplicate has now run (synchronous when parent is already
             // ready) and set the label to "RANDOMIZE". Override it.
