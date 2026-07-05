@@ -1,12 +1,14 @@
 using System.Reflection;
 using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Enchantments;
@@ -14,7 +16,12 @@ using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Modifiers;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Models.Singleton;
+using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
+using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
+using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
+using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
@@ -315,5 +322,170 @@ public class HarmonyPatches
                 __instance.Monster?.NextMove?.Intents?.Count(i => i.HasIntentTip) ?? 0;
             __result = __result.Skip(intentTipCount);
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // "Last Run" button — remembers the modifiers used on the previous custom run
+    // and re-applies them with a single click.
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Before a singleplayer custom run actually starts, snapshot the chosen modifiers.
+    /// </summary>
+    [HarmonyPatch(typeof(NGame), nameof(NGame.StartNewSingleplayerRun))]
+    public static class CaptureCustomRunModifiersPatch
+    {
+        public static void Prefix(IReadOnlyList<ModifierModel> modifiers, GameMode gameMode)
+        {
+            if (gameMode != GameMode.Custom)
+                return;
+            PreviousRunModifiers.Modifiers = modifiers.ToList();
+            MainFile.Logger.Info(
+                MainFile.CreateLogMessage(
+                    $"Stored {modifiers.Count} modifiers from custom run for Last Run button."
+                )
+            );
+        }
+    }
+
+    /// <summary>
+    /// After NCustomRunScreen._Ready, duplicate the randomize button and insert it
+    /// immediately to its right as the "Last Run" button.
+    /// </summary>
+    [HarmonyPatch(typeof(NCustomRunScreen), "_Ready")]
+    public static class CustomRunScreenReadyPatch
+    {
+        private static readonly FieldInfo _randomizeButtonField = AccessTools.Field(
+            typeof(NCustomRunScreen),
+            "_randomizeButton"
+        );
+        private static readonly FieldInfo _modifiersListField = AccessTools.Field(
+            typeof(NCustomRunScreen),
+            "_modifiersList"
+        );
+
+        public static void Postfix(NCustomRunScreen __instance)
+        {
+            var randomizeButton =
+                _randomizeButtonField.GetValue(__instance) as NCustomRunRandomizeButton;
+            var modifiersList = _modifiersListField.GetValue(__instance) as NCustomRunModifiersList;
+
+            if (randomizeButton == null || modifiersList == null)
+            {
+                MainFile.Logger.Warn(
+                    MainFile.CreateLogMessage(
+                        "Could not inject Last Run button: randomizeButton or modifiersList is null."
+                    )
+                );
+                return;
+            }
+
+            // Duplicate the randomize button (copies the entire sub-tree including
+            // Background + Label children that _Ready depends on).
+            var lastRunButton = (NCustomRunRandomizeButton)(
+                (object)((Node)(object)randomizeButton).Duplicate()!
+            );
+            ((Node)(object)lastRunButton).Name = "LastRunModifiersButton";
+
+            // AddSiblingSafely places the new node right after its sibling in the parent.
+            ((Node)(object)randomizeButton).AddSiblingSafely((Node?)(object)lastRunButton);
+
+            // _Ready on the duplicate has now run (synchronous when parent is already
+            // ready) and set the label to "RANDOMIZE". Override it.
+            ((Node)(object)lastRunButton)
+                .GetNode<MegaRichTextLabel>("Label")
+                .SetTextAutoSize("Last Run");
+
+            // Wire up the click handler.
+            ((GodotObject)(object)lastRunButton).Connect(
+                NClickableControl.SignalName.Released,
+                Callable.From<NButton>(_ => OnLastRunPressed(modifiersList)),
+                0u
+            );
+
+            PreviousRunModifiers.LastRunButton = lastRunButton;
+            MainFile.Logger.Info(MainFile.CreateLogMessage("Last Run button injected."));
+        }
+
+        private static void OnLastRunPressed(NCustomRunModifiersList modifiersList)
+        {
+            if (PreviousRunModifiers.Modifiers == null || PreviousRunModifiers.Modifiers.Count == 0)
+            {
+                MainFile.Logger.Info(
+                    MainFile.CreateLogMessage(
+                        "Last Run button pressed but no previous run modifiers stored."
+                    )
+                );
+                return;
+            }
+
+            try
+            {
+                modifiersList.SetTickedModifiers(PreviousRunModifiers.Modifiers);
+            }
+            catch (InvalidOperationException)
+            {
+                // In multiplayer-client or load mode the list is read-only; ignore.
+            }
+        }
+    }
+
+    /// <summary>Disable the Last Run button while the player is waiting for the run to begin.</summary>
+    [HarmonyPatch(typeof(NCustomRunScreen), "OnEmbarkPressed")]
+    public static class CustomRunEmbarkPatch
+    {
+        public static void Postfix()
+        {
+            if (
+                PreviousRunModifiers.LastRunButton != null
+                && GodotObject.IsInstanceValid(PreviousRunModifiers.LastRunButton)
+            )
+                PreviousRunModifiers.LastRunButton.Disable();
+        }
+    }
+
+    /// <summary>Re-enable the Last Run button when the player un-readies (host/singleplayer only).</summary>
+    [HarmonyPatch(typeof(NCustomRunScreen), "OnUnreadyPressed")]
+    public static class CustomRunUnreadyPatch
+    {
+        public static void Postfix()
+        {
+            if (PreviousRunModifiers.IsClientMode)
+                return;
+            if (
+                PreviousRunModifiers.LastRunButton != null
+                && GodotObject.IsInstanceValid(PreviousRunModifiers.LastRunButton)
+            )
+                PreviousRunModifiers.LastRunButton.Enable();
+        }
+    }
+
+    /// <summary>Disable the Last Run button in multiplayer-client mode (clients cannot change modifiers).</summary>
+    [HarmonyPatch(typeof(NCustomRunScreen), nameof(NCustomRunScreen.InitializeMultiplayerAsClient))]
+    public static class CustomRunClientInitPatch
+    {
+        public static void Postfix()
+        {
+            PreviousRunModifiers.IsClientMode = true;
+            if (
+                PreviousRunModifiers.LastRunButton != null
+                && GodotObject.IsInstanceValid(PreviousRunModifiers.LastRunButton)
+            )
+                PreviousRunModifiers.LastRunButton.Disable();
+        }
+    }
+
+    /// <summary>Clear the client-mode flag when the screen is used as singleplayer.</summary>
+    [HarmonyPatch(typeof(NCustomRunScreen), nameof(NCustomRunScreen.InitializeSingleplayer))]
+    public static class CustomRunSingleplayerInitPatch
+    {
+        public static void Postfix() => PreviousRunModifiers.IsClientMode = false;
+    }
+
+    /// <summary>Clear the client-mode flag when the screen is used as multiplayer host.</summary>
+    [HarmonyPatch(typeof(NCustomRunScreen), nameof(NCustomRunScreen.InitializeMultiplayerAsHost))]
+    public static class CustomRunHostInitPatch
+    {
+        public static void Postfix() => PreviousRunModifiers.IsClientMode = false;
     }
 }
