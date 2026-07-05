@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Events;
@@ -11,6 +12,7 @@ using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Relics;
+using MegaCrit.Sts2.Core.Nodes.Events;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
@@ -66,7 +68,26 @@ public class NeowsBlessing : ModifierModel
     {
         var tcs = new TaskCompletionSource();
         var options = BuildRelicChoiceOptions(neow, tcs);
+        // SetEventState fires StateChanged → RefreshEventState, which clears dialogue and
+        // adds the 3 option buttons to _optionsContainer.
         _setEventStateMethod.Invoke(neow, new object[] { neow.InitialDescription, options });
+        // NAncientEventLayout.SetDialogueLineAndAnimate calculated the content-tween target
+        // using _optionsContainer.Size.Y when dialogue finished — at that point only
+        // 1 modifier-option button was in the container.  With 3 buttons now added, the
+        // extra buttons overflow the clipped container.
+        //
+        // VBoxContainer defers its layout sort (queue_sort → call_deferred), so
+        // _optionsContainer.Size.Y is not yet updated when we are called synchronously.
+        // Scheduling SetDialogueLineAndAnimate(0) via CallDeferred ensures it runs after
+        // the container's sort has recalculated the correct 3-button height, so the tween
+        // target is recalculated and all three options animate into view correctly.
+        if (neow.Node is NAncientEventLayout layout)
+        {
+            ((GodotObject)(object)layout).CallDeferred(
+                NAncientEventLayout.MethodName.SetDialogueLineAndAnimate,
+                Variant.From(0)
+            );
+        }
         await tcs.Task;
     }
 
