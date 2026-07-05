@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
+using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode;
 
@@ -13,7 +13,7 @@ public static class PreviousRunModifiers
     public static IReadOnlyList<ModifierModel>? Modifiers { get; set; }
 
     /// <summary>Reference to the injected "Last Run" button on the current custom run screen.</summary>
-    internal static NCustomRunRandomizeButton? LastRunButton { get; set; }
+    internal static NButton? LastRunButton { get; set; }
 
     /// <summary>True while the screen is initialised in multiplayer-client mode.</summary>
     internal static bool IsClientMode { get; set; }
