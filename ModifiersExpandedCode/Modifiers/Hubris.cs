@@ -1,9 +1,10 @@
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
+
+namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
 public class Hubris : ModifierModel
 {

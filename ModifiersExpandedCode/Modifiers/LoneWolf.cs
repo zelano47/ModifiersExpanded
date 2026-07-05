@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Models.Singleton;
 using MegaCrit.Sts2.Core.Rooms;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
-namespace ModifiersExpandedCode.Modifiers;
+namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
 public class LoneWolf : ModifierModel
 {

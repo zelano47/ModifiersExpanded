@@ -18,7 +18,6 @@ using MegaCrit.Sts2.Core.Models.Singleton;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.ValueProps;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
-using ModifiersExpandedCode.Modifiers;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
 
