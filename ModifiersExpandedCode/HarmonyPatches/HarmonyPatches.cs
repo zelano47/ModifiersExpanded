@@ -10,7 +10,6 @@ using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
@@ -395,12 +394,7 @@ public class HarmonyPatches
             // ready) and set the label to "RANDOMIZE". Override it.
             ((Node)(object)lastRunButton)
                 .GetNode<MegaRichTextLabel>("Label")
-                .SetTextAutoSize(
-                    new LocString(
-                        "main_menu_ui",
-                        "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON"
-                    ).GetFormattedText()
-                );
+                .SetTextAutoSize("Last Run");
 
             // Wire up the click handler.
             ((GodotObject)(object)lastRunButton).Connect(
