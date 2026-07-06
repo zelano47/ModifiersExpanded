@@ -7,7 +7,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class SpeedrunBase : ModifierModel
+public abstract class SpeedrunBase : ModifierModel
 {
     public virtual float _timeLimit { get; set; }
 
