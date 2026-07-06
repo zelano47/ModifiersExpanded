@@ -129,21 +129,10 @@ public class ModifierGroupControls
         label.Text = arrow + text;
     }
 
-    private const int maxCollapsedTextLength = 75;
-    private const int numEllipsisChars = 3;
-
     public static string ModifierGroupCollapsedText(NRunModifierTickbox[] tickboxes)
     {
         StringBuilder sb = new StringBuilder();
         sb.Append(string.Join(", ", tickboxes.Select(t => ModifierDisplayName(t.Modifier))));
-        if (sb.Length > maxCollapsedTextLength)
-        {
-            sb.Remove(
-                maxCollapsedTextLength - numEllipsisChars,
-                sb.Length - (maxCollapsedTextLength - numEllipsisChars)
-            );
-            sb.Append(new string('.', numEllipsisChars));
-        }
         return sb.ToString();
     }
 
@@ -173,6 +162,7 @@ public class ModifierGroupControls
         label.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
         label.VerticalAlignment = VerticalAlignment.Center;
         label.AutowrapMode = TextServer.AutowrapMode.Off;
+        label.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
         panel.AddChild(label);
 
         return (panel, label);
