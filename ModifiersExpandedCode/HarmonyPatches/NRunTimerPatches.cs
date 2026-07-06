@@ -101,6 +101,7 @@ public class NRunTimerPatches
             }
             else
             {
+                ((CanvasItem)timerLabel).SelfModulate = Colors.White;
                 return;
             }
             timerLabel.SetTextAutoSize(FormatCountdown(timerLabelValue));
