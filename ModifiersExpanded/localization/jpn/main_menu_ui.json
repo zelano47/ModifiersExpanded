@@ -1,3 +1,7 @@
 {
-  "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "前回のラン"
+  "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "前回のラン",
+  "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "初期デッキ置換",
+  "MODIFIER_GROUP.SPEEDRUN.title": "スピードラン",
+  "MODIFIER_GROUP.URGENCY.title": "緊急事態",
+  "MODIFIER_GROUP.CARD_POOLS.title": "カードプール"
 }
