@@ -2,6 +2,7 @@ using System.Reflection;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.addons.mega_text;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.TopBar;
 using MegaCrit.Sts2.Core.Runs;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
@@ -20,6 +21,24 @@ public class NRunTimerPatches
             .FirstOrDefault();
     }
 
+    private static UrgencyBase? GetActiveUrgencyModifier()
+    {
+        if (!RunManager.Instance.IsInProgress)
+            return null;
+        return RunManager
+            .Instance.DebugOnlyGetState()
+            ?.Modifiers.OfType<UrgencyBase>()
+            .FirstOrDefault();
+    }
+
+    private static string FormatCountdown(float remaining)
+    {
+        bool negative = remaining < 0;
+        var t = TimeSpan.FromSeconds(Math.Abs(remaining));
+        string formatted = $"{(int)t.TotalMinutes:D2}:{t.Seconds:D2}";
+        return negative ? $"-{formatted}" : formatted;
+    }
+
     /// <summary>
     /// Force the run timer to be visible whenever a SpeedrunBase modifier is active,
     /// regardless of the user's ShowRunTimer preference or screen state.
@@ -29,7 +48,11 @@ public class NRunTimerPatches
     {
         public static void Postfix(NRunTimer __instance)
         {
-            if (GetActiveSpeedrunModifier() != null)
+            var urgencyForVisibility = GetActiveUrgencyModifier();
+            if (
+                GetActiveSpeedrunModifier() != null
+                || (urgencyForVisibility != null && urgencyForVisibility.IsInCombat)
+            )
                 ((CanvasItem)__instance).Visible = true;
         }
     }
@@ -51,9 +74,19 @@ public class NRunTimerPatches
             if (_timerLabelField?.GetValue(__instance) is not MegaLabel timerLabel)
                 return;
 
-            var modifier = GetActiveSpeedrunModifier();
+            var urgency = GetActiveUrgencyModifier();
+            if (urgency != null && urgency.IsInCombat)
+            {
+                float remaining =
+                    urgency._timeLimit - (RunManager.Instance.RunTime - urgency._startTime);
+                timerLabel.SetTextAutoSize(FormatCountdown(remaining));
+                ((CanvasItem)timerLabel).SelfModulate = remaining < 0 ? Colors.Red : Colors.White;
+                return;
+            }
+
+            var speedrun = GetActiveSpeedrunModifier();
             ((CanvasItem)timerLabel).SelfModulate =
-                modifier != null && RunManager.Instance.RunTime > modifier._timeLimit
+                speedrun != null && RunManager.Instance.RunTime > speedrun._timeLimit
                     ? Colors.Red
                     : Colors.White;
         }
