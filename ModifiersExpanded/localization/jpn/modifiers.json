@@ -26,5 +26,17 @@
   "CHIMERA.title": "キマイラ",
   "CHIMERA.description": "初期デッキが5人のキャラクターの融合になる。",
   "RUNIC_DOME.title": "ルーニックドーム",
-  "RUNIC_DOME.description": "毎ターン開始時に1エナジーを得る。敵の意図が見えなくなる。"
+  "RUNIC_DOME.description": "毎ターン開始時に1エナジーを得る。敵の意図が見えなくなる。",
+  "URGENCY.title": "緊急事態",
+  "URGENCY.description": "戦闘時間が60秒を超えると、1秒経過するごとにダメージを受ける。",
+  "URGENCY_PLUS.title": "緊急事態+",
+  "URGENCY_PLUS.description": "戦闘時間が45秒を超えると、1秒経過するごとにダメージを受ける。",
+  "URGENCY_PLUS_PLUS.title": "緊急事態++",
+  "URGENCY_PLUS_PLUS.description": "戦闘時間が30秒を超えると、1秒経過するごとにダメージを受ける。",
+  "SPEEDRUN.title": "スピードラン",
+  "SPEEDRUN.description": "ランのタイマーが40分を超えた場合、敗北する。",
+  "SPEEDRUN_PLUS.title": "スピードラン+",
+  "SPEEDRUN_PLUS.description": "ランのタイマーが30分を超えた場合、敗北する。",
+  "SPEEDRUN_PLUS_PLUS.title": "スピードラン++",
+  "SPEEDRUN_PLUS_PLUS.description": "ランのタイマーが20分を超えた場合、敗北する。"
 }

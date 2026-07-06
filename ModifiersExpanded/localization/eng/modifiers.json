@@ -34,9 +34,9 @@
   "URGENCY_PLUS_PLUS.title": "Urgency++",
   "URGENCY_PLUS_PLUS.description": "Every second spent in combat beyond 30 seconds deals damage to you.",
   "SPEEDRUN.title": "Speedrun",
-  "SPEEDRUN.description": "Finish the run in 40 minutes",
+  "SPEEDRUN.description": "If the run timer exceeds 40 minutes, you lose.",
   "SPEEDRUN_PLUS.title": "Speedrun+",
-  "SPEEDRUN_PLUS.description": "Finish the run in 30 minutes.",
+  "SPEEDRUN_PLUS.description": "If the run timer exceeds 30 minutes, you lose.",
   "SPEEDRUN_PLUS_PLUS.title": "Speedrun++",
-  "SPEEDRUN_PLUS_PLUS.description": "Finish the run in 20 minutes."
+  "SPEEDRUN_PLUS_PLUS.description": "If the run timer exceeds 20 minutes, you lose."
 }

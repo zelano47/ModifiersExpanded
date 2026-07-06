@@ -26,5 +26,17 @@
   "CHIMERA.title": "奇美拉",
   "CHIMERA.description": "你的初始卡组由5个角色的卡牌融合而成。",
   "RUNIC_DOME.title": "符文圆顶",
-  "RUNIC_DOME.description": "每回合开始时获得1点能量。你无法再看到敌人的意图。"
+  "RUNIC_DOME.description": "每回合开始时获得1点能量。你无法再看到敌人的意图。",
+  "URGENCY.title": "紧急情况",
+  "URGENCY.description": "战斗时间每超过60秒，每秒都会对你造成伤害。",
+  "URGENCY_PLUS.title": "紧急情况+",
+  "URGENCY_PLUS.description": "战斗时间每超过45秒，每秒都会对你造成伤害。",
+  "URGENCY_PLUS_PLUS.title": "紧急情况++",
+  "URGENCY_PLUS_PLUS.description": "战斗时间每超过30秒，每秒都会对你造成伤害。",
+  "SPEEDRUN.title": "速通",
+  "SPEEDRUN.description": "如果通关用时超过40分钟，你将直接失败。",
+  "SPEEDRUN_PLUS.title": "速通+",
+  "SPEEDRUN_PLUS.description": "如果通关用时超过30分钟，你将直接失败。",
+  "SPEEDRUN_PLUS_PLUS.title": "速通++",
+  "SPEEDRUN_PLUS_PLUS.description": "如果通关用时超过20分钟，你将直接失败。"
 }
