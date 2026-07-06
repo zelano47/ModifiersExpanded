@@ -1,0 +1,150 @@
+using Godot;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Modifiers;
+using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
+using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
+
+namespace ModifiersExpanded.ModifiersExpandedCode.UI;
+
+public static class ModifierList
+{
+    private static List<ModifierGroup> BuildModifierGroups()
+    {
+        var exclusionGroups = ModelDb.MutuallyExclusiveModifiers;
+        var allModifiers = ModelDb.GoodModifiers.Concat(ModelDb.BadModifiers).ToList();
+
+        var replaceStarterDeckGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.REPLACE_STARTER_DECK.title")
+        );
+        var speedrunGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.SPEEDRUN.title")
+        );
+        var urgencyGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.URGENCY.title")
+        );
+
+        var cardPoolsGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.CARD_POOLS.title"),
+            false
+        );
+
+        foreach (var modifier in allModifiers)
+        {
+            if (modifier.ClearsPlayerDeck)
+                replaceStarterDeckGroup.Modifiers.Add(modifier);
+            else if (modifier is SpeedrunBase)
+                speedrunGroup.Modifiers.Add(modifier);
+            else if (modifier is UrgencyBase)
+                urgencyGroup.Modifiers.Add(modifier);
+            else if (modifier is CharacterCards || modifier is ColorlessCards)
+                cardPoolsGroup.Modifiers.Add(modifier);
+        }
+
+        var groups = new List<ModifierGroup>
+        {
+            replaceStarterDeckGroup,
+            speedrunGroup,
+            urgencyGroup,
+            cardPoolsGroup,
+        };
+
+        // Generate one section per external mutual-exclusion set for any modifier not already
+        // classified above. Iterating each set separately preserves distinct groupings from
+        // different mods rather than collapsing them all into a single fallback section.
+        var alreadyGroupedTypes = groups
+            .SelectMany(g => g.Modifiers)
+            .Select(m => m.GetType())
+            .ToHashSet();
+
+        foreach (var exclusionSet in exclusionGroups)
+        {
+            var unclassified = allModifiers
+                .Where(m =>
+                    !alreadyGroupedTypes.Contains(m.GetType())
+                    && exclusionSet.Any(e => e.GetType() == m.GetType())
+                )
+                .ToList();
+
+            if (unclassified.Count > 1)
+            {
+                // No GroupName: the header will fall back to listing member names.
+                var externalGroup = new ModifierGroup();
+                foreach (var m in unclassified)
+                    externalGroup.Modifiers.Add(m);
+                groups.Add(externalGroup);
+            }
+        }
+
+        // Drop groups with fewer than two members — no meaningful choice to present.
+        // Their modifier(s) will fall through to standalone tickboxes in the layout.
+        return groups.Where(g => g.Modifiers.Count > 1).ToList();
+    }
+
+    // ── Layout builder ───────────────────────────────────────────────────────
+
+    public static void RebuildWithAccordionGroups(
+        Control container,
+        List<NRunModifierTickbox> tickboxes
+    )
+    {
+        var groups = BuildModifierGroups();
+        var goodModifierTypes = ModelDb.GoodModifiers.Select(m => m.GetType()).ToHashSet();
+
+        // Map each non-null tickbox to its ModifierGroup.
+        var tickboxToGroup = new Dictionary<NRunModifierTickbox, ModifierGroup>();
+        foreach (var tickbox in tickboxes)
+        {
+            if (tickbox?.Modifier == null)
+                continue;
+            var match = groups.FirstOrDefault(g =>
+                g.Modifiers.Any(m => m.GetType() == tickbox.Modifier.GetType())
+            );
+            if (match != null)
+                tickboxToGroup[tickbox] = match;
+        }
+
+        // Detach every tickbox from the container without freeing it. Their existing signal
+        // connections (to NCustomRunModifiersList.AfterModifiersChanged) are preserved on
+        // the GodotObject — they survive the reparent.
+        foreach (var tickbox in tickboxes)
+        {
+            if (tickbox == null)
+                continue;
+            ((Node)(object)tickbox).GetParent()?.RemoveChild((Node)(object)tickbox);
+        }
+
+        // ── 1. Accordion sections (groups in definition order, tickboxes alphabetical) ──
+        foreach (var group in groups)
+        {
+            var groupTickboxes = tickboxes
+                .Where(t => t != null && tickboxToGroup.TryGetValue(t, out var g) && g == group)
+                .OrderBy(t => ModifierGroupControls.ModifierDisplayName(t!.Modifier))
+                .ToList();
+
+            if (groupTickboxes.Count == 0)
+                continue;
+
+            bool anyTicked = groupTickboxes.Any(t => t.IsTicked);
+            var section = ModifierGroupControls.BuildAccordionSection(
+                group,
+                groupTickboxes,
+                startExpanded: anyTicked
+            );
+            ((Node)(object)container).AddChildSafely((Node)(object)section);
+        }
+
+        // ── 2. Standalone tickboxes (good before bad, alphabetical within each) ──────────
+        var standalones = tickboxes
+            .Where(t => t != null && !tickboxToGroup.ContainsKey(t))
+            .OrderBy(t =>
+                t!.Modifier != null && goodModifierTypes.Contains(t.Modifier.GetType()) ? 0 : 1
+            )
+            .ThenBy(t => ModifierGroupControls.ModifierDisplayName(t!.Modifier))
+            .ToList();
+
+        foreach (var tickbox in standalones)
+            ((Node)(object)container).AddChildSafely((Node)(object)tickbox);
+    }
+}
