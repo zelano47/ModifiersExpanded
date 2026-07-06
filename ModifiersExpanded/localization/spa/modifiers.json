@@ -26,5 +26,17 @@
   "CHIMERA.title": "Quimera",
   "CHIMERA.description": "Tu baraja inicial es una fusión de 5 personajes.",
   "RUNIC_DOME.title": "Cúpula Rúnica",
-  "RUNIC_DOME.description": "Gana 1 de Energía al comienzo de cada turno. Ya no puedes ver las intenciones de los enemigos."
+  "RUNIC_DOME.description": "Gana 1 de Energía al comienzo de cada turno. Ya no puedes ver las intenciones de los enemigos.",
+  "URGENCY.title": "Urgencia",
+  "URGENCY.description": "Cada segundo que pases en combate más allá de los 60 segundos te inflige daño.",
+  "URGENCY_PLUS.title": "Urgencia+",
+  "URGENCY_PLUS.description": "Cada segundo que pases en combate más allá de los 45 segundos te inflige daño.",
+  "URGENCY_PLUS_PLUS.title": "Urgencia++",
+  "URGENCY_PLUS_PLUS.description": "Cada segundo que pases en combate más allá de los 30 segundos te inflige daño.",
+  "SPEEDRUN.title": "Speedrun",
+  "SPEEDRUN.description": "Si el temporizador de la partida supera los 40 minutos, pierdes.",
+  "SPEEDRUN_PLUS.title": "Speedrun+",
+  "SPEEDRUN_PLUS.description": "Si el temporizador de la partida supera los 30 minutos, pierdes.",
+  "SPEEDRUN_PLUS_PLUS.title": "Speedrun++",
+  "SPEEDRUN_PLUS_PLUS.description": "Si el temporizador de la partida supera los 20 minutos, pierdes."
 }

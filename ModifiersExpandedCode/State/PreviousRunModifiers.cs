@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 
-namespace ModifiersExpanded.ModifiersExpandedCode;
+namespace ModifiersExpanded.ModifiersExpandedCode.State;
 
 /// <summary>
 /// In-memory store for the modifier selection used on the most recent custom run.

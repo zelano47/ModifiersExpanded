@@ -1,3 +1,7 @@
 {
-  "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "Última partida"
+  "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "Última partida",
+  "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Reemplazar baraja inicial",
+  "MODIFIER_GROUP.SPEEDRUN.title": "Speedrun",
+  "MODIFIER_GROUP.URGENCY.title": "Urgencia",
+  "MODIFIER_GROUP.CARD_POOLS.title": "Reservas de cartas"
 }

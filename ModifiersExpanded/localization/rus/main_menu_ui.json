@@ -1,3 +1,7 @@
 {
-  "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "Прошлый забег"
+  "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "Прошлый забег",
+  "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Замена стартовой колоды",
+  "MODIFIER_GROUP.SPEEDRUN.title": "Спидран",
+  "MODIFIER_GROUP.URGENCY.title": "Спешка",
+  "MODIFIER_GROUP.CARD_POOLS.title": "Наборы карт"
 }

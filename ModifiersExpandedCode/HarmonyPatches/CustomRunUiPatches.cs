@@ -10,6 +10,8 @@ using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
 using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
 using MegaCrit.Sts2.Core.Runs;
+using ModifiersExpanded.ModifiersExpandedCode.State;
+using ModifiersExpanded.ModifiersExpandedCode.UI;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
 
@@ -129,10 +131,25 @@ public class CustomRunUiPatches
                 0u
             );
 
+            // Refresh all accordion headers after the last-run modifiers are applied.
+            ((GodotObject)(object)lastRunButton).Connect(
+                NClickableControl.SignalName.Released,
+                Callable.From<NButton>(_ => ModifierList.RefreshAllSectionHeaders?.Invoke()),
+                0u
+            );
+
             PreviousRunModifiers.LastRunButton = lastRunButton;
             if (PreviousRunModifiers.Modifiers == null || PreviousRunModifiers.Modifiers.Count == 0)
                 lastRunButton.Disable();
             MainFile.Logger.Info(MainFile.CreateLogMessage("Last Run button injected."));
+
+            // Refresh all accordion headers after the randomize button changes tickboxes.
+            // Connected last so it fires after the randomize logic has already run.
+            ((GodotObject)(object)randomizeButton).Connect(
+                NClickableControl.SignalName.Released,
+                Callable.From<NButton>(_ => ModifierList.RefreshAllSectionHeaders?.Invoke()),
+                0u
+            );
         }
 
         private static void OnLastRunPressed(NCustomRunModifiersList modifiersList)
@@ -157,7 +174,10 @@ public class CustomRunUiPatches
                 return;
             try
             {
-                setTickedMethod.Invoke(modifiersList, new object[] { PreviousRunModifiers.Modifiers });
+                setTickedMethod.Invoke(
+                    modifiersList,
+                    new object[] { PreviousRunModifiers.Modifiers }
+                );
             }
             catch (TargetInvocationException ex)
                 when (ex.InnerException is InvalidOperationException)
