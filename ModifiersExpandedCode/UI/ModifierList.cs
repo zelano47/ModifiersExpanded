@@ -10,6 +10,13 @@ namespace ModifiersExpanded.ModifiersExpandedCode.UI;
 
 public static class ModifierList
 {
+    /// <summary>
+    /// Refreshes every accordion section header (text + style). Call this after any
+    /// operation that changes tickbox state from outside the per-tickbox signal path
+    /// (e.g. Randomize or Last Run button clicks).
+    /// </summary>
+    public static Action? RefreshAllSectionHeaders { get; private set; }
+
     private static List<ModifierGroup> BuildModifierGroups()
     {
         var exclusionGroups = ModelDb.MutuallyExclusiveModifiers;
@@ -116,6 +123,7 @@ public static class ModifierList
         }
 
         // ── 1. Accordion sections (groups in definition order, tickboxes alphabetical) ──
+        var sectionRefreshers = new List<Action>();
         foreach (var group in groups)
         {
             var groupTickboxes = tickboxes
@@ -127,13 +135,20 @@ public static class ModifierList
                 continue;
 
             bool anyTicked = groupTickboxes.Any(t => t.IsTicked);
-            var section = ModifierGroupControls.BuildAccordionSection(
+            var (section, refresh) = ModifierGroupControls.BuildAccordionSection(
                 group,
                 groupTickboxes,
                 startExpanded: anyTicked
             );
             ((Node)(object)container).AddChildSafely((Node)(object)section);
+            sectionRefreshers.Add(refresh);
         }
+
+        RefreshAllSectionHeaders = () =>
+        {
+            foreach (var r in sectionRefreshers)
+                r();
+        };
 
         // ── 2. Standalone tickboxes (good before bad, alphabetical within each) ──────────
         var standalones = tickboxes

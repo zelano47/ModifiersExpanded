@@ -8,7 +8,7 @@ namespace ModifiersExpanded.ModifiersExpandedCode.UI;
 
 public class ModifierGroupControls
 {
-    public static VBoxContainer BuildAccordionSection(
+    public static (VBoxContainer section, Action refreshHeader) BuildAccordionSection(
         ModifierGroup group,
         List<NRunModifierTickbox> groupTickboxes,
         bool startExpanded
@@ -25,7 +25,42 @@ public class ModifierGroupControls
         foreach (var tickbox in groupTickboxes)
             body.AddChild((Node)(object)tickbox);
 
-        RefreshHeader(headerLabel, body.Visible, group, groupTickboxes);
+        // ── Style state ─────────────────────────────────────────────────────
+        // Four combinations: (selected | unselected) x (hovered | idle)
+        var normalBase = BuildNormalStyle(selected: false);
+        var normalHover = BuildHoverVariant(normalBase);
+        var selectedBase = BuildNormalStyle(selected: true);
+        var selectedHover = BuildHoverVariant(selectedBase);
+        bool isHovering = false;
+
+        void ApplyStyle()
+        {
+            bool hasSelection = groupTickboxes.Any(t => t.IsTicked);
+            var style = hasSelection
+                ? (isHovering ? selectedHover : selectedBase)
+                : (isHovering ? normalHover : normalBase);
+            headerPanel.AddThemeStyleboxOverride("panel", style);
+        }
+
+        headerPanel.MouseEntered += () =>
+        {
+            isHovering = true;
+            ApplyStyle();
+        };
+        headerPanel.MouseExited += () =>
+        {
+            isHovering = false;
+            ApplyStyle();
+        };
+
+        // ── Unified refresh (style + text) ──────────────────────────────────
+        void Refresh()
+        {
+            ApplyStyle();
+            RefreshHeader(headerLabel, body.Visible, group, groupTickboxes);
+        }
+
+        Refresh(); // initial state
 
         // Toggle on header click.
         headerPanel.GuiInput += evt =>
@@ -37,20 +72,20 @@ public class ModifierGroupControls
             )
             {
                 body.Visible = !body.Visible;
-                RefreshHeader(headerLabel, body.Visible, group, groupTickboxes);
+                Refresh();
             }
         };
 
-        // Single Toggled handler per tickbox: refreshes the header AND enforces mutual
-        // exclusion if the group requires it. Guarding on toggled.IsTicked == true prevents
-        // cascades when we programmatically untick sibling tickboxes below.
+        // Single Toggled handler per tickbox: refreshes header AND enforces mutual
+        // exclusion if the group requires it. Guarding on toggled.IsTicked == true
+        // prevents cascades when we programmatically untick sibling tickboxes.
         foreach (var tickbox in groupTickboxes)
         {
             ((GodotObject)(object)tickbox).Connect(
                 NTickbox.SignalName.Toggled,
                 Callable.From<NRunModifierTickbox>(toggled =>
                 {
-                    RefreshHeader(headerLabel, body.Visible, group, groupTickboxes);
+                    Refresh();
                     if (group.IsMutuallyExclusive && toggled.IsTicked)
                         foreach (var other in groupTickboxes)
                             if (other != toggled)
@@ -62,7 +97,7 @@ public class ModifierGroupControls
 
         root.AddChild(headerPanel);
         root.AddChild(body);
-        return root;
+        return (root, Refresh);
     }
 
     private static void RefreshHeader(
@@ -124,43 +159,15 @@ public class ModifierGroupControls
     }
 
     /// <summary>
-    /// Creates a styled clickable header using a <see cref="PanelContainer"/> with a
-    /// native <see cref="Label"/> child. <c>Label</c> inherits fonts through Godot's
-    /// theme tree, picking up the project's custom font automatically at runtime.
-    /// <c>NButton</c> is scene-based; <c>new MegaLabel()</c> creates a bare instance
-    /// without the font resources embedded in scene-loaded versions.
+    /// Creates a styled clickable header panel. Hover and selection styles are applied
+    /// externally by <see cref="BuildAccordionSection"/> so they can react to selection state.
     /// </summary>
-    public static (PanelContainer panel, Label label) CreateHeaderPanel()
+    private static (PanelContainer panel, Label label) CreateHeaderPanel()
     {
         var panel = new PanelContainer();
         panel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
         panel.CustomMinimumSize = new Vector2(0, 40);
-        // Stop propagates mouse events to this node so GuiInput fires.
         panel.MouseFilter = Control.MouseFilterEnum.Stop;
-
-        // Dark brownish section header — visually distinct from the tickboxes below.
-        var normal = new StyleBoxFlat();
-        normal.BgColor = new Color(0.13f, 0.10f, 0.07f, 0.95f);
-        normal.BorderWidthLeft = 1;
-        normal.BorderWidthTop = 1;
-        normal.BorderWidthRight = 1;
-        normal.BorderWidthBottom = 1;
-        normal.BorderColor = new Color(0.45f, 0.33f, 0.12f, 0.80f);
-        normal.CornerRadiusTopLeft = 3;
-        normal.CornerRadiusTopRight = 3;
-        normal.CornerRadiusBottomLeft = 3;
-        normal.CornerRadiusBottomRight = 3;
-        normal.ContentMarginLeft = 10;
-        normal.ContentMarginTop = 4;
-        normal.ContentMarginBottom = 4;
-
-        // Slightly lighter on hover.
-        var hover = (StyleBoxFlat)normal.Duplicate();
-        hover.BgColor = new Color(0.21f, 0.17f, 0.10f, 0.95f);
-
-        panel.AddThemeStyleboxOverride("panel", normal);
-        panel.MouseEntered += () => panel.AddThemeStyleboxOverride("panel", hover);
-        panel.MouseExited += () => panel.AddThemeStyleboxOverride("panel", normal);
 
         var label = new Label();
         label.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
@@ -169,5 +176,37 @@ public class ModifierGroupControls
         panel.AddChild(label);
 
         return (panel, label);
+    }
+
+    // ── Header styles ────────────────────────────────────────────────────────
+
+    private static StyleBoxFlat BuildNormalStyle(bool selected)
+    {
+        var style = new StyleBoxFlat();
+        style.BgColor = selected
+            ? new Color(0.22f, 0.16f, 0.07f, 0.95f)
+            : new Color(0.13f, 0.10f, 0.07f, 0.95f);
+        style.BorderWidthLeft = 1;
+        style.BorderWidthTop = 1;
+        style.BorderWidthRight = 1;
+        style.BorderWidthBottom = 1;
+        style.BorderColor = selected
+            ? new Color(0.70f, 0.52f, 0.15f, 0.95f)
+            : new Color(0.45f, 0.33f, 0.12f, 0.80f);
+        style.CornerRadiusTopLeft = 3;
+        style.CornerRadiusTopRight = 3;
+        style.CornerRadiusBottomLeft = 3;
+        style.CornerRadiusBottomRight = 3;
+        style.ContentMarginLeft = 10;
+        style.ContentMarginTop = 4;
+        style.ContentMarginBottom = 4;
+        return style;
+    }
+
+    private static StyleBoxFlat BuildHoverVariant(StyleBoxFlat baseStyle)
+    {
+        var hover = (StyleBoxFlat)baseStyle.Duplicate();
+        hover.BgColor = baseStyle.BgColor.Lightened(0.08f);
+        return hover;
     }
 }
