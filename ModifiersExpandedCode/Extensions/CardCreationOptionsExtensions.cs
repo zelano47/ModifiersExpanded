@@ -36,6 +36,41 @@ public static class CardCreationOptionsExtensions
         new[] { typeof(IEnumerable<CardPoolModel>), typeof(Func<CardModel, bool>) }
     );
 
+    // sts2 main only: CustomCardPool property (absent in sts2-beta)
+    private static readonly PropertyInfo? _customCardPoolProp = AccessTools.Property(
+        typeof(CardCreationOptions),
+        "CustomCardPool"
+    );
+
+    // sts2 main only: WithCustomPool(IEnumerable<CardModel>, CardRarityOddsType?)
+    private static readonly MethodInfo? _withCustomPoolMain = AccessTools.Method(
+        typeof(CardCreationOptions),
+        "WithCustomPool"
+    );
+
+    /// <summary>
+    /// Returns the flat <c>CustomCardPool</c> on sts2-main, or <c>null</c> on sts2-beta
+    /// (where the property does not exist).
+    /// </summary>
+    public static IEnumerable<CardModel>? GetCustomCardPool(this CardCreationOptions options) =>
+        (IEnumerable<CardModel>?)_customCardPoolProp?.GetValue(options);
+
+    /// <summary>
+    /// Extends the existing <c>CustomCardPool</c> with <paramref name="extra"/> cards.
+    /// Only valid to call when <see cref="GetCustomCardPool"/> returns non-null.
+    /// </summary>
+    public static CardCreationOptions WithExtendedCustomPool(
+        this CardCreationOptions options,
+        IEnumerable<CardModel> extra
+    )
+    {
+        if (_withCustomPoolMain == null)
+            return options;
+        var extended = options.GetCustomCardPool()!.Concat(extra);
+        return (CardCreationOptions)
+            _withCustomPoolMain.Invoke(options, new object?[] { extended, null })!;
+    }
+
     /// <summary>
     /// Replaces the card pools on <paramref name="options"/> and applies
     /// <paramref name="filter"/>, compatible with both sts2 main and sts2-beta.

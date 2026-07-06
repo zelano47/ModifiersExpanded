@@ -61,6 +61,19 @@ public class ColorlessCards : ModifierModel
         {
             return options;
         }
+
+        // sts2-main: CharacterCards converts the reward pool to a flat CustomCardPool via
+        // WithCustomPool(), which clears CardPools. Detect this and extend the flat list
+        // directly rather than adding a pool to the now-empty CardPools list.
+        var customPool = options.GetCustomCardPool();
+        if (customPool != null)
+        {
+            var colorlessCards = ModelDb
+                .CardPool<ColorlessCardPool>()
+                .GetUnlockedCards(player.UnlockState, player.RunState.CardMultiplayerConstraint);
+            return options.WithExtendedCustomPool(colorlessCards);
+        }
+
         return options.WithCardPoolsAndFilter(
             options
                 .CardPools.ToList()
