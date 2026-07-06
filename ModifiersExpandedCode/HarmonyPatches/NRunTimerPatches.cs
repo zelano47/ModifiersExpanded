@@ -51,9 +51,11 @@ public class NRunTimerPatches
             var urgencyForVisibility = GetActiveUrgencyModifier();
             if (
                 GetActiveSpeedrunModifier() != null
-                || (urgencyForVisibility != null && urgencyForVisibility.IsInCombat)
+                || (urgencyForVisibility != null && !urgencyForVisibility.RoomExited)
             )
+            {
                 ((CanvasItem)__instance).Visible = true;
+            }
         }
     }
 
@@ -72,23 +74,48 @@ public class NRunTimerPatches
         public static void Postfix(NRunTimer __instance)
         {
             if (_timerLabelField?.GetValue(__instance) is not MegaLabel timerLabel)
-                return;
-
-            var urgency = GetActiveUrgencyModifier();
-            if (urgency != null && urgency.IsInCombat)
             {
-                float remaining =
-                    urgency._timeLimit - (RunManager.Instance.RunTime - urgency._startTime);
-                timerLabel.SetTextAutoSize(FormatCountdown(remaining));
-                ((CanvasItem)timerLabel).SelfModulate = remaining < 0 ? Colors.Red : Colors.White;
                 return;
             }
 
+            UpdateUrgencyTimerLabel(timerLabel);
+            UpdateSpeedrunTimerLabel(timerLabel);
+        }
+
+        private static void UpdateUrgencyTimerLabel(MegaLabel timerLabel)
+        {
+            var urgency = GetActiveUrgencyModifier();
+            if (urgency == null)
+            {
+                return;
+            }
+            float timerLabelValue;
+            if (urgency.IsInCombat)
+            {
+                timerLabelValue =
+                    urgency.TimeLimit - (RunManager.Instance.RunTime - urgency.StartTime);
+            }
+            else if (!urgency.RoomExited)
+            {
+                timerLabelValue = urgency.TimeLeft;
+            }
+            else
+            {
+                return;
+            }
+            timerLabel.SetTextAutoSize(FormatCountdown(timerLabelValue));
+            ((CanvasItem)timerLabel).SelfModulate = timerLabelValue < 0 ? Colors.Red : Colors.White;
+        }
+
+        private static void UpdateSpeedrunTimerLabel(MegaLabel timerLabel)
+        {
             var speedrun = GetActiveSpeedrunModifier();
+            if (speedrun == null)
+            {
+                return;
+            }
             ((CanvasItem)timerLabel).SelfModulate =
-                speedrun != null && RunManager.Instance.RunTime > speedrun._timeLimit
-                    ? Colors.Red
-                    : Colors.White;
+                RunManager.Instance.RunTime > speedrun._timeLimit ? Colors.Red : Colors.White;
         }
     }
 }

@@ -12,25 +12,32 @@ namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
 public abstract class UrgencyBase : ModifierModel
 {
-    public virtual float _timeLimit { get; set; }
-    public float _startTime { get; set; }
+    public virtual float TimeLimit { get; set; }
+    public float StartTime { get; set; }
     public bool IsInCombat { get; set; }
-
+    public float TimeLeft { get; set; }
     public bool RoomExited { get; set; }
 
     public override Task AfterRoomEntered(AbstractRoom room)
     {
-        RoomExited = false;
         if (room is not CombatRoom)
         {
             return Task.CompletedTask;
         }
-        _startTime = RunManager.Instance.RunTime;
+        RoomExited = false;
+        StartTime = RunManager.Instance.RunTime;
+        TimeLeft = TimeLimit;
         IsInCombat = true;
         return Task.CompletedTask;
     }
 
-    public virtual Task AfterRewardTaken(Player player, Reward reward)
+    public override Task AfterRewardTaken(Player player, Reward reward)
+    {
+        RoomExited = true;
+        return Task.CompletedTask;
+    }
+
+    public override Task AfterActEntered()
     {
         RoomExited = true;
         return Task.CompletedTask;
@@ -39,10 +46,11 @@ public abstract class UrgencyBase : ModifierModel
     public override async Task AfterCombatEnd(CombatRoom room)
     {
         IsInCombat = false;
-        float elapsedTime = RunManager.Instance.RunTime - _startTime;
-        if (elapsedTime > _timeLimit)
+        float combatElapsedTime = RunManager.Instance.RunTime - StartTime;
+        TimeLeft = TimeLimit - combatElapsedTime;
+        if (combatElapsedTime > TimeLimit)
         {
-            int damage = (int)Math.Round(elapsedTime - _timeLimit);
+            int damage = (int)Math.Round(combatElapsedTime - TimeLimit);
             foreach (var player in RunState.Players)
             {
                 await CreatureCmd.Damage(
