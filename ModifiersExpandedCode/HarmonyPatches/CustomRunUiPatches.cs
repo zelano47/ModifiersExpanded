@@ -45,28 +45,38 @@ public class CustomRunUiPatches
     [HarmonyPatch(typeof(NCustomRunScreen), "_Ready")]
     public static class CustomRunScreenReadyPatch
     {
-        private static readonly FieldInfo _randomizeButtonField = AccessTools.Field(
+        private static readonly FieldInfo? _randomizeButtonField = AccessTools.Field(
             typeof(NCustomRunScreen),
             "_randomizeButton"
         );
-        private static readonly FieldInfo _modifiersListField = AccessTools.Field(
+        private static readonly FieldInfo? _modifiersListField = AccessTools.Field(
             typeof(NCustomRunScreen),
             "_modifiersList"
+        );
+
+        // NCustomRunRandomizeButton only exists on the beta branch of the game.
+        // Look it up at runtime so the mod compiles and runs on the main branch too.
+        private static readonly Type? _randomizeButtonType = AccessTools.TypeByName(
+            "MegaCrit.Sts2.Core.Nodes.Screens.CustomRun.NCustomRunRandomizeButton"
         );
 
         // _shaderMaterial is cached in NCustomRunRandomizeButton._Ready and used by
         // OnFocus/OnUnfocus. After Duplicate() both buttons share the same ShaderMaterial
         // instance, so we must replace it with a copy and update the cached field.
-        private static readonly FieldInfo _shaderMaterialField = AccessTools.Field(
-            typeof(NCustomRunRandomizeButton),
-            "_shaderMaterial"
-        );
+        private static readonly FieldInfo? _shaderMaterialField =
+            _randomizeButtonType != null
+                ? AccessTools.Field(_randomizeButtonType, "_shaderMaterial")
+                : null;
 
         public static void Postfix(NCustomRunScreen __instance)
         {
-            var randomizeButton =
-                _randomizeButtonField.GetValue(__instance) as NCustomRunRandomizeButton;
-            var modifiersList = _modifiersListField.GetValue(__instance) as NCustomRunModifiersList;
+            // Feature only available when NCustomRunRandomizeButton exists (beta branch).
+            if (_randomizeButtonType == null)
+                return;
+
+            var randomizeButton = _randomizeButtonField?.GetValue(__instance) as NButton;
+            var modifiersList =
+                _modifiersListField?.GetValue(__instance) as NCustomRunModifiersList;
 
             if (randomizeButton == null || modifiersList == null)
             {
@@ -80,9 +90,9 @@ public class CustomRunUiPatches
 
             // Duplicate the randomize button (copies the entire sub-tree including
             // Background + Label children that _Ready depends on).
-            var lastRunButton = (NCustomRunRandomizeButton)(
-                (object)((Node)(object)randomizeButton).Duplicate()!
-            );
+            var lastRunButton = ((Node)(object)randomizeButton).Duplicate()! as NButton;
+            if (lastRunButton == null)
+                return;
             ((Node)(object)lastRunButton).Name = "LastRunModifiersButton";
 
             // AddSiblingSafely places the new node right after its sibling in the parent.
@@ -98,7 +108,7 @@ public class CustomRunUiPatches
             {
                 var uniqueMat = (ShaderMaterial)sharedMat.Duplicate();
                 ((CanvasItem)(object)bgControl).Material = uniqueMat;
-                _shaderMaterialField.SetValue(lastRunButton, uniqueMat);
+                _shaderMaterialField?.SetValue(lastRunButton, uniqueMat);
             }
 
             // _Ready on the duplicate has now run (synchronous when parent is already
@@ -137,11 +147,20 @@ public class CustomRunUiPatches
                 return;
             }
 
+            // SetTickedModifiers only exists on sts2-beta; call via reflection so
+            // this file compiles against sts2 main as well.
+            var setTickedMethod = AccessTools.Method(
+                typeof(NCustomRunModifiersList),
+                "SetTickedModifiers"
+            );
+            if (setTickedMethod == null)
+                return;
             try
             {
-                modifiersList.SetTickedModifiers(PreviousRunModifiers.Modifiers);
+                setTickedMethod.Invoke(modifiersList, new object[] { PreviousRunModifiers.Modifiers });
             }
-            catch (InvalidOperationException)
+            catch (TargetInvocationException ex)
+                when (ex.InnerException is InvalidOperationException)
             {
                 // In multiplayer-client or load mode the list is read-only; ignore.
             }

@@ -80,9 +80,7 @@ public class BodyDouble : ModifierModel
     )
     {
         Func<CardModel, bool> filter = (CardModel c) => c.Type != CardType.Attack;
-        return options
-            .WithCardPools(options.CardPools.ToList())
-            .WithFilter(filter);
+        return options.WithCardPoolsAndFilter(options.CardPools.ToList(), filter);
     }
 
     protected override string IconPath => nameof(BodyDouble).ToSnakeCasePng().ModifierImagePath();
