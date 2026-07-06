@@ -111,12 +111,16 @@ public class NRunTimerPatches
         private static void UpdateSpeedrunTimerLabel(MegaLabel timerLabel)
         {
             var speedrun = GetActiveSpeedrunModifier();
+            var urgency = GetActiveUrgencyModifier();
             if (speedrun == null)
             {
                 return;
             }
-            ((CanvasItem)timerLabel).SelfModulate =
-                RunManager.Instance.RunTime > speedrun._timeLimit ? Colors.Red : Colors.White;
+            if (urgency != null && urgency.RoomExited)
+            {
+                ((CanvasItem)timerLabel).SelfModulate =
+                    RunManager.Instance.RunTime > speedrun._timeLimit ? Colors.Red : Colors.White;
+            }
         }
     }
 }
