@@ -43,8 +43,10 @@ public class ModelDbPatches
                 ModelDb.Modifier<RunicDome>(),
                 ModelDb.Modifier<Speedrun>(),
                 ModelDb.Modifier<SpeedrunPlus>(),
+                ModelDb.Modifier<SpeedrunPlusPlus>(),
                 ModelDb.Modifier<Urgency>(),
                 ModelDb.Modifier<UrgencyPlus>(),
+                ModelDb.Modifier<UrgencyPlusPlus>(),
             };
             __result = patched;
         }

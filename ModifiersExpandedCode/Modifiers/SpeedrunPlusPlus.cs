@@ -1,8 +1,8 @@
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Speedrun : SpeedrunBase
+public class SpeedrunPlusPlus : SpeedrunBase
 {
-    private const float _timeLimitMinutes = 40f;
+    private const float _timeLimitMinutes = 20f;
 
     public override float _timeLimit { get; set; } = 60f * _timeLimitMinutes;
 }
