@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using Godot;
 using HarmonyLib;
@@ -335,10 +336,10 @@ public class ModifiersListPatches
         // Collapsed with a selection: show the selected modifier's name.
         if (!expanded)
         {
-            var selected = tickboxes.FirstOrDefault(t => t.IsTicked);
-            if (selected != null)
+            NRunModifierTickbox[] selected = tickboxes.Where(t => t.IsTicked).ToArray();
+            if (selected.Length > 0)
             {
-                label.Text = arrow + ModifierDisplayName(selected.Modifier);
+                label.Text = arrow + ModifierGroupCollapsedText(selected);
                 return;
             }
         }
@@ -348,11 +349,29 @@ public class ModifiersListPatches
         string text =
             group.GroupName != null
                 ? group.GroupName.GetFormattedText()
-                : string.Join(" / ", tickboxes.Select(t => ModifierDisplayName(t.Modifier)));
+                : ModifierGroupCollapsedText(tickboxes.ToArray());
         label.Text = arrow + text;
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private const int maxCollapsedTextLength = 75;
+    private const int numEllipsisChars = 3;
+
+    private static string ModifierGroupCollapsedText(NRunModifierTickbox[] tickboxes)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append(string.Join(", ", tickboxes.Select(t => ModifierDisplayName(t.Modifier))));
+        if (sb.Length > maxCollapsedTextLength)
+        {
+            sb.Remove(
+                maxCollapsedTextLength - numEllipsisChars,
+                sb.Length - (maxCollapsedTextLength - numEllipsisChars)
+            );
+            sb.Append(new string('.', numEllipsisChars));
+        }
+        return sb.ToString();
+    }
 
     /// <summary>
     /// Converts a PascalCase modifier ID to a readable display name.

@@ -26,5 +26,13 @@
   "CHIMERA.title": "Chimera",
   "CHIMERA.description": "Your starting deck is a fusion of 5 characters.",
   "RUNIC_DOME.title": "Runic Dome",
-  "RUNIC_DOME.description": "Gain 1 Energy at the start of each turn. You can no longer see enemy Intents."
+  "RUNIC_DOME.description": "Gain 1 Energy at the start of each turn. You can no longer see enemy Intents.",
+  "URGENCY.title": "Urgency",
+  "URGENCY.description": "Every second spent in combat beyond 45 seconds deals damage to you.",
+  "URGENCY_PLUS.title": "Urgency+",
+  "URGENCY_PLUS.description": "Every second spent in combat beyond 30 seconds deals damage to you.",
+  "SPEEDRUN.title": "Speedrun",
+  "SPEEDRUN.description": "Finish the run in 40 minutes",
+  "SPEEDRUN_PLUS.title": "Speedrun+",
+  "SPEEDRUN_PLUS.description": "Finish the run in 30 minutes."
 }
