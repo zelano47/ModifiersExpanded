@@ -195,7 +195,9 @@ public class ModifiersListPatches
         // ── 2. Standalone tickboxes (good before bad, alphabetical within each) ──────────
         var standalones = tickboxes
             .Where(t => t != null && !tickboxToGroup.ContainsKey(t))
-            .OrderBy(t => t!.Modifier != null && goodModifierTypes.Contains(t.Modifier.GetType()) ? 0 : 1)
+            .OrderBy(t =>
+                t!.Modifier != null && goodModifierTypes.Contains(t.Modifier.GetType()) ? 0 : 1
+            )
             .ThenBy(t => ModifierDisplayName(t!.Modifier))
             .ToList();
 
@@ -214,7 +216,7 @@ public class ModifiersListPatches
         var root = new VBoxContainer();
         root.AddThemeConstantOverride("separation", 0);
 
-        var header = CreateHeaderButton();
+        var (headerPanel, headerLabel) = CreateHeaderPanel();
         var body = new VBoxContainer();
         body.AddThemeConstantOverride("separation", 0);
         body.Visible = startExpanded;
@@ -222,13 +224,20 @@ public class ModifiersListPatches
         foreach (var tickbox in groupTickboxes)
             body.AddChild((Node)(object)tickbox);
 
-        RefreshHeader(header, body.Visible, group, groupTickboxes);
+        RefreshHeader(headerLabel, body.Visible, group, groupTickboxes);
 
         // Toggle on header click.
-        header.Pressed += () =>
+        headerPanel.GuiInput += evt =>
         {
-            body.Visible = !body.Visible;
-            RefreshHeader(header, body.Visible, group, groupTickboxes);
+            if (
+                evt is InputEventMouseButton btn
+                && btn.ButtonIndex == MouseButton.Left
+                && btn.Pressed
+            )
+            {
+                body.Visible = !body.Visible;
+                RefreshHeader(headerLabel, body.Visible, group, groupTickboxes);
+            }
         };
 
         // Single Toggled handler per tickbox: refreshes the header AND enforces mutual
@@ -240,7 +249,7 @@ public class ModifiersListPatches
                 NTickbox.SignalName.Toggled,
                 Callable.From<NRunModifierTickbox>(toggled =>
                 {
-                    RefreshHeader(header, body.Visible, group, groupTickboxes);
+                    RefreshHeader(headerLabel, body.Visible, group, groupTickboxes);
                     if (group.IsMutuallyExclusive && toggled.IsTicked)
                         foreach (var other in groupTickboxes)
                             if (other != toggled)
@@ -250,20 +259,27 @@ public class ModifiersListPatches
             );
         }
 
-        root.AddChild(header);
+        root.AddChild(headerPanel);
         root.AddChild(body);
         return root;
     }
 
-    // ── Header button ────────────────────────────────────────────────────────
+    // ── Header panel ────────────────────────────────────────────────────────
 
-    private static Button CreateHeaderButton()
+    /// <summary>
+    /// Creates a styled clickable header using a <see cref="PanelContainer"/> with a
+    /// native <see cref="Label"/> child. <c>Label</c> inherits fonts through Godot's
+    /// theme tree, picking up the project's custom font automatically at runtime.
+    /// <c>NButton</c> is scene-based; <c>new MegaLabel()</c> creates a bare instance
+    /// without the font resources embedded in scene-loaded versions.
+    /// </summary>
+    private static (PanelContainer panel, Label label) CreateHeaderPanel()
     {
-        var btn = new Button();
-        btn.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-        btn.CustomMinimumSize = new Vector2(0, 40);
-        btn.Alignment = HorizontalAlignment.Left;
-        btn.ClipText = true;
+        var panel = new PanelContainer();
+        panel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        panel.CustomMinimumSize = new Vector2(0, 40);
+        // Stop propagates mouse events to this node so GuiInput fires.
+        panel.MouseFilter = Control.MouseFilterEnum.Stop;
 
         // Dark brownish section header — visually distinct from the tickboxes below.
         var normal = new StyleBoxFlat();
@@ -283,19 +299,23 @@ public class ModifiersListPatches
 
         // Slightly lighter on hover.
         var hover = (StyleBoxFlat)normal.Duplicate();
-        hover.BgColor = new Color(0.21f, 0.17f, 0.10f, 0.30f);
+        hover.BgColor = new Color(0.21f, 0.17f, 0.10f, 0.95f);
 
-        btn.AddThemeStyleboxOverride("normal", normal);
-        btn.AddThemeStyleboxOverride("hover", hover);
-        btn.AddThemeStyleboxOverride("pressed", hover);
-        btn.AddThemeStyleboxOverride("focus", normal);
-        btn.AddThemeStyleboxOverride("disabled", normal);
+        panel.AddThemeStyleboxOverride("panel", normal);
+        panel.MouseEntered += () => panel.AddThemeStyleboxOverride("panel", hover);
+        panel.MouseExited += () => panel.AddThemeStyleboxOverride("panel", normal);
 
-        return btn;
+        var label = new Label();
+        label.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        label.VerticalAlignment = VerticalAlignment.Center;
+        label.AutowrapMode = TextServer.AutowrapMode.Off;
+        panel.AddChild(label);
+
+        return (panel, label);
     }
 
     private static void RefreshHeader(
-        Button header,
+        Label label,
         bool expanded,
         ModifierGroup group,
         List<NRunModifierTickbox> tickboxes
@@ -309,18 +329,18 @@ public class ModifiersListPatches
             var selected = tickboxes.FirstOrDefault(t => t.IsTicked);
             if (selected != null)
             {
-                header.Text = arrow + ModifierDisplayName(selected.Modifier);
+                label.Text = arrow + ModifierDisplayName(selected.Modifier);
                 return;
             }
         }
 
         // Expanded, or collapsed with nothing selected:
         // prefer the group's localized name; fall back to listing member names.
-        string label =
+        string text =
             group.GroupName != null
                 ? group.GroupName.GetFormattedText()
                 : string.Join(" / ", tickboxes.Select(t => ModifierDisplayName(t.Modifier)));
-        header.Text = arrow + label;
+        label.Text = arrow + text;
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
@@ -333,6 +353,6 @@ public class ModifiersListPatches
     {
         if (modifier == null)
             return "?";
-        return Regex.Replace(modifier.Id.Entry, @"(?<!^)([A-Z])", " $1");
+        return modifier.Title.GetFormattedText();
     }
 }
