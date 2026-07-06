@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
 using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
 using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
 using MegaCrit.Sts2.Core.Runs;
+using ModifiersExpanded.ModifiersExpandedCode.State;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
 
@@ -157,7 +158,10 @@ public class CustomRunUiPatches
                 return;
             try
             {
-                setTickedMethod.Invoke(modifiersList, new object[] { PreviousRunModifiers.Modifiers });
+                setTickedMethod.Invoke(
+                    modifiersList,
+                    new object[] { PreviousRunModifiers.Modifiers }
+                );
             }
             catch (TargetInvocationException ex)
                 when (ex.InnerException is InvalidOperationException)
