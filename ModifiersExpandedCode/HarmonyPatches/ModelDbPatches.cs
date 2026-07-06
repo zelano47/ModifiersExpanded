@@ -41,6 +41,7 @@ public class ModelDbPatches
                 ModelDb.Modifier<Hubris>(),
                 ModelDb.Modifier<Ephemeral>(),
                 ModelDb.Modifier<RunicDome>(),
+                ModelDb.Modifier<Speedrun>(),
             };
             __result = patched;
         }
