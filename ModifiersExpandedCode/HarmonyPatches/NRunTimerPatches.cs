@@ -2,6 +2,7 @@ using System.Reflection;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.addons.mega_text;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.TopBar;
 using MegaCrit.Sts2.Core.Runs;
@@ -52,6 +53,7 @@ public class NRunTimerPatches
             if (
                 GetActiveSpeedrunModifier() != null
                 || (urgencyForVisibility != null && !urgencyForVisibility.RoomExited)
+                || RunManager.Instance.IsGameOver
             )
             {
                 ((CanvasItem)__instance).Visible = true;
@@ -71,12 +73,34 @@ public class NRunTimerPatches
             "_timerLabel"
         );
 
+        private static long? _gameOverRunTime;
+
         public static void Postfix(NRunTimer __instance)
         {
             if (_timerLabelField?.GetValue(__instance) is not MegaLabel timerLabel)
+                return;
+
+            // When all players are dead and speedrun is active, restore run time display.
+            // The base OnTimerTimeout skips its body on IsGameOver, leaving stale text.
+            // GetActiveSpeedrunModifier() also returns null on game over (IsInProgress is false),
+            // so read the run state directly here.
+            if (RunManager.Instance.IsGameOver)
             {
+                _gameOverRunTime ??= RunManager.Instance.RunTime;
+                var speedrun = RunManager
+                    .Instance.DebugOnlyGetState()
+                    ?.Modifiers.OfType<SpeedrunBase>()
+                    .FirstOrDefault();
+                if (speedrun != null)
+                {
+                    timerLabel.SetTextAutoSize(TimeFormatting.Format(_gameOverRunTime.Value));
+                    ((CanvasItem)timerLabel).SelfModulate =
+                        _gameOverRunTime.Value > speedrun._timeLimit ? Colors.Red : Colors.White;
+                }
                 return;
             }
+
+            _gameOverRunTime = null;
 
             UpdateUrgencyTimerLabel(timerLabel);
             UpdateSpeedrunTimerLabel(timerLabel);
@@ -85,7 +109,7 @@ public class NRunTimerPatches
         private static void UpdateUrgencyTimerLabel(MegaLabel timerLabel)
         {
             var urgency = GetActiveUrgencyModifier();
-            if (urgency == null)
+            if (urgency == null || RunManager.Instance.IsGameOver)
             {
                 return;
             }

@@ -1,4 +1,5 @@
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
@@ -53,6 +54,9 @@ public abstract class UrgencyBase : ModifierModel
             int damage = (int)Math.Round(combatElapsedTime - TimeLimit);
             foreach (var player in RunState.Players)
             {
+                if (player.Creature.CurrentHp <= 0)
+                    continue;
+
                 await CreatureCmd.Damage(
                     new BlockingPlayerChoiceContext(),
                     player.Creature,
