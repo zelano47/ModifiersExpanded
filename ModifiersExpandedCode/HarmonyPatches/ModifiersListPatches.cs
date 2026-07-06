@@ -5,6 +5,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Modifiers;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
 using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
@@ -16,18 +17,18 @@ public class ModifierGroup
 {
     public ModifierGroup(bool isMutuallyExclusive = true)
     {
-        MutuallyExclusiveModifiers = new HashSet<ModifierModel>();
+        Modifiers = new HashSet<ModifierModel>();
         IsMutuallyExclusive = isMutuallyExclusive;
     }
 
     public ModifierGroup(LocString groupName, bool isMutuallyExclusive = true)
     {
-        MutuallyExclusiveModifiers = new HashSet<ModifierModel>();
+        Modifiers = new HashSet<ModifierModel>();
         GroupName = groupName;
         IsMutuallyExclusive = isMutuallyExclusive;
     }
 
-    public HashSet<ModifierModel> MutuallyExclusiveModifiers { get; }
+    public HashSet<ModifierModel> Modifiers { get; }
     public LocString? GroupName { get; set; }
 
     /// <summary>
@@ -94,14 +95,21 @@ public class ModifiersListPatches
             new LocString("main_menu_ui", "MODIFIER_GROUP.URGENCY.title")
         );
 
+        var cardPoolsGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.CARD_POOLS.title"),
+            false
+        );
+
         foreach (var modifier in allModifiers)
         {
             if (modifier.ClearsPlayerDeck)
-                replaceStarterDeckGroup.MutuallyExclusiveModifiers.Add(modifier);
+                replaceStarterDeckGroup.Modifiers.Add(modifier);
             else if (modifier is SpeedrunBase)
-                speedrunGroup.MutuallyExclusiveModifiers.Add(modifier);
+                speedrunGroup.Modifiers.Add(modifier);
             else if (modifier is UrgencyBase)
-                urgencyGroup.MutuallyExclusiveModifiers.Add(modifier);
+                urgencyGroup.Modifiers.Add(modifier);
+            else if (modifier is CharacterCards || modifier is ColorlessCards)
+                cardPoolsGroup.Modifiers.Add(modifier);
         }
 
         var groups = new List<ModifierGroup>
@@ -109,13 +117,14 @@ public class ModifiersListPatches
             replaceStarterDeckGroup,
             speedrunGroup,
             urgencyGroup,
+            cardPoolsGroup,
         };
 
         // Generate one section per external mutual-exclusion set for any modifier not already
         // classified above. Iterating each set separately preserves distinct groupings from
         // different mods rather than collapsing them all into a single fallback section.
         var alreadyGroupedTypes = groups
-            .SelectMany(g => g.MutuallyExclusiveModifiers)
+            .SelectMany(g => g.Modifiers)
             .Select(m => m.GetType())
             .ToHashSet();
 
@@ -133,14 +142,14 @@ public class ModifiersListPatches
                 // No GroupName: the header will fall back to listing member names.
                 var externalGroup = new ModifierGroup();
                 foreach (var m in unclassified)
-                    externalGroup.MutuallyExclusiveModifiers.Add(m);
+                    externalGroup.Modifiers.Add(m);
                 groups.Add(externalGroup);
             }
         }
 
         // Drop groups with fewer than two members — no meaningful choice to present.
         // Their modifier(s) will fall through to standalone tickboxes in the layout.
-        return groups.Where(g => g.MutuallyExclusiveModifiers.Count > 1).ToList();
+        return groups.Where(g => g.Modifiers.Count > 1).ToList();
     }
 
     // ── Layout builder ───────────────────────────────────────────────────────
@@ -160,7 +169,7 @@ public class ModifiersListPatches
             if (tickbox?.Modifier == null)
                 continue;
             var match = groups.FirstOrDefault(g =>
-                g.MutuallyExclusiveModifiers.Any(m => m.GetType() == tickbox.Modifier.GetType())
+                g.Modifiers.Any(m => m.GetType() == tickbox.Modifier.GetType())
             );
             if (match != null)
                 tickboxToGroup[tickbox] = match;
