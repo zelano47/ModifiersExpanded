@@ -44,6 +44,7 @@ public class ModelDbPatches
                 ModelDb.Modifier<Speedrun>(),
                 ModelDb.Modifier<SpeedrunPlus>(),
                 ModelDb.Modifier<Urgency>(),
+                ModelDb.Modifier<UrgencyPlus>(),
             };
             __result = patched;
         }

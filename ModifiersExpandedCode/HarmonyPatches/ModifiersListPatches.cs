@@ -1,0 +1,338 @@
+using System.Reflection;
+using System.Text.RegularExpressions;
+using Godot;
+using HarmonyLib;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
+using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
+using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
+
+namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
+
+public class ModifierGroup
+{
+    public ModifierGroup(bool isMutuallyExclusive = true)
+    {
+        MutuallyExclusiveModifiers = new HashSet<ModifierModel>();
+        IsMutuallyExclusive = isMutuallyExclusive;
+    }
+
+    public ModifierGroup(LocString groupName, bool isMutuallyExclusive = true)
+    {
+        MutuallyExclusiveModifiers = new HashSet<ModifierModel>();
+        GroupName = groupName;
+        IsMutuallyExclusive = isMutuallyExclusive;
+    }
+
+    public HashSet<ModifierModel> MutuallyExclusiveModifiers { get; }
+    public LocString? GroupName { get; set; }
+
+    /// <summary>
+    /// When true, ticking one modifier in this group automatically unticks all others.
+    /// Enforced directly from the group's own tickbox connections so the mod no longer
+    /// depends on <see cref="ModelDb.MutuallyExclusiveModifiers"/> at display time.
+    /// </summary>
+    public bool IsMutuallyExclusive { get; init; }
+};
+
+/// <summary>
+/// Replaces the flat <see cref="NCustomRunModifiersList"/> layout with a grouped accordion
+/// UI. Modifiers that belong to a mutual-exclusion set are collapsed into an expandable
+/// section; standalone modifiers are displayed directly as before.
+///
+/// The patch is a Postfix on _Ready: the original method still creates all
+/// <see cref="NRunModifierTickbox"/> instances and registers its signal connections. We
+/// only reorganise how those tickboxes are parented in the scene tree — all existing
+/// mutual-exclusion logic and the ModifiersChanged signal remain untouched.
+/// </summary>
+public class ModifiersListPatches
+{
+    private static readonly FieldInfo? _containerField = AccessTools.Field(
+        typeof(NCustomRunModifiersList),
+        "_container"
+    );
+
+    private static readonly FieldInfo? _modifierTickboxesField = AccessTools.Field(
+        typeof(NCustomRunModifiersList),
+        "_modifierTickboxes"
+    );
+
+    // ── Patch ────────────────────────────────────────────────────────────────
+
+    [HarmonyPatch(typeof(NCustomRunModifiersList), "_Ready")]
+    public static class NCustomRunModifiersListReadyPatch
+    {
+        public static void Postfix(NCustomRunModifiersList __instance)
+        {
+            if (_containerField?.GetValue(__instance) is not Control container)
+                return;
+            if (
+                _modifierTickboxesField?.GetValue(__instance)
+                is not List<NRunModifierTickbox> tickboxes
+            )
+                return;
+
+            RebuildWithAccordionGroups(container, tickboxes);
+        }
+    }
+
+    private static List<ModifierGroup> BuildModifierGroups()
+    {
+        var exclusionGroups = ModelDb.MutuallyExclusiveModifiers;
+        var allModifiers = ModelDb.GoodModifiers.Concat(ModelDb.BadModifiers).ToList();
+
+        var replaceStarterDeckGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.REPLACE_STARTER_DECK.title")
+        );
+        var speedrunGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.SPEEDRUN.title")
+        );
+        var urgencyGroup = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.URGENCY.title")
+        );
+
+        foreach (var modifier in allModifiers)
+        {
+            if (modifier.ClearsPlayerDeck)
+                replaceStarterDeckGroup.MutuallyExclusiveModifiers.Add(modifier);
+            else if (modifier is SpeedrunBase)
+                speedrunGroup.MutuallyExclusiveModifiers.Add(modifier);
+            else if (modifier is UrgencyBase)
+                urgencyGroup.MutuallyExclusiveModifiers.Add(modifier);
+        }
+
+        var groups = new List<ModifierGroup>
+        {
+            replaceStarterDeckGroup,
+            speedrunGroup,
+            urgencyGroup,
+        };
+
+        // Generate one section per external mutual-exclusion set for any modifier not already
+        // classified above. Iterating each set separately preserves distinct groupings from
+        // different mods rather than collapsing them all into a single fallback section.
+        var alreadyGroupedTypes = groups
+            .SelectMany(g => g.MutuallyExclusiveModifiers)
+            .Select(m => m.GetType())
+            .ToHashSet();
+
+        foreach (var exclusionSet in exclusionGroups)
+        {
+            var unclassified = allModifiers
+                .Where(m =>
+                    !alreadyGroupedTypes.Contains(m.GetType())
+                    && exclusionSet.Any(e => e.GetType() == m.GetType())
+                )
+                .ToList();
+
+            if (unclassified.Count > 1)
+            {
+                // No GroupName: the header will fall back to listing member names.
+                var externalGroup = new ModifierGroup();
+                foreach (var m in unclassified)
+                    externalGroup.MutuallyExclusiveModifiers.Add(m);
+                groups.Add(externalGroup);
+            }
+        }
+
+        // Drop groups with fewer than two members — no meaningful choice to present.
+        // Their modifier(s) will fall through to standalone tickboxes in the layout.
+        return groups.Where(g => g.MutuallyExclusiveModifiers.Count > 1).ToList();
+    }
+
+    // ── Layout builder ───────────────────────────────────────────────────────
+
+    private static void RebuildWithAccordionGroups(
+        Control container,
+        List<NRunModifierTickbox> tickboxes
+    )
+    {
+        var groups = BuildModifierGroups();
+        var goodModifierTypes = ModelDb.GoodModifiers.Select(m => m.GetType()).ToHashSet();
+
+        // Map each non-null tickbox to its ModifierGroup.
+        var tickboxToGroup = new Dictionary<NRunModifierTickbox, ModifierGroup>();
+        foreach (var tickbox in tickboxes)
+        {
+            if (tickbox?.Modifier == null)
+                continue;
+            var match = groups.FirstOrDefault(g =>
+                g.MutuallyExclusiveModifiers.Any(m => m.GetType() == tickbox.Modifier.GetType())
+            );
+            if (match != null)
+                tickboxToGroup[tickbox] = match;
+        }
+
+        // Detach every tickbox from the container without freeing it. Their existing signal
+        // connections (to NCustomRunModifiersList.AfterModifiersChanged) are preserved on
+        // the GodotObject — they survive the reparent.
+        foreach (var tickbox in tickboxes)
+        {
+            if (tickbox == null)
+                continue;
+            ((Node)(object)tickbox).GetParent()?.RemoveChild((Node)(object)tickbox);
+        }
+
+        // ── 1. Accordion sections (groups in definition order, tickboxes alphabetical) ──
+        foreach (var group in groups)
+        {
+            var groupTickboxes = tickboxes
+                .Where(t => t != null && tickboxToGroup.TryGetValue(t, out var g) && g == group)
+                .OrderBy(t => ModifierDisplayName(t!.Modifier))
+                .ToList();
+
+            if (groupTickboxes.Count == 0)
+                continue;
+
+            bool anyTicked = groupTickboxes.Any(t => t.IsTicked);
+            var section = BuildAccordionSection(group, groupTickboxes, startExpanded: anyTicked);
+            ((Node)(object)container).AddChildSafely((Node)(object)section);
+        }
+
+        // ── 2. Standalone tickboxes (good before bad, alphabetical within each) ──────────
+        var standalones = tickboxes
+            .Where(t => t != null && !tickboxToGroup.ContainsKey(t))
+            .OrderBy(t => t!.Modifier != null && goodModifierTypes.Contains(t.Modifier.GetType()) ? 0 : 1)
+            .ThenBy(t => ModifierDisplayName(t!.Modifier))
+            .ToList();
+
+        foreach (var tickbox in standalones)
+            ((Node)(object)container).AddChildSafely((Node)(object)tickbox);
+    }
+
+    // ── Accordion section ────────────────────────────────────────────────────
+
+    private static VBoxContainer BuildAccordionSection(
+        ModifierGroup group,
+        List<NRunModifierTickbox> groupTickboxes,
+        bool startExpanded
+    )
+    {
+        var root = new VBoxContainer();
+        root.AddThemeConstantOverride("separation", 0);
+
+        var header = CreateHeaderButton();
+        var body = new VBoxContainer();
+        body.AddThemeConstantOverride("separation", 0);
+        body.Visible = startExpanded;
+
+        foreach (var tickbox in groupTickboxes)
+            body.AddChild((Node)(object)tickbox);
+
+        RefreshHeader(header, body.Visible, group, groupTickboxes);
+
+        // Toggle on header click.
+        header.Pressed += () =>
+        {
+            body.Visible = !body.Visible;
+            RefreshHeader(header, body.Visible, group, groupTickboxes);
+        };
+
+        // Single Toggled handler per tickbox: refreshes the header AND enforces mutual
+        // exclusion if the group requires it. Guarding on toggled.IsTicked == true prevents
+        // cascades when we programmatically untick sibling tickboxes below.
+        foreach (var tickbox in groupTickboxes)
+        {
+            ((GodotObject)(object)tickbox).Connect(
+                NTickbox.SignalName.Toggled,
+                Callable.From<NRunModifierTickbox>(toggled =>
+                {
+                    RefreshHeader(header, body.Visible, group, groupTickboxes);
+                    if (group.IsMutuallyExclusive && toggled.IsTicked)
+                        foreach (var other in groupTickboxes)
+                            if (other != toggled)
+                                other.IsTicked = false;
+                }),
+                0u
+            );
+        }
+
+        root.AddChild(header);
+        root.AddChild(body);
+        return root;
+    }
+
+    // ── Header button ────────────────────────────────────────────────────────
+
+    private static Button CreateHeaderButton()
+    {
+        var btn = new Button();
+        btn.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        btn.CustomMinimumSize = new Vector2(0, 40);
+        btn.Alignment = HorizontalAlignment.Left;
+        btn.ClipText = true;
+
+        // Dark brownish section header — visually distinct from the tickboxes below.
+        var normal = new StyleBoxFlat();
+        normal.BgColor = new Color(0.13f, 0.10f, 0.07f, 0.95f);
+        normal.BorderWidthLeft = 1;
+        normal.BorderWidthTop = 1;
+        normal.BorderWidthRight = 1;
+        normal.BorderWidthBottom = 1;
+        normal.BorderColor = new Color(0.45f, 0.33f, 0.12f, 0.80f);
+        normal.CornerRadiusTopLeft = 3;
+        normal.CornerRadiusTopRight = 3;
+        normal.CornerRadiusBottomLeft = 3;
+        normal.CornerRadiusBottomRight = 3;
+        normal.ContentMarginLeft = 10;
+        normal.ContentMarginTop = 4;
+        normal.ContentMarginBottom = 4;
+
+        // Slightly lighter on hover.
+        var hover = (StyleBoxFlat)normal.Duplicate();
+        hover.BgColor = new Color(0.21f, 0.17f, 0.10f, 0.30f);
+
+        btn.AddThemeStyleboxOverride("normal", normal);
+        btn.AddThemeStyleboxOverride("hover", hover);
+        btn.AddThemeStyleboxOverride("pressed", hover);
+        btn.AddThemeStyleboxOverride("focus", normal);
+        btn.AddThemeStyleboxOverride("disabled", normal);
+
+        return btn;
+    }
+
+    private static void RefreshHeader(
+        Button header,
+        bool expanded,
+        ModifierGroup group,
+        List<NRunModifierTickbox> tickboxes
+    )
+    {
+        string arrow = expanded ? "▼  " : "▶  ";
+
+        // Collapsed with a selection: show the selected modifier's name.
+        if (!expanded)
+        {
+            var selected = tickboxes.FirstOrDefault(t => t.IsTicked);
+            if (selected != null)
+            {
+                header.Text = arrow + ModifierDisplayName(selected.Modifier);
+                return;
+            }
+        }
+
+        // Expanded, or collapsed with nothing selected:
+        // prefer the group's localized name; fall back to listing member names.
+        string label =
+            group.GroupName != null
+                ? group.GroupName.GetFormattedText()
+                : string.Join(" / ", tickboxes.Select(t => ModifierDisplayName(t.Modifier)));
+        header.Text = arrow + label;
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Converts a PascalCase modifier ID to a readable display name.
+    /// "SealedDeck" → "Sealed Deck"
+    /// </summary>
+    private static string ModifierDisplayName(ModifierModel? modifier)
+    {
+        if (modifier == null)
+            return "?";
+        return Regex.Replace(modifier.Id.Entry, @"(?<!^)([A-Z])", " $1");
+    }
+}
