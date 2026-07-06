@@ -7,7 +7,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Speedrun : SpeedrunBase
+public class SpeedrunPlus : SpeedrunBase
 {
-    public override float _timeLimit { get; set; } = 60f * 40f;
+    public override float _timeLimit { get; set; } = 60f * 1f;
 }
