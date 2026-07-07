@@ -57,13 +57,11 @@ public abstract class UrgencyBase : ModifierModel
                 if (player.Creature.CurrentHp <= 0)
                     continue;
 
-                await CreatureCmd.Damage(
+                await CreatureCmdCompat.DamageNoSource(
                     new BlockingPlayerChoiceContext(),
                     player.Creature,
                     damage,
-                    ValueProp.Unblockable | ValueProp.Unpowered,
-                    null,
-                    null
+                    ValueProp.Unblockable | ValueProp.Unpowered
                 );
             }
         }
