@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
@@ -29,6 +30,7 @@ public abstract class UrgencyBase : ModifierModel
         StartTime = RunManager.Instance.RunTime;
         TimeLeft = TimeLimit;
         IsInCombat = true;
+        NRun.Instance?.GlobalUi.TopBar.Timer.RefreshVisibility();
         return Task.CompletedTask;
     }
 
