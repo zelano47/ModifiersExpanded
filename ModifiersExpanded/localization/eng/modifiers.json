@@ -14,7 +14,7 @@
   "LONE_WOLF.title": "Lone Wolf",
   "LONE_WOLF.description": "Combat encounters are scaled as if playing with [red]2[/red] players.",
   "BODY_DOUBLE.title": "Body Double",
-  "BODY_DOUBLE.description": "Remove all starting Attacks. Add [blue]1[/blue] upgraded [gold]Body Slam[/gold] with [gold]Clone[/gold]. Attacks cannot be drafted or bought.",
+  "BODY_DOUBLE.description": "Remove all starting Attacks. Add [blue]1[/blue] upgraded [gold]Body Slam[/gold] with [purple]Clone[/purple]. Attacks cannot be drafted or bought.",
   "PRAISE_SNECKO.title": "Praise Snecko",
   "PRAISE_SNECKO.description": "Start with [gold]Snecko Eye[/gold].",
   "HUBRIS.title": "Hubris",
