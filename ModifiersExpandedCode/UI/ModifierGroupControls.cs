@@ -18,12 +18,15 @@ public class ModifierGroupControls
         root.AddThemeConstantOverride("separation", 0);
 
         var (headerPanel, headerLabel) = CreateHeaderPanel();
-        var body = new VBoxContainer();
+        var body = new MarginContainer();
+        body.AddThemeConstantOverride("margin_top", 8);
+        var vbox = new VBoxContainer();
+        body.AddChild(vbox);
         body.AddThemeConstantOverride("separation", 0);
         body.Visible = startExpanded;
 
         foreach (var tickbox in groupTickboxes)
-            body.AddChild((Node)(object)tickbox);
+            vbox.AddChild((Node)(object)tickbox);
 
         // ── Style state ─────────────────────────────────────────────────────
         // Four combinations: (selected | unselected) x (hovered | idle)
