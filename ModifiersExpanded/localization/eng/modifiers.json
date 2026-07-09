@@ -42,5 +42,7 @@
   "RELIC_SWAP.title": "Relic Swap",
   "RELIC_SWAP.description": "Swap your starter relic with a random rare relic.",
   "HIGH_ROLLER.title": "High Roller",
-  "HIGH_ROLLER.description": "Start with [blue]1[/blue] [gold]Jackpot[/gold] and [blue]1[/blue] [gold]Debt[/gold] in your deck."
+  "HIGH_ROLLER.description": "Start with [blue]1[/blue] [gold]Jackpot[/gold] and [blue]1[/blue] [gold]Debt[/gold] in your deck.",
+  "SPRINT.title": "Sprint",
+  "SPRINT.description": "The Map is a single linear path with [blue]1[/blue] of each node type."
 }
