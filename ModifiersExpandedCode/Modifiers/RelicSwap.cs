@@ -19,7 +19,11 @@ public class RelicSwap : ModifierModel
         {
             return;
         }
-        var starterRelicId = player.Relics.First(r => r.Rarity == RelicRarity.Starter).Id;
+        var starterRelicId = player.Relics.FirstOrDefault(r => r.Rarity == RelicRarity.Starter)?.Id;
+        if (starterRelicId == null)
+        {
+            return;
+        }
         RelicModel? original = player.GetRelicById(starterRelicId);
         if (original == null)
         {
