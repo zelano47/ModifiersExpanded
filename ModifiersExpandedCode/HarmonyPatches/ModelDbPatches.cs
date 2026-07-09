@@ -21,6 +21,7 @@ public class ModelDbPatches
                 ModelDb.Modifier<PraiseSnecko>(),
                 ModelDb.Modifier<Polymath>(),
                 ModelDb.Modifier<Chimera>(),
+                ModelDb.Modifier<RelicSwap>(),
             };
             __result = patched;
         }

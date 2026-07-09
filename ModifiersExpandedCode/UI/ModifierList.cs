@@ -31,9 +31,16 @@ public static class ModifierList
         var urgencyGroup = new ModifierGroup(
             new LocString("main_menu_ui", "MODIFIER_GROUP.URGENCY.title")
         );
-
         var cardPoolsGroup = new ModifierGroup(
             new LocString("main_menu_ui", "MODIFIER_GROUP.CARD_POOLS.title"),
+            false
+        );
+        var startingRelics = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.STARTING_RELICS.title"),
+            false
+        );
+        var startingCards = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.STARTING_CARDS.title"),
             false
         );
 
@@ -47,6 +54,15 @@ public static class ModifierList
                 urgencyGroup.Modifiers.Add(modifier);
             else if (modifier is CharacterCards || modifier is ColorlessCards)
                 cardPoolsGroup.Modifiers.Add(modifier);
+            else if (
+                modifier is PraiseSnecko
+                || modifier is Polymath
+                || modifier is RelicSwap
+                || modifier is NeowsBlessing
+            )
+                startingRelics.Modifiers.Add(modifier);
+            else if (modifier is AllStar || modifier is Chimera || modifier is Specialized)
+                startingCards.Modifiers.Add(modifier);
         }
 
         var groups = new List<ModifierGroup>
@@ -55,6 +71,8 @@ public static class ModifierList
             speedrunGroup,
             urgencyGroup,
             cardPoolsGroup,
+            startingRelics,
+            startingCards,
         };
 
         // Generate one section per external mutual-exclusion set for any modifier not already
@@ -86,7 +104,7 @@ public static class ModifierList
 
         // Drop groups with fewer than two members — no meaningful choice to present.
         // Their modifier(s) will fall through to standalone tickboxes in the layout.
-        return groups.Where(g => g.Modifiers.Count > 1).ToList();
+        return groups.Where(g => g.Modifiers.Count > 1).OrderBy(g => g.GroupName).ToList();
     }
 
     // ── Layout builder ───────────────────────────────────────────────────────
