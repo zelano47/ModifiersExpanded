@@ -38,5 +38,5 @@ public class HighRoller : ModifierModel
         await Cmd.CustomScaledWait(0.6f, 1.2f);
     }
 
-    protected override string IconPath => nameof(Ephemeral).ToSnakeCasePng().ModifierImagePath();
+    protected override string IconPath => nameof(HighRoller).ToSnakeCasePng().ModifierImagePath();
 }
