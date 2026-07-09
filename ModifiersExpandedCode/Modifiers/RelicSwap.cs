@@ -3,10 +3,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
-using MegaCrit.Sts2.Core.Random;
-using MegaCrit.Sts2.Core.Runs;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
-using ModifiersExpanded.ModifiersExpandedCode.Utils;
 
 public class RelicSwap : ModifierModel
 {
