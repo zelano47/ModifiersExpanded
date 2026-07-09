@@ -20,21 +20,33 @@ public static class ModifierList
     private static readonly (
         string LocKey,
         bool Exclusive,
-        Func<ModifierModel, bool> Predicate
+        Func<ModifierModel, bool> Predicate,
+        Func<ModifierModel, bool>? MutuallyExclusivePredicate
     )[] GroupSpecs =
     [
-        ("REPLACE_STARTER_DECK", true, m => m.ClearsPlayerDeck),
-        ("SPEEDRUN", true, m => m is SpeedrunBase),
-        ("URGENCY", true, m => m is UrgencyBase),
-        ("CARD_POOLS", false, m => m is CharacterCards or ColorlessCards),
+        ("REPLACE_STARTER_DECK", true, m => m.ClearsPlayerDeck, null),
+        ("SPEEDRUN", true, m => m is SpeedrunBase, null),
+        ("URGENCY", true, m => m is UrgencyBase, null),
+        ("CARD_POOLS", false, m => m is CharacterCards or ColorlessCards, null),
         (
             "STARTING_RELICS",
             false,
-            m => m is PraiseSnecko or Polymath or RelicSwap or NeowsBlessing
+            m => m is PraiseSnecko or Polymath or RelicSwap or NeowsBlessing,
+            null
         ),
-        ("STARTING_CARDS", false, m => m is AllStar or Specialized or HighRoller),
-        ("MAP_MODIFIERS", false, m => m is BigGameHunter or Marathon or DeadlyEvents or Flight),
-        ("REWARD_MODIFIERS", false, m => m is Pauper or Vintage or Enchanter or Hoarder or Midas),
+        ("STARTING_CARDS", false, m => m is AllStar or Specialized or HighRoller, null),
+        (
+            "MAP_MODIFIERS",
+            false,
+            m => m is BigGameHunter or Marathon or DeadlyEvents or Flight or Sprint,
+            m => m is Marathon or Sprint
+        ),
+        (
+            "REWARD_MODIFIERS",
+            false,
+            m => m is Pauper or Vintage or Enchanter or Hoarder or Midas,
+            null
+        ),
         (
             "CHALLENGES",
             false,
@@ -48,7 +60,8 @@ public static class ModifierList
                         or Hubris
                         or Murderous
                         or NightTerrors
-                        or Terminal
+                        or Terminal,
+            null
         ),
     ];
 
@@ -60,7 +73,7 @@ public static class ModifierList
         var classified = new HashSet<ModifierModel>();
         var groups = new List<ModifierGroup>();
 
-        foreach (var (locKey, exclusive, predicate) in GroupSpecs)
+        foreach (var (locKey, exclusive, predicate, mutuallyExclusivePredicate) in GroupSpecs)
         {
             var group = new ModifierGroup(
                 new LocString("main_menu_ui", $"MODIFIER_GROUP.{locKey}.title"),
@@ -70,6 +83,10 @@ public static class ModifierList
             {
                 group.Modifiers.Add(m);
                 classified.Add(m);
+                if (mutuallyExclusivePredicate != null && mutuallyExclusivePredicate(m))
+                {
+                    group.MutuallyExclusiveModifiers.Add(m.GetType());
+                }
             }
             groups.Add(group);
         }

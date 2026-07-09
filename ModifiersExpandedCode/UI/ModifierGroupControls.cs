@@ -90,9 +90,29 @@ public class ModifierGroupControls
                 {
                     Refresh();
                     if (group.IsMutuallyExclusive && toggled.IsTicked)
+                    {
                         foreach (var other in groupTickboxes)
                             if (other != toggled)
                                 other.IsTicked = false;
+                    }
+                    else if (
+                        toggled.Modifier != null
+                        && toggled.IsTicked
+                        && group.MutuallyExclusiveModifiers.Contains(toggled.Modifier.GetType())
+                    )
+                    {
+                        foreach (var other in groupTickboxes)
+                            if (
+                                other.Modifier != null
+                                && other != toggled
+                                && group.MutuallyExclusiveModifiers.Contains(
+                                    other.Modifier.GetType()
+                                )
+                            )
+                            {
+                                other.IsTicked = false;
+                            }
+                    }
                 }),
                 0u
             );
