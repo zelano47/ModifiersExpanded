@@ -73,7 +73,7 @@ public static class ModifierList
                 || modifier is NeowsBlessing
             )
                 startingRelics.Modifiers.Add(modifier);
-            else if (modifier is AllStar || modifier is Chimera || modifier is Specialized)
+            else if (modifier is AllStar || modifier is Specialized)
                 startingCards.Modifiers.Add(modifier);
             else if (
                 modifier is BigGameHunter
