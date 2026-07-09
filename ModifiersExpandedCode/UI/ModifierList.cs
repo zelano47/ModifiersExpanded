@@ -32,7 +32,7 @@ public static class ModifierList
             false,
             m => m is PraiseSnecko or Polymath or RelicSwap or NeowsBlessing
         ),
-        ("STARTING_CARDS", false, m => m is AllStar or Specialized),
+        ("STARTING_CARDS", false, m => m is AllStar or Specialized or HighRoller),
         ("MAP_MODIFIERS", false, m => m is BigGameHunter or Marathon or DeadlyEvents or Flight),
         ("REWARD_MODIFIERS", false, m => m is Pauper or Vintage or Enchanter or Hoarder or Midas),
         (

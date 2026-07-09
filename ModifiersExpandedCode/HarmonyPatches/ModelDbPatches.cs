@@ -48,6 +48,7 @@ public class ModelDbPatches
                 ModelDb.Modifier<Urgency>(),
                 ModelDb.Modifier<UrgencyPlus>(),
                 ModelDb.Modifier<UrgencyPlusPlus>(),
+                ModelDb.Modifier<HighRoller>(),
             };
             __result = patched;
         }
