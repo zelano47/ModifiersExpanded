@@ -10,6 +10,11 @@ public abstract class SpeedrunBase : ModifierModel
 {
     public virtual float _timeLimit { get; set; }
 
+    protected override void AfterRunCreated(RunState runState)
+    {
+        TimerState.SpeedrunModifierInstance = this;
+    }
+
     public override Task AfterRoomEntered(AbstractRoom room)
     {
         CheckTimeLimit();

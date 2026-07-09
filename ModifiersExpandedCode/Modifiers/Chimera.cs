@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
-using MegaCrit.Sts2.Core.Models.Characters;
 using MegaCrit.Sts2.Core.Random;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
@@ -25,7 +24,6 @@ public class Chimera : ModifierModel
             return;
         }
         List<CardPileAddResult> results = new List<CardPileAddResult>();
-        var startingCards = new List<CardModel>();
         //clad
         var cladDefend = ModelDb.Card<DefendIronclad>();
         var cladStrike = ModelDb.Card<StrikeIronclad>();
@@ -55,32 +53,36 @@ public class Chimera : ModifierModel
         var bodyguard = ModelDb.Card<Bodyguard>();
         var unleash = ModelDb.Card<Unleash>();
 
-        // strike
-        startingCards.Add(player.RunState.CreateCard(cladStrike, player));
-        startingCards.Add(player.RunState.CreateCard(silentStrike, player));
-        startingCards.Add(player.RunState.CreateCard(defectStrike, player));
-        startingCards.Add(player.RunState.CreateCard(regentStrike, player));
-        startingCards.Add(player.RunState.CreateCard(necroStrike, player));
-
-        // defend
-        startingCards.Add(player.RunState.CreateCard(cladDefend, player));
-        startingCards.Add(player.RunState.CreateCard(silentDefend, player));
-        startingCards.Add(player.RunState.CreateCard(defectDefend, player));
-        startingCards.Add(player.RunState.CreateCard(regentDefend, player));
-        startingCards.Add(player.RunState.CreateCard(necroDefend, player));
-
-        // attack
-        startingCards.Add(player.RunState.CreateCard(bash, player));
-        startingCards.Add(player.RunState.CreateCard(fallingStar, player));
-        startingCards.Add(player.RunState.CreateCard(unleash, player));
-
-        // skills
-        startingCards.Add(player.RunState.CreateCard(neutralize, player));
-        startingCards.Add(player.RunState.CreateCard(survivor, player));
-        startingCards.Add(player.RunState.CreateCard(zap, player));
-        startingCards.Add(player.RunState.CreateCard(dualcast, player));
-        startingCards.Add(player.RunState.CreateCard(venerate, player));
-        startingCards.Add(player.RunState.CreateCard(bodyguard, player));
+        var startingCards = new List<CardModel>()
+        {
+            // strike
+            player.RunState.CreateCard(cladStrike, player),
+            player.RunState.CreateCard(silentStrike, player),
+            player.RunState.CreateCard(defectStrike, player),
+            player.RunState.CreateCard(regentStrike, player),
+            player.RunState.CreateCard(necroStrike, player),
+            player.RunState.CreateCard(silentStrike, player),
+            player.RunState.CreateCard(defectStrike, player),
+            player.RunState.CreateCard(regentStrike, player),
+            player.RunState.CreateCard(necroStrike, player),
+            // defend
+            player.RunState.CreateCard(cladDefend, player),
+            player.RunState.CreateCard(silentDefend, player),
+            player.RunState.CreateCard(defectDefend, player),
+            player.RunState.CreateCard(regentDefend, player),
+            player.RunState.CreateCard(necroDefend, player),
+            // attack
+            player.RunState.CreateCard(bash, player),
+            player.RunState.CreateCard(fallingStar, player),
+            player.RunState.CreateCard(unleash, player),
+            // skills
+            player.RunState.CreateCard(neutralize, player),
+            player.RunState.CreateCard(survivor, player),
+            player.RunState.CreateCard(zap, player),
+            player.RunState.CreateCard(dualcast, player),
+            player.RunState.CreateCard(venerate, player),
+            player.RunState.CreateCard(bodyguard, player),
+        };
 
         foreach (CardModel card in startingCards)
         {
