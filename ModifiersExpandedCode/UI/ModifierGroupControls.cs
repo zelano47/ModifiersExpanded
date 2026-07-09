@@ -178,7 +178,7 @@ public class ModifierGroupControls
     {
         var panel = new PanelContainer();
         panel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-        panel.CustomMinimumSize = new Vector2(0, 40);
+        panel.CustomMinimumSize = new Vector2(0, 50);
         panel.MouseFilter = Control.MouseFilterEnum.Stop;
 
         var label = new Label();

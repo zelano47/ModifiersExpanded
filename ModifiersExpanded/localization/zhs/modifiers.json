@@ -44,5 +44,5 @@
   "HIGH_ROLLER.title": "豪赌客",
   "HIGH_ROLLER.description": "初始牌组中包含 [blue]1[/blue] 张 [gold]头奖[/gold] 和 [red]1[/red] 张 [gold]债务[/gold]。",
   "SPRINT.title": "冲刺",
-  "SPRINT.description": "地图变为一条单线路径，每种节点类型各有 [blue]1[/blue] 个。"
+  "SPRINT.description": "地图是一条单线路径，每种房间类型各有 [blue]1[/blue] 个。"
 }
