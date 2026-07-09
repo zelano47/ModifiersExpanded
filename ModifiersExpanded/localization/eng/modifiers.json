@@ -38,5 +38,7 @@
   "SPEEDRUN_PLUS.title": "Speedrun+",
   "SPEEDRUN_PLUS.description": "If the run timer exceeds [red]30[/red] minutes, you lose.",
   "SPEEDRUN_PLUS_PLUS.title": "Speedrun++",
-  "SPEEDRUN_PLUS_PLUS.description": "If the run timer exceeds [red]20[/red] minutes, you lose."
+  "SPEEDRUN_PLUS_PLUS.description": "If the run timer exceeds [red]20[/red] minutes, you lose.",
+  "RELIC_SWAP.title": "Relic Swap",
+  "RELIC_SWAP.description": "Swap your starter relic with a random rare relic."
 }

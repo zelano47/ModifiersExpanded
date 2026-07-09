@@ -43,6 +43,18 @@ public static class ModifierList
             new LocString("main_menu_ui", "MODIFIER_GROUP.STARTING_CARDS.title"),
             false
         );
+        var mapModifiers = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.MAP_MODIFIERS.title"),
+            false
+        );
+        var rewardModifiers = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.REWARD_MODIFIERS.title"),
+            false
+        );
+        var challenges = new ModifierGroup(
+            new LocString("main_menu_ui", "MODIFIER_GROUP.CHALLENGES.title"),
+            false
+        );
 
         foreach (var modifier in allModifiers)
         {
@@ -63,6 +75,33 @@ public static class ModifierList
                 startingRelics.Modifiers.Add(modifier);
             else if (modifier is AllStar || modifier is Chimera || modifier is Specialized)
                 startingCards.Modifiers.Add(modifier);
+            else if (
+                modifier is BigGameHunter
+                || modifier is Marathon
+                || modifier is DeadlyEvents
+                || modifier is Flight
+            )
+                mapModifiers.Modifiers.Add(modifier);
+            else if (
+                modifier is Pauper
+                || modifier is Vintage
+                || modifier is Enchanter
+                || modifier is Hoarder
+                || modifier is Midas
+            )
+                rewardModifiers.Modifiers.Add(modifier);
+            else if (
+                modifier is Phalanx
+                || modifier is Ephemeral
+                || modifier is RunicDome
+                || modifier is LoneWolf
+                || modifier is CursedRun
+                || modifier is Hubris
+                || modifier is Murderous
+                || modifier is NightTerrors
+                || modifier is Terminal
+            )
+                challenges.Modifiers.Add(modifier);
         }
 
         var groups = new List<ModifierGroup>
@@ -73,6 +112,9 @@ public static class ModifierList
             cardPoolsGroup,
             startingRelics,
             startingCards,
+            mapModifiers,
+            rewardModifiers,
+            challenges,
         };
 
         // Generate one section per external mutual-exclusion set for any modifier not already
@@ -146,7 +188,10 @@ public static class ModifierList
         {
             var groupTickboxes = tickboxes
                 .Where(t => t != null && tickboxToGroup.TryGetValue(t, out var g) && g == group)
-                .OrderBy(t => ModifierGroupControls.ModifierDisplayName(t!.Modifier))
+                .OrderBy(t =>
+                    t!.Modifier != null && goodModifierTypes.Contains(t.Modifier.GetType()) ? 0 : 1
+                )
+                .ThenBy(t => ModifierGroupControls.ModifierDisplayName(t!.Modifier))
                 .ToList();
 
             if (groupTickboxes.Count == 0)
