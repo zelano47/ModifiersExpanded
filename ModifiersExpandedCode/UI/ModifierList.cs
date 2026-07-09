@@ -17,105 +17,62 @@ public static class ModifierList
     /// </summary>
     public static Action? RefreshAllSectionHeaders { get; private set; }
 
+    private static readonly (
+        string LocKey,
+        bool Exclusive,
+        Func<ModifierModel, bool> Predicate
+    )[] GroupSpecs =
+    [
+        ("REPLACE_STARTER_DECK", true, m => m.ClearsPlayerDeck),
+        ("SPEEDRUN", true, m => m is SpeedrunBase),
+        ("URGENCY", true, m => m is UrgencyBase),
+        ("CARD_POOLS", false, m => m is CharacterCards or ColorlessCards),
+        (
+            "STARTING_RELICS",
+            false,
+            m => m is PraiseSnecko or Polymath or RelicSwap or NeowsBlessing
+        ),
+        ("STARTING_CARDS", false, m => m is AllStar or Specialized),
+        ("MAP_MODIFIERS", false, m => m is BigGameHunter or Marathon or DeadlyEvents or Flight),
+        ("REWARD_MODIFIERS", false, m => m is Pauper or Vintage or Enchanter or Hoarder or Midas),
+        (
+            "CHALLENGES",
+            false,
+            m =>
+                m
+                    is Phalanx
+                        or Ephemeral
+                        or RunicDome
+                        or LoneWolf
+                        or CursedRun
+                        or Hubris
+                        or Murderous
+                        or NightTerrors
+                        or Terminal
+        ),
+    ];
+
     private static List<ModifierGroup> BuildModifierGroups()
     {
         var exclusionGroups = ModelDb.MutuallyExclusiveModifiers;
         var allModifiers = ModelDb.GoodModifiers.Concat(ModelDb.BadModifiers).ToList();
 
-        var replaceStarterDeckGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.REPLACE_STARTER_DECK.title")
-        );
-        var speedrunGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.SPEEDRUN.title")
-        );
-        var urgencyGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.URGENCY.title")
-        );
-        var cardPoolsGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.CARD_POOLS.title"),
-            false
-        );
-        var startingRelics = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.STARTING_RELICS.title"),
-            false
-        );
-        var startingCards = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.STARTING_CARDS.title"),
-            false
-        );
-        var mapModifiers = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.MAP_MODIFIERS.title"),
-            false
-        );
-        var rewardModifiers = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.REWARD_MODIFIERS.title"),
-            false
-        );
-        var challenges = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.CHALLENGES.title"),
-            false
-        );
+        var classified = new HashSet<ModifierModel>();
+        var groups = new List<ModifierGroup>();
 
-        foreach (var modifier in allModifiers)
+        foreach (var (locKey, exclusive, predicate) in GroupSpecs)
         {
-            if (modifier.ClearsPlayerDeck)
-                replaceStarterDeckGroup.Modifiers.Add(modifier);
-            else if (modifier is SpeedrunBase)
-                speedrunGroup.Modifiers.Add(modifier);
-            else if (modifier is UrgencyBase)
-                urgencyGroup.Modifiers.Add(modifier);
-            else if (modifier is CharacterCards || modifier is ColorlessCards)
-                cardPoolsGroup.Modifiers.Add(modifier);
-            else if (
-                modifier is PraiseSnecko
-                || modifier is Polymath
-                || modifier is RelicSwap
-                || modifier is NeowsBlessing
-            )
-                startingRelics.Modifiers.Add(modifier);
-            else if (modifier is AllStar || modifier is Specialized)
-                startingCards.Modifiers.Add(modifier);
-            else if (
-                modifier is BigGameHunter
-                || modifier is Marathon
-                || modifier is DeadlyEvents
-                || modifier is Flight
-            )
-                mapModifiers.Modifiers.Add(modifier);
-            else if (
-                modifier is Pauper
-                || modifier is Vintage
-                || modifier is Enchanter
-                || modifier is Hoarder
-                || modifier is Midas
-            )
-                rewardModifiers.Modifiers.Add(modifier);
-            else if (
-                modifier is Phalanx
-                || modifier is Ephemeral
-                || modifier is RunicDome
-                || modifier is LoneWolf
-                || modifier is CursedRun
-                || modifier is Hubris
-                || modifier is Murderous
-                || modifier is NightTerrors
-                || modifier is Terminal
-            )
-                challenges.Modifiers.Add(modifier);
+            var group = new ModifierGroup(
+                new LocString("main_menu_ui", $"MODIFIER_GROUP.{locKey}.title"),
+                exclusive
+            );
+            foreach (var m in allModifiers.Where(m => !classified.Contains(m) && predicate(m)))
+            {
+                group.Modifiers.Add(m);
+                classified.Add(m);
+            }
+            groups.Add(group);
         }
-
-        var groups = new List<ModifierGroup>
-        {
-            replaceStarterDeckGroup,
-            speedrunGroup,
-            urgencyGroup,
-            cardPoolsGroup,
-            startingRelics,
-            startingCards,
-            mapModifiers,
-            rewardModifiers,
-            challenges,
-        };
 
         // Generate one section per external mutual-exclusion set for any modifier not already
         // classified above. Iterating each set separately preserves distinct groupings from
