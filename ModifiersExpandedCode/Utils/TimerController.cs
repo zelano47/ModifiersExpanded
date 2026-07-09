@@ -92,10 +92,7 @@ public static class TimerController
 
         // Read speedrun modifier directly; GetActiveSpeedrunModifier() guards on
         // IsInProgress which is false after game over.
-        var speedrun = RunManager
-            .Instance.DebugOnlyGetState()
-            ?.Modifiers.OfType<SpeedrunBase>()
-            .FirstOrDefault();
+        var speedrun = TimerState.SpeedrunModifierInstance;
 
         if (speedrun == null)
             return;
@@ -132,22 +129,12 @@ public static class TimerController
 
     private static SpeedrunBase? GetActiveSpeedrunModifier()
     {
-        if (!RunManager.Instance.IsInProgress)
-            return null;
-        return RunManager
-            .Instance.DebugOnlyGetState()
-            ?.Modifiers.OfType<SpeedrunBase>()
-            .FirstOrDefault();
+        return TimerState.SpeedrunModifierInstance;
     }
 
     private static UrgencyBase? GetActiveUrgencyModifier()
     {
-        if (!RunManager.Instance.IsInProgress)
-            return null;
-        return RunManager
-            .Instance.DebugOnlyGetState()
-            ?.Modifiers.OfType<UrgencyBase>()
-            .FirstOrDefault();
+        return TimerState.UrgencyModifierInstance;
     }
 
     // ── Formatting ──────────────────────────────────────────────────────────

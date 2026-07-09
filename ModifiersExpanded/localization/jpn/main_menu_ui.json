@@ -2,6 +2,11 @@
   "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "前回のラン",
   "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "初期デッキ置換",
   "MODIFIER_GROUP.SPEEDRUN.title": "スピードラン",
-  "MODIFIER_GROUP.URGENCY.title": "緊急事態",
-  "MODIFIER_GROUP.CARD_POOLS.title": "カードプール"
+  "MODIFIER_GROUP.URGENCY.title": "緊迫",
+  "MODIFIER_GROUP.CARD_POOLS.title": "カードプール",
+  "MODIFIER_GROUP.STARTING_RELICS.title": "初期遺物",
+  "MODIFIER_GROUP.STARTING_CARDS.title": "初期カード",
+  "MODIFIER_GROUP.CHALLENGES.title": "チャレンジ",
+  "MODIFIER_GROUP.REWARD_MODIFIERS.title": "報酬モディファイア",
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "マップモディファイア"
 }

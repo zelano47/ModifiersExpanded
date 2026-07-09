@@ -21,6 +21,7 @@ public class ModelDbPatches
                 ModelDb.Modifier<PraiseSnecko>(),
                 ModelDb.Modifier<Polymath>(),
                 ModelDb.Modifier<Chimera>(),
+                ModelDb.Modifier<RelicSwap>(),
             };
             __result = patched;
         }
@@ -47,6 +48,8 @@ public class ModelDbPatches
                 ModelDb.Modifier<Urgency>(),
                 ModelDb.Modifier<UrgencyPlus>(),
                 ModelDb.Modifier<UrgencyPlusPlus>(),
+                ModelDb.Modifier<HighRoller>(),
+                ModelDb.Modifier<Sprint>(),
             };
             __result = patched;
         }

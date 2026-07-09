@@ -18,12 +18,15 @@ public class ModifierGroupControls
         root.AddThemeConstantOverride("separation", 0);
 
         var (headerPanel, headerLabel) = CreateHeaderPanel();
-        var body = new VBoxContainer();
+        var body = new MarginContainer();
+        body.AddThemeConstantOverride("margin_top", 8);
+        var vbox = new VBoxContainer();
+        body.AddChild(vbox);
         body.AddThemeConstantOverride("separation", 0);
         body.Visible = startExpanded;
 
         foreach (var tickbox in groupTickboxes)
-            body.AddChild((Node)(object)tickbox);
+            vbox.AddChild((Node)(object)tickbox);
 
         // ── Style state ─────────────────────────────────────────────────────
         // Four combinations: (selected | unselected) x (hovered | idle)
@@ -87,9 +90,29 @@ public class ModifierGroupControls
                 {
                     Refresh();
                     if (group.IsMutuallyExclusive && toggled.IsTicked)
+                    {
                         foreach (var other in groupTickboxes)
                             if (other != toggled)
                                 other.IsTicked = false;
+                    }
+                    else if (
+                        toggled.Modifier != null
+                        && toggled.IsTicked
+                        && group.MutuallyExclusiveModifiers.Contains(toggled.Modifier.GetType())
+                    )
+                    {
+                        foreach (var other in groupTickboxes)
+                            if (
+                                other.Modifier != null
+                                && other != toggled
+                                && group.MutuallyExclusiveModifiers.Contains(
+                                    other.Modifier.GetType()
+                                )
+                            )
+                            {
+                                other.IsTicked = false;
+                            }
+                    }
                 }),
                 0u
             );
@@ -155,7 +178,7 @@ public class ModifierGroupControls
     {
         var panel = new PanelContainer();
         panel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
-        panel.CustomMinimumSize = new Vector2(0, 40);
+        panel.CustomMinimumSize = new Vector2(0, 50);
         panel.MouseFilter = Control.MouseFilterEnum.Stop;
 
         var label = new Label();

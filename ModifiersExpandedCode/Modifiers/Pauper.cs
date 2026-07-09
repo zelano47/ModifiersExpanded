@@ -36,12 +36,14 @@ public class Pauper : ModifierModel
         var replacement = new List<Reward>();
         foreach (var reward in rewards)
         {
+            // TODO: add null relic
             if (reward is RelicReward)
             {
                 _relicCount++;
                 if (_relicCount % 2 != 0)
                     replacement.Add(reward);
             }
+            // TODO: add empty potion
             else if (reward is PotionReward)
             {
                 _potionsCount++;

@@ -1,55 +1,47 @@
-using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Characters;
 using MegaCrit.Sts2.Core.Models.Relics;
-using MegaCrit.Sts2.Core.Runs;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
 public class Polymath : ModifierModel
 {
-    protected override void AfterRunCreated(RunState runState)
+    public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {
-        foreach (Player player in runState.Players)
-        {
-            if (player.Character is not Ironclad)
-            {
-                AddRelicToPlayer(player, ModelDb.Relic<BurningBlood>());
-            }
-
-            if (player.Character is not Silent)
-            {
-                AddRelicToPlayer(player, ModelDb.Relic<RingOfTheSnake>());
-            }
-
-            if (player.Character is not Defect)
-            {
-                AddRelicToPlayer(player, ModelDb.Relic<CrackedCore>());
-            }
-
-            if (player.Character is not Necrobinder)
-            {
-                AddRelicToPlayer(player, ModelDb.Relic<BoundPhylactery>());
-            }
-
-            if (player.Character is not Regent)
-            {
-                AddRelicToPlayer(player, ModelDb.Relic<DivineRight>());
-            }
-        }
-        runState.SharedRelicGrabBag.Remove<BurningBlood>();
-        runState.SharedRelicGrabBag.Remove<RingOfTheSnake>();
-        runState.SharedRelicGrabBag.Remove<CrackedCore>();
-        runState.SharedRelicGrabBag.Remove<BoundPhylactery>();
-        runState.SharedRelicGrabBag.Remove<DivineRight>();
+        return () => ObtainRelics(eventModel);
     }
 
-    private void AddRelicToPlayer(Player player, RelicModel relicModel)
+    private static async Task ObtainRelics(EventModel eventModel)
     {
-        var mutableRelic = relicModel.ToMutable();
-        player.AddRelicInternal(mutableRelic);
-        player.RelicGrabBag.Remove(relicModel);
+        var player = eventModel.Owner;
+        if (player == null)
+            return;
+        if (player.Character is not Ironclad)
+        {
+            await RelicCmd.Obtain(ModelDb.Relic<BurningBlood>().ToMutable(), player);
+        }
+
+        if (player.Character is not Silent)
+        {
+            await RelicCmd.Obtain(ModelDb.Relic<RingOfTheSnake>().ToMutable(), player);
+        }
+
+        if (player.Character is not Defect)
+        {
+            await RelicCmd.Obtain(ModelDb.Relic<CrackedCore>().ToMutable(), player);
+        }
+
+        if (player.Character is not Necrobinder)
+        {
+            await RelicCmd.Obtain(ModelDb.Relic<BoundPhylactery>().ToMutable(), player);
+        }
+
+        if (player.Character is not Regent)
+        {
+            await RelicCmd.Obtain(ModelDb.Relic<DivineRight>().ToMutable(), player);
+        }
     }
 
     protected override string IconPath => nameof(Polymath).ToSnakeCasePng().ModifierImagePath();

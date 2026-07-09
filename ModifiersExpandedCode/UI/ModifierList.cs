@@ -17,45 +17,79 @@ public static class ModifierList
     /// </summary>
     public static Action? RefreshAllSectionHeaders { get; private set; }
 
+    private static readonly (
+        string LocKey,
+        bool Exclusive,
+        Func<ModifierModel, bool> Predicate,
+        Func<ModifierModel, bool>? MutuallyExclusivePredicate
+    )[] GroupSpecs =
+    [
+        ("REPLACE_STARTER_DECK", true, m => m.ClearsPlayerDeck, null),
+        ("SPEEDRUN", true, m => m is SpeedrunBase, null),
+        ("URGENCY", true, m => m is UrgencyBase, null),
+        ("CARD_POOLS", false, m => m is CharacterCards or ColorlessCards, null),
+        (
+            "STARTING_RELICS",
+            false,
+            m => m is PraiseSnecko or Polymath or RelicSwap or NeowsBlessing,
+            null
+        ),
+        ("STARTING_CARDS", false, m => m is AllStar or Specialized or HighRoller, null),
+        (
+            "MAP_MODIFIERS",
+            false,
+            m => m is BigGameHunter or Marathon or DeadlyEvents or Flight or Sprint,
+            m => m is Marathon or Sprint
+        ),
+        (
+            "REWARD_MODIFIERS",
+            false,
+            m => m is Pauper or Vintage or Enchanter or Hoarder or Midas,
+            null
+        ),
+        (
+            "CHALLENGES",
+            false,
+            m =>
+                m
+                    is Phalanx
+                        or Ephemeral
+                        or RunicDome
+                        or LoneWolf
+                        or CursedRun
+                        or Hubris
+                        or Murderous
+                        or NightTerrors
+                        or Terminal,
+            null
+        ),
+    ];
+
     private static List<ModifierGroup> BuildModifierGroups()
     {
         var exclusionGroups = ModelDb.MutuallyExclusiveModifiers;
         var allModifiers = ModelDb.GoodModifiers.Concat(ModelDb.BadModifiers).ToList();
 
-        var replaceStarterDeckGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.REPLACE_STARTER_DECK.title")
-        );
-        var speedrunGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.SPEEDRUN.title")
-        );
-        var urgencyGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.URGENCY.title")
-        );
+        var classified = new HashSet<ModifierModel>();
+        var groups = new List<ModifierGroup>();
 
-        var cardPoolsGroup = new ModifierGroup(
-            new LocString("main_menu_ui", "MODIFIER_GROUP.CARD_POOLS.title"),
-            false
-        );
-
-        foreach (var modifier in allModifiers)
+        foreach (var (locKey, exclusive, predicate, mutuallyExclusivePredicate) in GroupSpecs)
         {
-            if (modifier.ClearsPlayerDeck)
-                replaceStarterDeckGroup.Modifiers.Add(modifier);
-            else if (modifier is SpeedrunBase)
-                speedrunGroup.Modifiers.Add(modifier);
-            else if (modifier is UrgencyBase)
-                urgencyGroup.Modifiers.Add(modifier);
-            else if (modifier is CharacterCards || modifier is ColorlessCards)
-                cardPoolsGroup.Modifiers.Add(modifier);
+            var group = new ModifierGroup(
+                new LocString("main_menu_ui", $"MODIFIER_GROUP.{locKey}.title"),
+                exclusive
+            );
+            foreach (var m in allModifiers.Where(m => !classified.Contains(m) && predicate(m)))
+            {
+                group.Modifiers.Add(m);
+                classified.Add(m);
+                if (mutuallyExclusivePredicate != null && mutuallyExclusivePredicate(m))
+                {
+                    group.MutuallyExclusiveModifiers.Add(m.GetType());
+                }
+            }
+            groups.Add(group);
         }
-
-        var groups = new List<ModifierGroup>
-        {
-            replaceStarterDeckGroup,
-            speedrunGroup,
-            urgencyGroup,
-            cardPoolsGroup,
-        };
 
         // Generate one section per external mutual-exclusion set for any modifier not already
         // classified above. Iterating each set separately preserves distinct groupings from
@@ -86,7 +120,7 @@ public static class ModifierList
 
         // Drop groups with fewer than two members — no meaningful choice to present.
         // Their modifier(s) will fall through to standalone tickboxes in the layout.
-        return groups.Where(g => g.Modifiers.Count > 1).ToList();
+        return groups.Where(g => g.Modifiers.Count > 1).OrderBy(g => g.GroupName).ToList();
     }
 
     // ── Layout builder ───────────────────────────────────────────────────────
@@ -128,7 +162,10 @@ public static class ModifierList
         {
             var groupTickboxes = tickboxes
                 .Where(t => t != null && tickboxToGroup.TryGetValue(t, out var g) && g == group)
-                .OrderBy(t => ModifierGroupControls.ModifierDisplayName(t!.Modifier))
+                .OrderBy(t =>
+                    t!.Modifier != null && goodModifierTypes.Contains(t.Modifier.GetType()) ? 0 : 1
+                )
+                .ThenBy(t => ModifierGroupControls.ModifierDisplayName(t!.Modifier))
                 .ToList();
 
             if (groupTickboxes.Count == 0)

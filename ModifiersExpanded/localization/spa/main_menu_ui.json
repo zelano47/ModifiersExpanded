@@ -3,5 +3,10 @@
   "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Reemplazar baraja inicial",
   "MODIFIER_GROUP.SPEEDRUN.title": "Speedrun",
   "MODIFIER_GROUP.URGENCY.title": "Urgencia",
-  "MODIFIER_GROUP.CARD_POOLS.title": "Reservas de cartas"
+  "MODIFIER_GROUP.CARD_POOLS.title": "Conjuntos de cartas",
+  "MODIFIER_GROUP.STARTING_RELICS.title": "Reliquias iniciales",
+  "MODIFIER_GROUP.STARTING_CARDS.title": "Cartas iniciales",
+  "MODIFIER_GROUP.CHALLENGES.title": "Desafíos",
+  "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Modificadores de recompensa",
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Modificadores de mapa"
 }

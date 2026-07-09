@@ -3,5 +3,10 @@
   "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Замена стартовой колоды",
   "MODIFIER_GROUP.SPEEDRUN.title": "Спидран",
   "MODIFIER_GROUP.URGENCY.title": "Спешка",
-  "MODIFIER_GROUP.CARD_POOLS.title": "Наборы карт"
+  "MODIFIER_GROUP.CARD_POOLS.title": "Наборы карт",
+  "MODIFIER_GROUP.STARTING_RELICS.title": "Стартовые реликвии",
+  "MODIFIER_GROUP.STARTING_CARDS.title": "Стартовые карты",
+  "MODIFIER_GROUP.CHALLENGES.title": "Испытания",
+  "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Модификаторы наград",
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Модификаторы карты"
 }

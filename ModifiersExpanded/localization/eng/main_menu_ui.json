@@ -3,5 +3,10 @@
   "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Replace Starter Deck",
   "MODIFIER_GROUP.SPEEDRUN.title": "Speedrun",
   "MODIFIER_GROUP.URGENCY.title": "Urgency",
-  "MODIFIER_GROUP.CARD_POOLS.title": "Card Pools"
+  "MODIFIER_GROUP.CARD_POOLS.title": "Card Pools",
+  "MODIFIER_GROUP.STARTING_RELICS.title": "Starting Relics",
+  "MODIFIER_GROUP.STARTING_CARDS.title": "Starting Cards",
+  "MODIFIER_GROUP.CHALLENGES.title": "Challenges",
+  "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Reward Modifiers",
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Map Modifiers"
 }

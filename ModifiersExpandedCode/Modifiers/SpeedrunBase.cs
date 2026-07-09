@@ -1,5 +1,4 @@
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
@@ -10,6 +9,11 @@ namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 public abstract class SpeedrunBase : ModifierModel
 {
     public virtual float _timeLimit { get; set; }
+
+    protected override void AfterRunCreated(RunState runState)
+    {
+        TimerState.SpeedrunModifierInstance = this;
+    }
 
     public override Task AfterRoomEntered(AbstractRoom room)
     {
