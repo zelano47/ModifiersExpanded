@@ -1,16 +1,8 @@
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 using Godot;
 using HarmonyLib;
-using MegaCrit.Sts2.Core.Helpers;
-using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Modifiers;
-using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
 using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
-using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 using ModifiersExpanded.ModifiersExpandedCode.UI;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.HarmonyPatches;
@@ -48,7 +40,6 @@ public class ModifiersListPatches
             {
                 return;
             }
-
             if (
                 _modifierTickboxesField?.GetValue(__instance)
                 is not List<NRunModifierTickbox> tickboxes
@@ -56,7 +47,7 @@ public class ModifiersListPatches
             {
                 return;
             }
-
+            __instance.OffsetLeft = 24;
             ModifierList.RebuildWithAccordionGroups(container, tickboxes);
         }
     }
