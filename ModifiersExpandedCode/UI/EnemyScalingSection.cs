@@ -126,11 +126,6 @@ public class EnemyScalingSection
     private void OnSliderValueChanged(float value)
     {
         EnemyScalingState.Instance.Damage = value;
-        MainFile.Logger.Info(
-            MainFile.CreateLogMessage(
-                $"EnemyScaling damage changed to {EnemyScalingState.Instance.Damage}"
-            )
-        );
         bool ticked = EnemyScalingState.Instance.Damage > 1f;
         foreach (var tb in _tickboxes)
         {
