@@ -16,7 +16,6 @@ public class EnemyScalingSection
     private readonly IReadOnlyList<NRunModifierTickbox> _tickboxes;
     private readonly PanelContainer _headerPanel;
     private readonly Label _headerLabel;
-    private readonly Label _valueLabel;
     private readonly MarginContainer _body;
     private readonly string _title;
     private readonly StyleBoxFlat _normalBase;
@@ -50,22 +49,40 @@ public class EnemyScalingSection
         _body.AddChild(vbox);
         _body.Visible = false;
 
-        var damageSlider = new ScalingSlider(OnSliderValueChanged);
+        var damageSlider = new ScalingSlider(
+            label: new LocString(
+                "main_menu_ui",
+                "MODIFIER_GROUP.ENEMY_SCALING.damage"
+            ).GetFormattedText(),
+            initialValue: EnemyScalingState.Instance.DamageMultiplier,
+            onValueChanged: OnDamageSliderChanged
+        );
 
-        _valueLabel = new Label();
-        _valueLabel.HorizontalAlignment = HorizontalAlignment.Center;
-        _valueLabel.Text = FormatScalingValue(EnemyScalingState.Instance.Damage);
+        var healthSlider = new ScalingSlider(
+            label: new LocString(
+                "main_menu_ui",
+                "MODIFIER_GROUP.ENEMY_SCALING.health"
+            ).GetFormattedText(),
+            initialValue: EnemyScalingState.Instance.HealthMultiplier,
+            onValueChanged: OnHealthSliderChanged
+        );
 
-        var damageLabel = new Label();
-        damageLabel.HorizontalAlignment = HorizontalAlignment.Left;
-        damageLabel.Text = new LocString(
-            "main_menu_ui",
-            "MODIFIER_GROUP.ENEMY_SCALING.damage"
-        ).GetFormattedText();
+        var playersSlider = new ScalingSlider(
+            label: new LocString(
+                "main_menu_ui",
+                "MODIFIER_GROUP.ENEMY_SCALING.num_players"
+            ).GetFormattedText(),
+            initialValue: EnemyScalingState.Instance.NumPlayers,
+            onValueChanged: OnPlayersSliderChanged,
+            minValue: 1f,
+            maxValue: 8f,
+            step: 1f,
+            formatter: v => $"{(int)v}"
+        );
 
-        vbox.AddChild(damageLabel);
         vbox.AddChild(damageSlider);
-        vbox.AddChild(_valueLabel);
+        vbox.AddChild(healthSlider);
+        vbox.AddChild(playersSlider);
 
         _normalBase = HeaderPanelStyles.BuildNormalStyle(selected: false);
         _normalHover = HeaderPanelStyles.BuildHoverVariant(_normalBase);
@@ -88,14 +105,17 @@ public class EnemyScalingSection
         string arrow = _body.Visible ? "▼  " : "▶  ";
         string suffix = _body.Visible
             ? ""
-            : $": {FormatScalingValue(EnemyScalingState.Instance.Damage)}";
+            : $": {FormatScalingValue(EnemyScalingState.Instance.DamageMultiplier)}";
         _headerLabel.Text = arrow + _title + suffix;
         ApplyStyle();
     }
 
     private void ApplyStyle()
     {
-        bool isModified = EnemyScalingState.Instance.Damage != 1.0f;
+        bool isModified =
+            EnemyScalingState.Instance.DamageMultiplier != 1.0f
+            || EnemyScalingState.Instance.HealthMultiplier != 1.0f
+            || EnemyScalingState.Instance.NumPlayers != 1;
         var style = isModified
             ? (_isHovering ? _selectedHover : _selectedBase)
             : (_isHovering ? _normalHover : _normalBase);
@@ -123,10 +143,10 @@ public class EnemyScalingSection
         }
     }
 
-    private void OnSliderValueChanged(float value)
+    private void OnDamageSliderChanged(float value)
     {
-        EnemyScalingState.Instance.Damage = value;
-        bool ticked = EnemyScalingState.Instance.Damage > 1f;
+        EnemyScalingState.Instance.DamageMultiplier = value;
+        bool ticked = EnemyScalingState.Instance.DamageMultiplier > 1f;
         foreach (var tb in _tickboxes)
         {
             MainFile.Logger.Info(
@@ -141,7 +161,18 @@ public class EnemyScalingSection
                 new Variant[] { Variant.From<GodotObject>((GodotObject)(object)tb) }
             );
         }
-        _valueLabel.Text = FormatScalingValue(EnemyScalingState.Instance.Damage);
+        Refresh();
+    }
+
+    private void OnHealthSliderChanged(float value)
+    {
+        EnemyScalingState.Instance.HealthMultiplier = value;
+        Refresh();
+    }
+
+    private void OnPlayersSliderChanged(float value)
+    {
+        EnemyScalingState.Instance.NumPlayers = (int)value;
         Refresh();
     }
 

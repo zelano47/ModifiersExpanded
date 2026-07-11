@@ -18,7 +18,7 @@ public class EnemyScaling : ModifierModel
     {
         if (dealer != null && dealer.IsEnemy && target != null && target.IsPlayer)
         {
-            return (decimal)State.Damage;
+            return (decimal)State.DamageMultiplier;
         }
         return 1m;
     }

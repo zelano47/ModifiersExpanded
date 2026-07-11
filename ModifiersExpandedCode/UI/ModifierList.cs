@@ -132,7 +132,7 @@ public static class ModifierList
         List<NRunModifierTickbox> tickboxes
     )
     {
-        EnemyScalingState.Instance.Damage = 1.0f;
+        EnemyScalingState.Instance.DamageMultiplier = 1.0f;
 
         var groups = BuildModifierGroups();
         var goodModifierTypes = ModelDb.GoodModifiers.Select(m => m.GetType()).ToHashSet();
@@ -163,7 +163,7 @@ public static class ModifierList
         // ── Enemy-scaling tickboxes: hidden from layout, toggled by the slider ────────────
         var enemyScalingTickboxes = tickboxes.Where(t => t?.Modifier is EnemyScaling).ToList();
         foreach (var tb in enemyScalingTickboxes)
-            tb.IsTicked = EnemyScalingState.Instance.Damage > 1f;
+            tb.IsTicked = EnemyScalingState.Instance.DamageMultiplier > 1f;
 
         // ── 1. Accordion sections (groups in definition order, tickboxes alphabetical) ──
         var sectionRefreshers = new List<Action>();
