@@ -125,6 +125,7 @@ public class EnemyScalingSection
 
     private void OnSliderValueChanged(float value)
     {
+        EnemyScalingState.Instance.Damage = value;
         MainFile.Logger.Info(
             MainFile.CreateLogMessage(
                 $"EnemyScaling damage changed to {EnemyScalingState.Instance.Damage}"
