@@ -12,6 +12,24 @@ public class EnemyScaling : ModifierModel
 {
     EnemyScalingState State { get; } = EnemyScalingState.Instance;
 
+    // 1 extra item for act 4 mod compatibility
+    private float[] _damageMultiplierCurve { get; } = new float[] { .80f, .90f, 1f, 1f };
+    private int _actIndex { get; set; } = 0;
+    private bool _isFirstAct { get; set; } = true;
+
+    public override Task AfterActEntered()
+    {
+        if (_isFirstAct)
+        {
+            _isFirstAct = false;
+        }
+        else
+        {
+            _actIndex += 1;
+        }
+        return Task.CompletedTask;
+    }
+
     public override decimal ModifyDamageMultiplicative(
         Creature? target,
         decimal amount,
@@ -22,7 +40,7 @@ public class EnemyScaling : ModifierModel
     {
         if (dealer != null && dealer.IsEnemy && target != null && target.IsPlayer)
         {
-            return (decimal)State.DamageMultiplier;
+            return (decimal)State.DamageMultiplier * (decimal)_damageMultiplierCurve[_actIndex];
         }
         return 1m;
     }
@@ -33,14 +51,13 @@ public class EnemyScaling : ModifierModel
         if (room is not CombatRoom combatRoom)
             return Task.CompletedTask;
 
-        var playerCount = combatRoom.CombatState?.Players.Count ?? 1;
         foreach (Creature creature in combatRoom.CombatState.Enemies)
         {
             if (State.NumAdditionalPlayers >= 0)
             {
                 creature.ScaleMonsterHpForMultiplayer(
                     combatRoom.CombatState.Encounter,
-                    playerCount + State.NumAdditionalPlayers,
+                    GetNumPlayers(combatRoom.CombatState),
                     combatRoom.CombatState.RunState.CurrentActIndex
                 );
             }
@@ -52,14 +69,12 @@ public class EnemyScaling : ModifierModel
     // Scale enemies spawned mid-combat (e.g. summons).
     public override Task AfterCreatureAddedToCombat(Creature creature)
     {
-        if (!creature.IsEnemy)
+        if (!creature.IsEnemy || creature.CombatState == null)
             return Task.CompletedTask;
-
-        var playerCount = creature.CombatState?.Players.Count ?? 1;
 
         creature.ScaleMonsterHpForMultiplayer(
             creature.CombatState?.Encounter,
-            playerCount + State.NumAdditionalPlayers,
+            GetNumPlayers(creature.CombatState!),
             creature.CombatState!.RunState.CurrentActIndex
         );
 
@@ -97,7 +112,7 @@ public class EnemyScaling : ModifierModel
             canonicalPower,
             combatState,
             amount,
-            combatState.Players.Count + State.NumAdditionalPlayers
+            GetNumPlayers(combatState)
         );
         return true;
     }
@@ -130,6 +145,9 @@ public class EnemyScaling : ModifierModel
                 combatState.RunState.CurrentActIndex
             );
     }
+
+    private int GetNumPlayers(ICombatState combatState) =>
+        combatState.Players.Count + State.NumAdditionalPlayers;
 
     protected override string IconPath => this.GetType().Name.ToSnakeCasePng().ModifierImagePath();
 }
