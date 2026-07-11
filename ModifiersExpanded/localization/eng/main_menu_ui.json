@@ -11,6 +11,5 @@
   "MODIFIER_GROUP.MAP_MODIFIERS.title": "Map Modifiers",
   "MODIFIER_GROUP.ENEMY_SCALING.title": "Enemy Scaling",
   "MODIFIER_GROUP.ENEMY_SCALING.damage": "Enemy Damage Multiplier",
-  "MODIFIER_GROUP.ENEMY_SCALING.health": "Enemy Health Multiplier",
-  "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Number of Players"
+  "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Number of Additional Players"
 }

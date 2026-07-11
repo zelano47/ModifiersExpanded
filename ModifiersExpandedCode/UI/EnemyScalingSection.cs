@@ -58,30 +58,20 @@ public class EnemyScalingSection
             onValueChanged: OnDamageSliderChanged
         );
 
-        var healthSlider = new ScalingSlider(
-            label: new LocString(
-                "main_menu_ui",
-                "MODIFIER_GROUP.ENEMY_SCALING.health"
-            ).GetFormattedText(),
-            initialValue: EnemyScalingState.Instance.HealthMultiplier,
-            onValueChanged: OnHealthSliderChanged
-        );
-
         var playersSlider = new ScalingSlider(
             label: new LocString(
                 "main_menu_ui",
                 "MODIFIER_GROUP.ENEMY_SCALING.num_players"
             ).GetFormattedText(),
-            initialValue: EnemyScalingState.Instance.NumPlayers,
+            initialValue: EnemyScalingState.Instance.NumAdditionalPlayers,
             onValueChanged: OnPlayersSliderChanged,
-            minValue: 1f,
-            maxValue: 8f,
+            minValue: 0f,
+            maxValue: 4f,
             step: 1f,
-            formatter: v => $"{(int)v}"
+            formatter: v => $"+{(int)v}"
         );
 
         vbox.AddChild(damageSlider);
-        vbox.AddChild(healthSlider);
         vbox.AddChild(playersSlider);
 
         _normalBase = HeaderPanelStyles.BuildNormalStyle(selected: false);
@@ -114,8 +104,7 @@ public class EnemyScalingSection
     {
         bool isModified =
             EnemyScalingState.Instance.DamageMultiplier != 1.0f
-            || EnemyScalingState.Instance.HealthMultiplier != 1.0f
-            || EnemyScalingState.Instance.NumPlayers != 1;
+            || EnemyScalingState.Instance.NumAdditionalPlayers != 0;
         var style = isModified
             ? (_isHovering ? _selectedHover : _selectedBase)
             : (_isHovering ? _normalHover : _normalBase);
@@ -164,15 +153,9 @@ public class EnemyScalingSection
         Refresh();
     }
 
-    private void OnHealthSliderChanged(float value)
-    {
-        EnemyScalingState.Instance.HealthMultiplier = value;
-        Refresh();
-    }
-
     private void OnPlayersSliderChanged(float value)
     {
-        EnemyScalingState.Instance.NumPlayers = (int)value;
+        EnemyScalingState.Instance.NumAdditionalPlayers = (int)value;
         Refresh();
     }
 

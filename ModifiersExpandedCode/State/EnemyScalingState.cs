@@ -6,12 +6,10 @@ public class EnemyScalingState
 
     public EnemyScalingState()
     {
-        HealthMultiplier = 1.0f;
         DamageMultiplier = 1.0f;
-        NumPlayers = 1;
+        NumAdditionalPlayers = 0;
     }
 
-    public float HealthMultiplier { get; set; }
     public float DamageMultiplier { get; set; }
-    public int NumPlayers { get; set; }
+    public int NumAdditionalPlayers { get; set; }
 }
