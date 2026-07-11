@@ -181,13 +181,9 @@ public static class ModifierList
                 continue;
 
             bool anyTicked = groupTickboxes.Any(t => t.IsTicked);
-            var (section, refresh) = ModifierGroupControls.BuildAccordionSection(
-                group,
-                groupTickboxes,
-                startExpanded: anyTicked
-            );
-            ((Node)(object)container).AddChildSafely((Node)(object)section);
-            sectionRefreshers.Add(refresh);
+            var section = new AccordionSection(group, groupTickboxes, startExpanded: anyTicked);
+            ((Node)(object)container).AddChildSafely(section.Root);
+            sectionRefreshers.Add(section.Refresh);
         }
 
         RefreshAllSectionHeaders = () =>
@@ -215,11 +211,8 @@ public static class ModifierList
             "main_menu_ui",
             "MODIFIER_GROUP.ENEMY_SCALING.title"
         ).GetFormattedText();
-        var (scalingSection, scalingRefresh) = ModifierGroupControls.BuildEnemyScalingSection(
-            scalingTitle,
-            enemyScalingTickboxes
-        );
-        ((Node)(object)container).AddChildSafely((Node)(object)scalingSection);
-        sectionRefreshers.Add(scalingRefresh);
+        var scalingSection = new EnemyScalingSection(scalingTitle, enemyScalingTickboxes);
+        ((Node)(object)container).AddChildSafely(scalingSection.Root);
+        sectionRefreshers.Add(scalingSection.Refresh);
     }
 }
