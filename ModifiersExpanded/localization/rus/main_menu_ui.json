@@ -8,5 +8,6 @@
   "MODIFIER_GROUP.STARTING_CARDS.title": "Стартовые карты",
   "MODIFIER_GROUP.CHALLENGES.title": "Испытания",
   "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Модификаторы наград",
-  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Модификаторы карты"
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Модификаторы карты",
+  "MODIFIER_GROUP.ENEMY_SCALING.title": "Масштаб врагов"
 }

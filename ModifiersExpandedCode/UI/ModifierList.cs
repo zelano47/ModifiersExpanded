@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Modifiers;
 using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
 using ModifiersExpanded.ModifiersExpandedCode.Modifiers;
+using ModifiersExpanded.ModifiersExpandedCode.State;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.UI;
 
@@ -63,6 +64,7 @@ public static class ModifierList
                         or Terminal,
             null
         ),
+        ("ENEMY_SCALING", false, m => m is EnemyScaling, null),
     ];
 
     private static List<ModifierGroup> BuildModifierGroups()
@@ -130,6 +132,8 @@ public static class ModifierList
         List<NRunModifierTickbox> tickboxes
     )
     {
+        EnemyScalingState.Instance.Damage = 1.0f;
+
         var groups = BuildModifierGroups();
         var goodModifierTypes = ModelDb.GoodModifiers.Select(m => m.GetType()).ToHashSet();
 
@@ -155,6 +159,11 @@ public static class ModifierList
                 continue;
             ((Node)(object)tickbox).GetParent()?.RemoveChild((Node)(object)tickbox);
         }
+
+        // ── Enemy-scaling tickboxes: hidden from layout, toggled by the slider ────────────
+        var enemyScalingTickboxes = tickboxes.Where(t => t?.Modifier is EnemyScaling).ToList();
+        foreach (var tb in enemyScalingTickboxes)
+            tb.IsTicked = EnemyScalingState.Instance.Damage > 1f;
 
         // ── 1. Accordion sections (groups in definition order, tickboxes alphabetical) ──
         var sectionRefreshers = new List<Action>();
@@ -189,7 +198,9 @@ public static class ModifierList
 
         // ── 2. Standalone tickboxes (good before bad, alphabetical within each) ──────────
         var standalones = tickboxes
-            .Where(t => t != null && !tickboxToGroup.ContainsKey(t))
+            .Where(t =>
+                t != null && !tickboxToGroup.ContainsKey(t) && !(t.Modifier is EnemyScaling)
+            )
             .OrderBy(t =>
                 t!.Modifier != null && goodModifierTypes.Contains(t.Modifier.GetType()) ? 0 : 1
             )
@@ -198,5 +209,17 @@ public static class ModifierList
 
         foreach (var tickbox in standalones)
             ((Node)(object)container).AddChildSafely((Node)(object)tickbox);
+
+        // ── 3. Enemy Scaling section ─────────────────────────────────────────
+        var scalingTitle = new LocString(
+            "main_menu_ui",
+            "MODIFIER_GROUP.ENEMY_SCALING.title"
+        ).GetFormattedText();
+        var (scalingSection, scalingRefresh) = ModifierGroupControls.BuildEnemyScalingSection(
+            scalingTitle,
+            enemyScalingTickboxes
+        );
+        ((Node)(object)container).AddChildSafely((Node)(object)scalingSection);
+        sectionRefreshers.Add(scalingRefresh);
     }
 }

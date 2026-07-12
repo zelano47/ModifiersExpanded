@@ -50,6 +50,7 @@ public class ModelDbPatches
                 ModelDb.Modifier<UrgencyPlusPlus>(),
                 ModelDb.Modifier<HighRoller>(),
                 ModelDb.Modifier<Sprint>(),
+                ModelDb.Modifier<EnemyScaling>(),
             };
             __result = patched;
         }

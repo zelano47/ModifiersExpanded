@@ -8,5 +8,6 @@
   "MODIFIER_GROUP.STARTING_CARDS.title": "初期カード",
   "MODIFIER_GROUP.CHALLENGES.title": "チャレンジ",
   "MODIFIER_GROUP.REWARD_MODIFIERS.title": "報酬モディファイア",
-  "MODIFIER_GROUP.MAP_MODIFIERS.title": "マップモディファイア"
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "マップモディファイア",
+  "MODIFIER_GROUP.ENEMY_SCALING.title": "敵スケーリング"
 }

@@ -1,8 +1,10 @@
 using System.Text;
 using Godot;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.Nodes.Screens.CustomRun;
+using ModifiersExpanded.ModifiersExpandedCode.State;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.UI;
 
@@ -222,4 +224,119 @@ public class ModifierGroupControls
         hover.BgColor = baseStyle.BgColor.Lightened(0.08f);
         return hover;
     }
+
+    public static (VBoxContainer section, Action refreshHeader) BuildEnemyScalingSection(
+        string title,
+        IReadOnlyList<NRunModifierTickbox> enemyScalingTickboxes
+    )
+    {
+        var root = new VBoxContainer();
+        root.AddThemeConstantOverride("separation", 0);
+
+        var (headerPanel, headerLabel) = CreateHeaderPanel();
+        var body = new MarginContainer();
+        body.AddThemeConstantOverride("margin_top", 8);
+        var vbox = new VBoxContainer();
+        vbox.AddThemeConstantOverride("separation", 4);
+        body.AddChild(vbox);
+        body.Visible = false;
+
+        var damageSlider = new ScalingSlider(v => EnemyScalingState.Instance.Damage = v);
+        var valueLabel = new Label();
+        valueLabel.HorizontalAlignment = HorizontalAlignment.Center;
+        valueLabel.Text = FormatScalingValue(EnemyScalingState.Instance.Damage);
+        var damageLabel = new Label();
+        damageLabel.HorizontalAlignment = HorizontalAlignment.Left;
+        damageLabel.Text = new LocString(
+            "main_menu_ui",
+            "MODIFIER_GROUP.ENEMY_SCALING.damage"
+        ).GetFormattedText();
+        vbox.AddChild(damageLabel);
+        vbox.AddChild(damageSlider);
+        vbox.AddChild(valueLabel);
+
+        var normalBase = BuildNormalStyle(selected: false);
+        var normalHover = BuildHoverVariant(normalBase);
+        var selectedBase = BuildNormalStyle(selected: true);
+        var selectedHover = BuildHoverVariant(selectedBase);
+        bool isHovering = false;
+
+        void ApplyStyle()
+        {
+            bool isModified = EnemyScalingState.Instance.Damage != 1.0f;
+            var style = isModified
+                ? (isHovering ? selectedHover : selectedBase)
+                : (isHovering ? normalHover : normalBase);
+            headerPanel.AddThemeStyleboxOverride("panel", style);
+        }
+
+        void Refresh()
+        {
+            string arrow = body.Visible ? "\u25bc  " : "\u25b6  ";
+            string suffix = body.Visible
+                ? ""
+                : $": {FormatScalingValue(EnemyScalingState.Instance.Damage)}";
+            headerLabel.Text = arrow + title + suffix;
+            ApplyStyle();
+        }
+
+        headerPanel.MouseEntered += () =>
+        {
+            isHovering = true;
+            ApplyStyle();
+        };
+        headerPanel.MouseExited += () =>
+        {
+            isHovering = false;
+            ApplyStyle();
+        };
+
+        headerPanel.GuiInput += evt =>
+        {
+            if (
+                evt is InputEventMouseButton btn
+                && btn.ButtonIndex == MouseButton.Left
+                && btn.Pressed
+            )
+            {
+                body.Visible = !body.Visible;
+                Refresh();
+            }
+        };
+
+        damageSlider.ValueChanged += _ =>
+        {
+            MainFile.Logger.Info(
+                MainFile.CreateLogMessage(
+                    $"EnemyScaling damage changed to {EnemyScalingState.Instance.Damage}"
+                )
+            );
+            bool ticked = EnemyScalingState.Instance.Damage > 1f;
+            foreach (var tb in enemyScalingTickboxes)
+            {
+                MainFile.Logger.Info(
+                    MainFile.CreateLogMessage($"EnemyScaling tickbox {tb} set to {ticked}")
+                );
+                tb.IsTicked = ticked;
+                // IsTicked setter does not emit Toggled; emit it manually so
+                // AfterModifiersChanged → ModifiersChanged fires and the run
+                // start button picks up the updated modifier list.
+                ((GodotObject)(object)tb).EmitSignal(
+                    NTickbox.SignalName.Toggled,
+                    new Variant[] { Variant.From<GodotObject>((GodotObject)(object)tb) }
+                );
+            }
+
+            valueLabel.Text = FormatScalingValue(EnemyScalingState.Instance.Damage);
+            Refresh();
+        };
+
+        Refresh();
+
+        root.AddChild(headerPanel);
+        root.AddChild(body);
+        return (root, Refresh);
+    }
+
+    private static string FormatScalingValue(float value) => $"{value:F2}x";
 }

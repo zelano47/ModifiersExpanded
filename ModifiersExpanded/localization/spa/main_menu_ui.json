@@ -8,5 +8,6 @@
   "MODIFIER_GROUP.STARTING_CARDS.title": "Cartas iniciales",
   "MODIFIER_GROUP.CHALLENGES.title": "Desafíos",
   "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Modificadores de recompensa",
-  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Modificadores de mapa"
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Modificadores de mapa",
+  "MODIFIER_GROUP.ENEMY_SCALING.title": "Escala de enemigos"
 }

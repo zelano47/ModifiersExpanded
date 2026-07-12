@@ -8,5 +8,6 @@
   "MODIFIER_GROUP.STARTING_CARDS.title": "Starting Cards",
   "MODIFIER_GROUP.CHALLENGES.title": "Challenges",
   "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Reward Modifiers",
-  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Map Modifiers"
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Map Modifiers",
+  "MODIFIER_GROUP.ENEMY_SCALING.title": "Enemy Scaling"
 }
