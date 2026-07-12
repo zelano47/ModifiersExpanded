@@ -1,13 +1,15 @@
 {
   "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "Última partida",
   "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Reemplazar baraja inicial",
-  "MODIFIER_GROUP.SPEEDRUN.title": "Speedrun",
+  "MODIFIER_GROUP.SPEEDRUN.title": "Contrarreloj",
   "MODIFIER_GROUP.URGENCY.title": "Urgencia",
   "MODIFIER_GROUP.CARD_POOLS.title": "Conjuntos de cartas",
   "MODIFIER_GROUP.STARTING_RELICS.title": "Reliquias iniciales",
   "MODIFIER_GROUP.STARTING_CARDS.title": "Cartas iniciales",
   "MODIFIER_GROUP.CHALLENGES.title": "Desafíos",
-  "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Modificadores de recompensa",
-  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Modificadores de mapa",
-  "MODIFIER_GROUP.ENEMY_SCALING.title": "Escala de enemigos"
+  "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Modificadores de recompensas",
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Modificadores del mapa",
+  "MODIFIER_GROUP.ENEMY_SCALING.title": "Escalado de enemigos",
+  "MODIFIER_GROUP.ENEMY_SCALING.damage": "Multiplicador de daño de enemigos",
+  "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Número de jugadores adicionales"
 }

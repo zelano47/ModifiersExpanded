@@ -44,5 +44,7 @@
   "HIGH_ROLLER.title": "Крупный игрок",
   "HIGH_ROLLER.description": "Начните игру с [blue]1[/blue] [gold]Джекпотом[/gold] и [red]1[/red] [gold]Долгом[/gold] в колоде.",
   "SPRINT.title": "Спринт",
-  "SPRINT.description": "Карта представляет собой одну линейную дорожку с [blue]1[/blue] комнатой каждого типа."
+  "SPRINT.description": "Карта представляет собой одну линейную дорожку с [blue]1[/blue] комнатой каждого типа.",
+  "ENEMY_SCALING.title": "Масштабирование врагов",
+  "ENEMY_SCALING.description": "Настраиваемое масштабирование сложности врагов."
 }

@@ -1,13 +1,15 @@
 {
   "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "Прошлый забег",
-  "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Замена стартовой колоды",
-  "MODIFIER_GROUP.SPEEDRUN.title": "Спидран",
-  "MODIFIER_GROUP.URGENCY.title": "Спешка",
+  "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Замена начальной колоды",
+  "MODIFIER_GROUP.SPEEDRUN.title": "Скоростное прохождение",
+  "MODIFIER_GROUP.URGENCY.title": "Срочность",
   "MODIFIER_GROUP.CARD_POOLS.title": "Наборы карт",
-  "MODIFIER_GROUP.STARTING_RELICS.title": "Стартовые реликвии",
-  "MODIFIER_GROUP.STARTING_CARDS.title": "Стартовые карты",
+  "MODIFIER_GROUP.STARTING_RELICS.title": "Начальные реликвии",
+  "MODIFIER_GROUP.STARTING_CARDS.title": "Начальные карты",
   "MODIFIER_GROUP.CHALLENGES.title": "Испытания",
   "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Модификаторы наград",
   "MODIFIER_GROUP.MAP_MODIFIERS.title": "Модификаторы карты",
-  "MODIFIER_GROUP.ENEMY_SCALING.title": "Масштаб врагов"
+  "MODIFIER_GROUP.ENEMY_SCALING.title": "Масштабирование врагов",
+  "MODIFIER_GROUP.ENEMY_SCALING.damage": "Множитель урона врагов",
+  "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Количество дополнительных игроков"
 }

@@ -44,5 +44,7 @@
   "HIGH_ROLLER.title": "ハイローラー",
   "HIGH_ROLLER.description": "デッキに [blue]1[/blue] 枚の [gold]ジャックポット[/gold] と [red]1[/red] 枚の [gold]借金[/gold] を持って開始する。",
   "SPRINT.title": "スプリント",
-  "SPRINT.description": "マップは各部屋タイプを [blue]1[/blue] つずつ含む、単一の直線ルートになる。"
+  "SPRINT.description": "マップは各部屋タイプを [blue]1[/blue] つずつ含む、単一の直線ルートになる。",
+  "ENEMY_SCALING.title": "エネミースケーリング",
+  "ENEMY_SCALING.description": "敵の難易度スケーリングをカスタムする。"
 }

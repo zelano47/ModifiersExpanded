@@ -44,5 +44,7 @@
   "HIGH_ROLLER.title": "Gran apostador",
   "HIGH_ROLLER.description": "Empieza con [blue]1[/blue] [gold]Premio gordo[/gold] y [red]1[/red] [gold]Deuda[/gold] en tu baraja.",
   "SPRINT.title": "Esprint",
-  "SPRINT.description": "El mapa es una única ruta lineal con [blue]1[/blue] sala de cada tipo."
+  "SPRINT.description": "El mapa es una única ruta lineal con [blue]1[/blue] sala de cada tipo.",
+  "ENEMY_SCALING.title": "Escalado de enemigos",
+  "ENEMY_SCALING.description": "Ajuste personalizado de la dificultad de los enemigos."
 }
