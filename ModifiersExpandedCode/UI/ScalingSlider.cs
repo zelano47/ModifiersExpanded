@@ -39,6 +39,7 @@ public partial class ScalingSlider : VBoxContainer
         var nameLabel = new Label();
         nameLabel.Text = label;
         nameLabel.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        nameLabel.AddThemeFontSizeOverride("font_size", 20);
         _valueLabel = new Label();
         _valueLabel.Text = formatter(initialValue);
         _valueLabel.HorizontalAlignment = HorizontalAlignment.Right;
