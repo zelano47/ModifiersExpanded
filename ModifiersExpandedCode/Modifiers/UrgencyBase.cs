@@ -20,6 +20,14 @@ public abstract class UrgencyBase : ModifierModel
     public float TimeLeft { get; set; }
     public bool RoomExited { get; set; }
 
+    public void Reset()
+    {
+        TimeLeft = TimeLimit;
+        StartTime = 0f;
+        IsInCombat = false;
+        RoomExited = true;
+    }
+
     protected override void AfterRunCreated(RunState runState)
     {
         TimerState.UrgencyModifierInstance = this;
