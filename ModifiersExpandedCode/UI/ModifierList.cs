@@ -181,7 +181,11 @@ public static class ModifierList
                 continue;
 
             bool anyTicked = groupTickboxes.Any(t => t.IsTicked);
-            var section = new AccordionSection(group, groupTickboxes, startExpanded: anyTicked);
+            var section = new ModifierCheckboxSection(
+                group,
+                groupTickboxes,
+                startExpanded: anyTicked
+            );
             ((Node)(object)container).AddChildSafely(section.Root);
             sectionRefreshers.Add(section.Refresh);
         }
