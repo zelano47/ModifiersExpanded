@@ -61,10 +61,6 @@ public class Chimera : ModifierModel
             player.RunState.CreateCard(defectStrike, player),
             player.RunState.CreateCard(regentStrike, player),
             player.RunState.CreateCard(necroStrike, player),
-            player.RunState.CreateCard(silentStrike, player),
-            player.RunState.CreateCard(defectStrike, player),
-            player.RunState.CreateCard(regentStrike, player),
-            player.RunState.CreateCard(necroStrike, player),
             // defend
             player.RunState.CreateCard(cladDefend, player),
             player.RunState.CreateCard(silentDefend, player),
