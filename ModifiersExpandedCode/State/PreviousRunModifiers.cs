@@ -17,4 +17,7 @@ public static class PreviousRunModifiers
 
     /// <summary>True while the screen is initialised in multiplayer-client mode.</summary>
     internal static bool IsClientMode { get; set; }
+
+    public static float? DamageMultiplier { get; set; }
+    public static int? NumAdditionalPlayers { get; set; }
 }

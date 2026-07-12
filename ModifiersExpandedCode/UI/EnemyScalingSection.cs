@@ -16,6 +16,8 @@ public class EnemyScalingSection : CollapsibleSection
 {
     private readonly IReadOnlyList<NRunModifierTickbox> _tickboxes;
     private readonly string _title;
+    private readonly ScalingSlider? _damageSlider;
+    private readonly ScalingSlider? _playersSlider;
 
     /// <summary>
     /// Initialises a new enemy scaling section with the given title and tickboxes.
@@ -35,7 +37,7 @@ public class EnemyScalingSection : CollapsibleSection
         vbox.AddThemeConstantOverride("separation", 4);
         _body.AddChild(vbox);
 
-        var damageSlider = new ScalingSlider(
+        _damageSlider = new ScalingSlider(
             label: new LocString(
                 "main_menu_ui",
                 "MODIFIER_GROUP.ENEMY_SCALING.damage"
@@ -44,7 +46,7 @@ public class EnemyScalingSection : CollapsibleSection
             onValueChanged: OnDamageSliderChanged
         );
 
-        var playersSlider = new ScalingSlider(
+        _playersSlider = new ScalingSlider(
             label: new LocString(
                 "main_menu_ui",
                 "MODIFIER_GROUP.ENEMY_SCALING.num_players"
@@ -57,8 +59,8 @@ public class EnemyScalingSection : CollapsibleSection
             formatter: v => $"+{(int)v}"
         );
 
-        vbox.AddChild(damageSlider);
-        vbox.AddChild(playersSlider);
+        vbox.AddChild(_damageSlider);
+        vbox.AddChild(_playersSlider);
 
         Refresh();
     }
@@ -69,7 +71,7 @@ public class EnemyScalingSection : CollapsibleSection
     /// <summary>Refreshes the header label text and panel style.</summary>
     public override void Refresh()
     {
-        string suffix = String.Empty;
+        string suffix = string.Empty;
         if (!_body.Visible && ModifierEnabled())
         {
             StringBuilder sb = new StringBuilder();
@@ -89,6 +91,13 @@ public class EnemyScalingSection : CollapsibleSection
             suffix = $": {sb}";
         }
         _headerLabel.Text = Arrow + _title + suffix;
+        MainFile.Logger.Info(
+            MainFile.CreateLogMessage(
+                $"EnemyScalingSection refreshed: DamageMultiplier={EnemyScalingState.Instance.DamageMultiplier}, NumAdditionalPlayers={EnemyScalingState.Instance.NumAdditionalPlayers}"
+            )
+        );
+        _damageSlider!.Slider.Value = EnemyScalingState.Instance.DamageMultiplier;
+        _playersSlider!.Slider.Value = EnemyScalingState.Instance.NumAdditionalPlayers;
         ApplyStyle();
     }
 

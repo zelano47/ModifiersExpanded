@@ -10,6 +10,8 @@ public partial class ScalingSlider : VBoxContainer
 {
     private readonly Label _valueLabel;
 
+    public HSlider Slider { get; internal set; }
+
     /// <summary>
     /// Initialises a new scaling slider.
     /// </summary>
@@ -46,22 +48,22 @@ public partial class ScalingSlider : VBoxContainer
         row.AddChild(nameLabel);
         row.AddChild(_valueLabel);
 
-        var slider = new HSlider();
-        slider.MinValue = minValue;
-        slider.MaxValue = maxValue;
-        slider.Step = step;
-        slider.Value = initialValue;
-        slider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-        slider.CustomMinimumSize = new Vector2(0, 32);
+        Slider = new HSlider();
+        Slider.MinValue = minValue;
+        Slider.MaxValue = maxValue;
+        Slider.Step = step;
+        Slider.Value = initialValue;
+        Slider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        Slider.CustomMinimumSize = new Vector2(0, 32);
 
         var capturedFormatter = formatter;
-        slider.ValueChanged += v =>
+        Slider.ValueChanged += v =>
         {
             _valueLabel.Text = capturedFormatter((float)v);
             onValueChanged?.Invoke((float)v);
         };
 
         AddChild(row);
-        AddChild(slider);
+        AddChild(Slider);
     }
 }
