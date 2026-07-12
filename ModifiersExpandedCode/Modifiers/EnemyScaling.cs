@@ -30,13 +30,7 @@ public class EnemyScaling : ModifierModel
         return Task.CompletedTask;
     }
 
-    public override decimal ModifyDamageMultiplicative(
-        Creature? target,
-        decimal amount,
-        ValueProp props,
-        Creature? dealer,
-        CardModel? cardSource
-    )
+    public decimal GetEnemyToPlayerDamageMultiplier(Creature? target, Creature? dealer)
     {
         if (dealer != null && dealer.IsEnemy && target != null && target.IsPlayer)
         {
