@@ -60,22 +60,20 @@ public class ModifierCheckboxSection : CollapsibleSection
 
     private void RefreshHeaderText()
     {
+        string groupName =
+            _group.GroupName != null
+                ? _group.GroupName.GetFormattedText()
+                : ModifierGroupControls.ModifierGroupCollapsedText(_tickboxes.ToArray());
+
+        string suffix = string.Empty;
         if (!_body.Visible)
         {
             var selected = _tickboxes.Where(t => t.IsTicked).ToArray();
             if (selected.Length > 0)
-            {
-                _headerLabel.Text =
-                    Arrow + ModifierGroupControls.ModifierGroupCollapsedText(selected);
-                return;
-            }
+                suffix = $": {ModifierGroupControls.ModifierGroupCollapsedText(selected)}";
         }
 
-        string text =
-            _group.GroupName != null
-                ? _group.GroupName.GetFormattedText()
-                : ModifierGroupControls.ModifierGroupCollapsedText(_tickboxes.ToArray());
-        _headerLabel.Text = Arrow + text;
+        _headerLabel.Text = Arrow + groupName + suffix;
     }
 
     private void OnTickboxToggled(NRunModifierTickbox toggled)
