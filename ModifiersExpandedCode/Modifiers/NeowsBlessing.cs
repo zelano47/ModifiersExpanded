@@ -151,6 +151,10 @@ public class NeowsBlessing : ModifierModel
         TaskCompletionSource tcs
     )
     {
+        if (neow.Owner == null)
+        {
+            return original;
+        }
         var relic = original.Relic!;
         return new EventOption(
             neow,
