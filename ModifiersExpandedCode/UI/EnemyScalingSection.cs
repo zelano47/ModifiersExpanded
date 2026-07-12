@@ -1,3 +1,4 @@
+using System.Text;
 using Godot;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.CommonUi;
@@ -44,6 +45,8 @@ public class EnemyScalingSection
 
         _body = new MarginContainer();
         _body.AddThemeConstantOverride("margin_top", 8);
+        _body.AddThemeConstantOverride("margin_left", 20);
+        _body.AddThemeConstantOverride("margin_right", 20);
         var vbox = new VBoxContainer();
         vbox.AddThemeConstantOverride("separation", 4);
         _body.AddChild(vbox);
@@ -93,19 +96,39 @@ public class EnemyScalingSection
     public void Refresh()
     {
         string arrow = _body.Visible ? "▼  " : "▶  ";
-        string suffix = _body.Visible
-            ? ""
-            : $": {FormatScalingValue(EnemyScalingState.Instance.DamageMultiplier)}";
+        string suffix =
+            !_body.Visible && ModifierEnabled()
+                ? $": Damage {FormatScalingValue(EnemyScalingState.Instance.DamageMultiplier)}, Players +{EnemyScalingState.Instance.NumAdditionalPlayers}"
+                : "";
+        if (!_body.Visible && ModifierEnabled())
+        {
+            StringBuilder sb = new StringBuilder();
+            if (DamageModified())
+            {
+                sb.Append(
+                    $"Damage {FormatScalingValue(EnemyScalingState.Instance.DamageMultiplier)}"
+                );
+            }
+
+            if (PlayersModified())
+            {
+                if (sb.Length > 0)
+                    sb.Append(", ");
+                sb.Append($"Players +{EnemyScalingState.Instance.NumAdditionalPlayers}");
+            }
+            suffix = $": {sb}";
+        }
+        else
+        {
+            suffix = String.Empty;
+        }
         _headerLabel.Text = arrow + _title + suffix;
         ApplyStyle();
     }
 
     private void ApplyStyle()
     {
-        bool isModified =
-            EnemyScalingState.Instance.DamageMultiplier != 1.0f
-            || EnemyScalingState.Instance.NumAdditionalPlayers != 0;
-        var style = isModified
+        var style = ModifierEnabled()
             ? (_isHovering ? _selectedHover : _selectedBase)
             : (_isHovering ? _normalHover : _normalBase);
         _headerPanel.AddThemeStyleboxOverride("panel", style);
@@ -138,9 +161,6 @@ public class EnemyScalingSection
         bool ticked = EnemyScalingState.Instance.DamageMultiplier > 1f;
         foreach (var tb in _tickboxes)
         {
-            MainFile.Logger.Info(
-                MainFile.CreateLogMessage($"EnemyScaling tickbox {tb} set to {ticked}")
-            );
             tb.IsTicked = ticked;
             // IsTicked setter does not emit Toggled; emit it manually so
             // AfterModifiersChanged → ModifiersChanged fires and the run
@@ -151,6 +171,21 @@ public class EnemyScalingSection
             );
         }
         Refresh();
+    }
+
+    private bool ModifierEnabled()
+    {
+        return PlayersModified() || DamageModified();
+    }
+
+    private bool PlayersModified()
+    {
+        return EnemyScalingState.Instance.NumAdditionalPlayers != 0;
+    }
+
+    private bool DamageModified()
+    {
+        return EnemyScalingState.Instance.DamageMultiplier != 1.0f;
     }
 
     private void OnPlayersSliderChanged(float value)
