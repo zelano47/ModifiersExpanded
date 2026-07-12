@@ -1,6 +1,6 @@
 {
   "CUSTOM_RUN_SCREEN.LAST_RUN_BUTTON": "Last Run",
-  "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Replace Starter Deck",
+  "MODIFIER_GROUP.REPLACE_STARTER_DECK.title": "Replace Starting Deck",
   "MODIFIER_GROUP.SPEEDRUN.title": "Speedrun",
   "MODIFIER_GROUP.URGENCY.title": "Urgency",
   "MODIFIER_GROUP.CARD_POOLS.title": "Card Pools",
@@ -8,5 +8,8 @@
   "MODIFIER_GROUP.STARTING_CARDS.title": "Starting Cards",
   "MODIFIER_GROUP.CHALLENGES.title": "Challenges",
   "MODIFIER_GROUP.REWARD_MODIFIERS.title": "Reward Modifiers",
-  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Map Modifiers"
+  "MODIFIER_GROUP.MAP_MODIFIERS.title": "Map Modifiers",
+  "MODIFIER_GROUP.ENEMY_SCALING.title": "Enemy Scaling",
+  "MODIFIER_GROUP.ENEMY_SCALING.damage": "Enemy Damage Multiplier",
+  "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Number of Additional Players"
 }
