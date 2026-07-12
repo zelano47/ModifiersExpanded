@@ -96,10 +96,7 @@ public class EnemyScalingSection
     public void Refresh()
     {
         string arrow = _body.Visible ? "▼  " : "▶  ";
-        string suffix =
-            !_body.Visible && ModifierEnabled()
-                ? $": Damage {FormatScalingValue(EnemyScalingState.Instance.DamageMultiplier)}, Players +{EnemyScalingState.Instance.NumAdditionalPlayers}"
-                : "";
+        string suffix = String.Empty;
         if (!_body.Visible && ModifierEnabled())
         {
             StringBuilder sb = new StringBuilder();
@@ -117,10 +114,6 @@ public class EnemyScalingSection
                 sb.Append($"Players +{EnemyScalingState.Instance.NumAdditionalPlayers}");
             }
             suffix = $": {sb}";
-        }
-        else
-        {
-            suffix = String.Empty;
         }
         _headerLabel.Text = arrow + _title + suffix;
         ApplyStyle();
