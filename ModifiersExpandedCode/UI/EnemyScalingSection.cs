@@ -113,6 +113,18 @@ public class EnemyScalingSection : CollapsibleSection
     private void OnPlayersSliderChanged(float value)
     {
         EnemyScalingState.Instance.NumAdditionalPlayers = (int)value;
+        bool ticked = EnemyScalingState.Instance.NumAdditionalPlayers > 0;
+        foreach (var tb in _tickboxes)
+        {
+            tb.IsTicked = ticked;
+            // IsTicked setter does not emit Toggled; emit it manually so
+            // AfterModifiersChanged → ModifiersChanged fires and the run
+            // start button picks up the updated modifier list.
+            ((GodotObject)(object)tb).EmitSignal(
+                NTickbox.SignalName.Toggled,
+                new Variant[] { Variant.From<GodotObject>((GodotObject)(object)tb) }
+            );
+        }
         Refresh();
     }
 

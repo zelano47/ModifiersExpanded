@@ -12,4 +12,10 @@ public class EnemyScalingState
 
     public float DamageMultiplier { get; set; }
     public int NumAdditionalPlayers { get; set; }
+
+    public void Reset()
+    {
+        DamageMultiplier = 1.0f;
+        NumAdditionalPlayers = 0;
+    }
 }
