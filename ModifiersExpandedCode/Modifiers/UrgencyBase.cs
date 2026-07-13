@@ -1,5 +1,3 @@
-using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
@@ -26,6 +24,12 @@ public abstract class UrgencyBase : ModifierModel
         StartTime = 0f;
         IsInCombat = false;
         RoomExited = true;
+    }
+
+    protected override void AfterRunLoaded(RunState runState)
+    {
+        TimerState.UrgencyModifierInstance = this;
+        TimerState.TryApplyPendingUrgencySnapshot();
     }
 
     protected override void AfterRunCreated(RunState runState)
