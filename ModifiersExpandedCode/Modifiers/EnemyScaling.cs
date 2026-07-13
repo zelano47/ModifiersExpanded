@@ -12,29 +12,11 @@ public class EnemyScaling : ModifierModel
 {
     EnemyScalingState State { get; } = EnemyScalingState.Instance;
 
-    // 1 extra item for act 4 mod compatibility
-    private float[] _damageMultiplierCurve { get; } = new float[] { .80f, .90f, 1f, 1f };
-    private int _actIndex { get; set; } = 0;
-    private bool _isFirstAct { get; set; } = true;
-
-    public override Task AfterActEntered()
-    {
-        if (_isFirstAct)
-        {
-            _isFirstAct = false;
-        }
-        else
-        {
-            _actIndex += 1;
-        }
-        return Task.CompletedTask;
-    }
-
     public decimal GetEnemyToPlayerDamageMultiplier(Creature? target, Creature? dealer)
     {
         if (dealer != null && dealer.IsEnemy && target != null && target.IsPlayer)
         {
-            return (decimal)State.DamageMultiplier * (decimal)_damageMultiplierCurve[_actIndex];
+            return (decimal)State.DamageMultiplier;
         }
         return 1m;
     }
