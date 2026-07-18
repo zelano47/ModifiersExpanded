@@ -28,13 +28,12 @@ public partial class ScalingSlider : VBoxContainer
         string label,
         float initialValue,
         Action<float> onValueChanged,
+        Func<float, string> formatter,
         float minValue = 1.0f,
         float maxValue = 2.5f,
-        float step = 0.05f,
-        Func<float, string>? formatter = null
+        float step = 0.05f
     )
     {
-        formatter ??= v => $"{v:F2}x";
         AddThemeConstantOverride("separation", 2);
 
         var row = new HBoxContainer();

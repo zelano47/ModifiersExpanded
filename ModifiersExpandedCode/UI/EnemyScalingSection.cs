@@ -43,7 +43,8 @@ public class EnemyScalingSection : CollapsibleSection
                 "MODIFIER_GROUP.ENEMY_SCALING.damage"
             ).GetFormattedText(),
             initialValue: EnemyScalingState.Instance.DamageMultiplier,
-            onValueChanged: OnDamageSliderChanged
+            onValueChanged: OnDamageSliderChanged,
+            formatter: v => FormatScalingValue(v)
         );
 
         _playersSlider = new ScalingSlider(
@@ -53,10 +54,10 @@ public class EnemyScalingSection : CollapsibleSection
             ).GetFormattedText(),
             initialValue: EnemyScalingState.Instance.NumAdditionalPlayers,
             onValueChanged: OnPlayersSliderChanged,
+            formatter: v => $"+{(int)v}",
             minValue: 0f,
             maxValue: 4f,
-            step: 1f,
-            formatter: v => $"+{(int)v}"
+            step: 1f
         );
 
         vbox.AddChild(_damageSlider);
@@ -77,16 +78,26 @@ public class EnemyScalingSection : CollapsibleSection
             StringBuilder sb = new StringBuilder();
             if (DamageModified())
             {
+                string dmgShort = new LocString(
+                    "main_menu_ui",
+                    "MODIFIER_GROUP.ENEMY_SCALING.damage_short"
+                ).GetFormattedText();
                 sb.Append(
-                    $"Damage {FormatScalingValue(EnemyScalingState.Instance.DamageMultiplier)}"
+                    $"{dmgShort} {FormatScalingValue(EnemyScalingState.Instance.DamageMultiplier)}"
                 );
             }
 
             if (PlayersModified())
             {
                 if (sb.Length > 0)
+                {
                     sb.Append(", ");
-                sb.Append($"Players +{EnemyScalingState.Instance.NumAdditionalPlayers}");
+                }
+                string playersShort = new LocString(
+                    "main_menu_ui",
+                    "MODIFIER_GROUP.ENEMY_SCALING.num_players_short"
+                ).GetFormattedText();
+                sb.Append($"{playersShort} +{EnemyScalingState.Instance.NumAdditionalPlayers}");
             }
             suffix = $": {sb}";
         }
@@ -143,5 +154,5 @@ public class EnemyScalingSection : CollapsibleSection
 
     private bool DamageModified() => EnemyScalingState.Instance.DamageMultiplier != 1.0f;
 
-    private static string FormatScalingValue(float value) => $"{value:F2}x";
+    private static string FormatScalingValue(float value) => $"x{value:F2}";
 }
