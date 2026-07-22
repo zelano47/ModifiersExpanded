@@ -9,13 +9,11 @@ public class SprintMap : ActMap
     public override MapPoint BossMapPoint { get; }
     public override MapPoint StartingMapPoint { get; }
     protected override MapPoint?[,] Grid { get; }
+    public override MapPoint? SecondBossMapPoint { get; }
 
-    public SprintMap()
+    public SprintMap(bool hasSecondBoss = false)
     {
-        // 1 column wide; rows 1–6 hold the 6 intermediate nodes.
-        // GetRowCount() == 7, so BossMapPoint sits at row 6 (outside the grid).
         Grid = new MapPoint?[1, 7];
-
         StartingMapPoint = new MapPoint(_col, 0)
         {
             PointType = MapPointType.Ancient,
@@ -42,6 +40,13 @@ public class SprintMap : ActMap
         elite.AddChildPoint(shop);
         shop.AddChildPoint(restSite);
         restSite.AddChildPoint(BossMapPoint);
+
+        if (hasSecondBoss)
+        {
+            SecondBossMapPoint = new MapPoint(_col, GetRowCount() + 1);
+            SecondBossMapPoint.PointType = MapPointType.Boss;
+            BossMapPoint.AddChildPoint(SecondBossMapPoint);
+        }
 
         startMapPoints.Add(monster);
     }

@@ -11,7 +11,7 @@ public class Sprint : ModifierModel
 {
     public override ActMap ModifyGeneratedMap(IRunState runState, ActMap map, int actIndex)
     {
-        return new SprintMap();
+        return new SprintMap(runState.Act.HasSecondBoss);
     }
 
     protected override string IconPath => nameof(Sprint).ToSnakeCasePng().ModifierImagePath();
