@@ -1,6 +1,5 @@
 using MegaCrit.Sts2.Core.Map;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Random;
 using MegaCrit.Sts2.Core.Runs;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 using ModifiersExpanded.ModifiersExpandedCode.Map;
@@ -14,7 +13,7 @@ public class Marathon : ModifierModel
         bool isMultiplayer = runState.Players.Count > 1;
         bool replaceTreasureWithElites =
             map is StandardActMap sam && sam.ShouldReplaceTreasureWithElites;
-        var mapRng = new Rng(runState.Rng.Seed, $"act_{actIndex + 1}_map");
+        var mapRng = runState.Rng.CreateNamedRngCompat($"act_{actIndex + 1}_map");
         return new MarathonActMap(
             mapRng,
             runState.Act,
