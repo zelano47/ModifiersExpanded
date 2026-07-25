@@ -34,10 +34,11 @@ public class CustomRunUiPatches
             PreviousRunModifiers.Modifiers = modifiers.ToList();
             MainFile.Logger.Info(
                 MainFile.CreateLogMessage(
-                    $"Captured custom run modifiers: DamageMultiplier={EnemyScalingState.Instance.DamageMultiplier}, NumAdditionalPlayers={EnemyScalingState.Instance.NumAdditionalPlayers}, EasyPoolScalingPercent={EnemyScalingState.Instance.EasyPoolScalingPercent}"
+                    $"Captured custom run modifiers: DamageMultiplier={EnemyScalingState.Instance.DamageMultiplier}, HpMultiplier={EnemyScalingState.Instance.HpMultiplier}, NumAdditionalPlayers={EnemyScalingState.Instance.NumAdditionalPlayers}, EasyPoolScalingPercent={EnemyScalingState.Instance.EasyPoolScalingPercent}"
                 )
             );
             PreviousRunModifiers.DamageMultiplier = EnemyScalingState.Instance.DamageMultiplier;
+            PreviousRunModifiers.HpMultiplier = EnemyScalingState.Instance.HpMultiplier;
             PreviousRunModifiers.NumAdditionalPlayers = EnemyScalingState
                 .Instance
                 .NumAdditionalPlayers;
@@ -177,6 +178,7 @@ public class CustomRunUiPatches
             }
             EnemyScalingState.Instance.DamageMultiplier =
                 PreviousRunModifiers.DamageMultiplier ?? 1f;
+            EnemyScalingState.Instance.HpMultiplier = PreviousRunModifiers.HpMultiplier ?? 1f;
             EnemyScalingState.Instance.NumAdditionalPlayers =
                 PreviousRunModifiers.NumAdditionalPlayers ?? 0;
             EnemyScalingState.Instance.EasyPoolScalingPercent =

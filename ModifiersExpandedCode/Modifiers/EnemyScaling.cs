@@ -17,22 +17,7 @@ public class EnemyScaling : ModifierModel
     {
         if (dealer != null && dealer.IsEnemy && target != null && target.IsPlayer)
         {
-            decimal baseMultiplier = (decimal)State.DamageMultiplier;
-            if (baseMultiplier == 1m)
-                return 1m;
-
-            if (!EncounterPoolUtils.IsEasyPoolEncounter(dealer.CombatState?.Encounter))
-                return baseMultiplier;
-
-            decimal easyPoolScalingRatio = (decimal)Math.Clamp(
-                State.EasyPoolScalingPercent / 100.0f,
-                0.0f,
-                1.0f
-            );
-
-            // Interpolate from 1.0 to the configured multiplier for easy-pool encounters.
-            // Example: base 2.0x with 50% easy-pool scaling => 1.5x.
-            return 1m + (baseMultiplier - 1m) * easyPoolScalingRatio;
+            return GetEffectiveMultiplier(State.DamageMultiplier, dealer.CombatState?.Encounter);
         }
         return 1m;
     }
@@ -52,6 +37,9 @@ public class EnemyScaling : ModifierModel
                     GetNumPlayers(combatRoom.CombatState),
                     combatRoom.CombatState.RunState.CurrentActIndex
                 );
+
+                // Apply configurable HP multiplier after player-count scaling.
+                ApplyHpMultiplierAfterPlayerScaling(creature, combatRoom.CombatState.Encounter);
             }
         }
 
@@ -69,6 +57,9 @@ public class EnemyScaling : ModifierModel
             GetNumPlayers(creature.CombatState!),
             creature.CombatState!.RunState.CurrentActIndex
         );
+
+        // Apply configurable HP multiplier after player-count scaling.
+        ApplyHpMultiplierAfterPlayerScaling(creature, creature.CombatState.Encounter);
 
         return Task.CompletedTask;
     }
@@ -140,6 +131,35 @@ public class EnemyScaling : ModifierModel
 
     private int GetNumPlayers(ICombatState combatState) =>
         combatState.Players.Count + State.NumAdditionalPlayers;
+
+    private void ApplyHpMultiplierAfterPlayerScaling(Creature creature, EncounterModel? encounter)
+    {
+        decimal hpMultiplier = GetEffectiveMultiplier(State.HpMultiplier, encounter);
+        if (hpMultiplier == 1m)
+            return;
+
+        // Mirror Creature.ScaleMonsterHpForMultiplayer's application pattern:
+        // set max HP first, then refill current HP to the new maximum.
+        creature.SetMaxHpInternal(creature.MaxHp * hpMultiplier);
+        creature.SetCurrentHpInternal(creature.MaxHp);
+    }
+
+    private decimal GetEffectiveMultiplier(float baseMultiplier, EncounterModel? encounter)
+    {
+        decimal multiplier = (decimal)baseMultiplier;
+        if (multiplier == 1m)
+            return 1m;
+
+        if (!EncounterPoolUtils.IsEasyPoolEncounter(encounter))
+            return multiplier;
+
+        decimal easyPoolScalingRatio = (decimal)
+            Math.Clamp(State.EasyPoolScalingPercent / 100.0f, 0.0f, 1.0f);
+
+        // Interpolate from 1.0 to the configured multiplier for easy-pool encounters.
+        // Example: base 2.0x with 50% easy-pool scaling => 1.5x.
+        return 1m + (multiplier - 1m) * easyPoolScalingRatio;
+    }
 
     protected override string IconPath => this.GetType().Name.ToSnakeCasePng().ModifierImagePath();
 }

@@ -17,6 +17,7 @@ public class EnemyScalingSection : CollapsibleSection
     private readonly IReadOnlyList<NRunModifierTickbox> _tickboxes;
     private readonly string _title;
     private readonly ScalingSlider? _damageSlider;
+    private readonly ScalingSlider? _hpSlider;
     private readonly ScalingSlider? _playersSlider;
     private readonly ScalingSlider? _easyPoolSlider;
 
@@ -48,6 +49,16 @@ public class EnemyScalingSection : CollapsibleSection
             formatter: v => FormatScalingValue(v)
         );
 
+        _hpSlider = new ScalingSlider(
+            label: new LocString(
+                "main_menu_ui",
+                "MODIFIER_GROUP.ENEMY_SCALING.hp"
+            ).GetFormattedText(),
+            initialValue: EnemyScalingState.Instance.HpMultiplier,
+            onValueChanged: OnHpSliderChanged,
+            formatter: v => FormatScalingValue(v)
+        );
+
         _playersSlider = new ScalingSlider(
             label: new LocString(
                 "main_menu_ui",
@@ -75,8 +86,9 @@ public class EnemyScalingSection : CollapsibleSection
         );
 
         vbox.AddChild(_damageSlider);
-        vbox.AddChild(_playersSlider);
+        vbox.AddChild(_hpSlider);
         vbox.AddChild(_easyPoolSlider);
+        vbox.AddChild(_playersSlider);
 
         Refresh();
     }
@@ -115,6 +127,21 @@ public class EnemyScalingSection : CollapsibleSection
                 sb.Append($"{playersShort} +{EnemyScalingState.Instance.NumAdditionalPlayers}");
             }
 
+            if (HpModified())
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append(", ");
+                }
+                string hpShort = new LocString(
+                    "main_menu_ui",
+                    "MODIFIER_GROUP.ENEMY_SCALING.hp_short"
+                ).GetFormattedText();
+                sb.Append(
+                    $"{hpShort} {FormatScalingValue(EnemyScalingState.Instance.HpMultiplier)}"
+                );
+            }
+
             if (EasyPoolScalingModified())
             {
                 if (sb.Length > 0)
@@ -125,17 +152,20 @@ public class EnemyScalingSection : CollapsibleSection
                     "main_menu_ui",
                     "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale_short"
                 ).GetFormattedText();
-                sb.Append($"{easyPoolShort} {EnemyScalingState.Instance.EasyPoolScalingPercent:F0}%");
+                sb.Append(
+                    $"{easyPoolShort} {EnemyScalingState.Instance.EasyPoolScalingPercent:F0}%"
+                );
             }
             suffix = $": {sb}";
         }
         _headerLabel.Text = Arrow + _title + suffix;
         MainFile.Logger.Info(
             MainFile.CreateLogMessage(
-                $"EnemyScalingSection refreshed: DamageMultiplier={EnemyScalingState.Instance.DamageMultiplier}, NumAdditionalPlayers={EnemyScalingState.Instance.NumAdditionalPlayers}, EasyPoolScalingPercent={EnemyScalingState.Instance.EasyPoolScalingPercent}"
+                $"EnemyScalingSection refreshed: DamageMultiplier={EnemyScalingState.Instance.DamageMultiplier}, HpMultiplier={EnemyScalingState.Instance.HpMultiplier}, NumAdditionalPlayers={EnemyScalingState.Instance.NumAdditionalPlayers}, EasyPoolScalingPercent={EnemyScalingState.Instance.EasyPoolScalingPercent}"
             )
         );
         _damageSlider!.Slider.Value = EnemyScalingState.Instance.DamageMultiplier;
+        _hpSlider!.Slider.Value = EnemyScalingState.Instance.HpMultiplier;
         _playersSlider!.Slider.Value = EnemyScalingState.Instance.NumAdditionalPlayers;
         _easyPoolSlider!.Slider.Value = EnemyScalingState.Instance.EasyPoolScalingPercent;
         ApplyStyle();
@@ -151,6 +181,13 @@ public class EnemyScalingSection : CollapsibleSection
     private void OnPlayersSliderChanged(float value)
     {
         EnemyScalingState.Instance.NumAdditionalPlayers = (int)value;
+        UpdateTickboxesFromState();
+        Refresh();
+    }
+
+    private void OnHpSliderChanged(float value)
+    {
+        EnemyScalingState.Instance.HpMultiplier = value;
         UpdateTickboxesFromState();
         Refresh();
     }
@@ -178,13 +215,16 @@ public class EnemyScalingSection : CollapsibleSection
         }
     }
 
-    private bool ModifierEnabled() => PlayersModified() || DamageModified();
+    private bool ModifierEnabled() => PlayersModified() || DamageModified() || HpModified();
 
     private bool PlayersModified() => EnemyScalingState.Instance.NumAdditionalPlayers != 0;
 
     private bool DamageModified() => EnemyScalingState.Instance.DamageMultiplier != 1.0f;
 
-    private bool EasyPoolScalingModified() => EnemyScalingState.Instance.EasyPoolScalingPercent != 100.0f;
+    private bool HpModified() => EnemyScalingState.Instance.HpMultiplier != 1.0f;
+
+    private bool EasyPoolScalingModified() =>
+        EnemyScalingState.Instance.EasyPoolScalingPercent != 100.0f;
 
     private static string FormatScalingValue(float value) => $"x{value:F2}";
 }

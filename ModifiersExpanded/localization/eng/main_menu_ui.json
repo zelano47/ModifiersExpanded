@@ -11,8 +11,10 @@
   "MODIFIER_GROUP.MAP_MODIFIERS.title": "Map Modifiers",
   "MODIFIER_GROUP.ENEMY_SCALING.title": "Enemy Scaling",
   "MODIFIER_GROUP.ENEMY_SCALING.damage": "Enemy Damage Multiplier",
+  "MODIFIER_GROUP.ENEMY_SCALING.hp": "Enemy HP Multiplier",
   "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale": "Easy Pool Scaling (%)",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Number of Additional Players",
+  "MODIFIER_GROUP.ENEMY_SCALING.hp_short": "HP",
   "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale_short": "Easy Pool",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players_short": "Players",
   "MODIFIER_GROUP.ENEMY_SCALING.damage_short": "Damage"

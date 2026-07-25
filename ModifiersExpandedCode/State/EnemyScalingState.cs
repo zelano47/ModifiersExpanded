@@ -7,17 +7,20 @@ public class EnemyScalingState
     public EnemyScalingState()
     {
         DamageMultiplier = 1.0f;
+        HpMultiplier = 1.0f;
         NumAdditionalPlayers = 0;
         EasyPoolScalingPercent = 100.0f;
     }
 
     public float DamageMultiplier { get; set; }
+    public float HpMultiplier { get; set; }
     public int NumAdditionalPlayers { get; set; }
     public float EasyPoolScalingPercent { get; set; }
 
     public void Reset()
     {
         DamageMultiplier = 1.0f;
+        HpMultiplier = 1.0f;
         NumAdditionalPlayers = 0;
         EasyPoolScalingPercent = 100.0f;
     }

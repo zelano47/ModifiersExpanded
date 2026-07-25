@@ -11,8 +11,10 @@
   "MODIFIER_GROUP.MAP_MODIFIERS.title": "マップモディファイア",
   "MODIFIER_GROUP.ENEMY_SCALING.title": "エネミースケーリング",
   "MODIFIER_GROUP.ENEMY_SCALING.damage": "敵のダメージ倍率",
+  "MODIFIER_GROUP.ENEMY_SCALING.hp": "敵のHP倍率",
   "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale": "易しい遭遇の倍率 (%)",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players": "追加プレイヤーの人数",
+  "MODIFIER_GROUP.ENEMY_SCALING.hp_short": "HP",
   "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale_short": "易遭遇",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players_short": "プレイヤー",
   "MODIFIER_GROUP.ENEMY_SCALING.damage_short": "ダメージ"

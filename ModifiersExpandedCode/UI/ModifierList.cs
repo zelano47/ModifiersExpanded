@@ -166,6 +166,7 @@ public static class ModifierList
         {
             tb.IsTicked =
                 EnemyScalingState.Instance.DamageMultiplier > 1f
+                || EnemyScalingState.Instance.HpMultiplier > 1f
                 || EnemyScalingState.Instance.NumAdditionalPlayers > 0;
         }
 

@@ -19,6 +19,7 @@ public static class PreviousRunModifiers
     internal static bool IsClientMode { get; set; }
 
     public static float? DamageMultiplier { get; set; }
+    public static float? HpMultiplier { get; set; }
     public static int? NumAdditionalPlayers { get; set; }
     public static float? EasyPoolScalingPercent { get; set; }
 }
