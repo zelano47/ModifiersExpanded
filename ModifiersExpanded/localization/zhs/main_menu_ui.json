@@ -11,7 +11,9 @@
   "MODIFIER_GROUP.MAP_MODIFIERS.title": "地图修正",
   "MODIFIER_GROUP.ENEMY_SCALING.title": "敌人缩放",
   "MODIFIER_GROUP.ENEMY_SCALING.damage": "敌人伤害倍率",
+  "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale": "简单遭遇缩放 (%)",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players": "额外玩家人数",
+  "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale_short": "简单遭遇",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players_short": "玩家",
   "MODIFIER_GROUP.ENEMY_SCALING.damage_short": "伤害"
 }

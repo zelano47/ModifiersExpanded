@@ -164,7 +164,9 @@ public static class ModifierList
         var enemyScalingTickboxes = tickboxes.Where(t => t?.Modifier is EnemyScaling).ToList();
         foreach (var tb in enemyScalingTickboxes)
         {
-            tb.IsTicked = EnemyScalingState.Instance.DamageMultiplier > 1f;
+            tb.IsTicked =
+                EnemyScalingState.Instance.DamageMultiplier > 1f
+                || EnemyScalingState.Instance.NumAdditionalPlayers > 0;
         }
 
         // ── 1. Accordion sections (groups in definition order, tickboxes alphabetical) ──

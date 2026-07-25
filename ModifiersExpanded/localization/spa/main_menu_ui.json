@@ -11,7 +11,9 @@
   "MODIFIER_GROUP.MAP_MODIFIERS.title": "Modificadores del mapa",
   "MODIFIER_GROUP.ENEMY_SCALING.title": "Escalado de enemigos",
   "MODIFIER_GROUP.ENEMY_SCALING.damage": "Multiplicador de daño de enemigos",
+  "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale": "Escalado de encuentros fáciles (%)",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Número de jugadores adicionales",
+  "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale_short": "Fáciles",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players_short": "Jugadores",
   "MODIFIER_GROUP.ENEMY_SCALING.damage_short": "Daño"
 }

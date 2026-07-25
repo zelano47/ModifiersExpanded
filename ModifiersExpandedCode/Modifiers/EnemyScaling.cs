@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 using ModifiersExpanded.ModifiersExpandedCode.State;
+using ModifiersExpanded.ModifiersExpandedCode.Utils;
 
 public class EnemyScaling : ModifierModel
 {
@@ -16,7 +17,22 @@ public class EnemyScaling : ModifierModel
     {
         if (dealer != null && dealer.IsEnemy && target != null && target.IsPlayer)
         {
-            return (decimal)State.DamageMultiplier;
+            decimal baseMultiplier = (decimal)State.DamageMultiplier;
+            if (baseMultiplier == 1m)
+                return 1m;
+
+            if (!EncounterPoolUtils.IsEasyPoolEncounter(dealer.CombatState?.Encounter))
+                return baseMultiplier;
+
+            decimal easyPoolScalingRatio = (decimal)Math.Clamp(
+                State.EasyPoolScalingPercent / 100.0f,
+                0.0f,
+                1.0f
+            );
+
+            // Interpolate from 1.0 to the configured multiplier for easy-pool encounters.
+            // Example: base 2.0x with 50% easy-pool scaling => 1.5x.
+            return 1m + (baseMultiplier - 1m) * easyPoolScalingRatio;
         }
         return 1m;
     }

@@ -34,13 +34,16 @@ public class CustomRunUiPatches
             PreviousRunModifiers.Modifiers = modifiers.ToList();
             MainFile.Logger.Info(
                 MainFile.CreateLogMessage(
-                    $"Captured custom run modifiers: DamageMultiplier={EnemyScalingState.Instance.DamageMultiplier}, NumAdditionalPlayers={EnemyScalingState.Instance.NumAdditionalPlayers}"
+                    $"Captured custom run modifiers: DamageMultiplier={EnemyScalingState.Instance.DamageMultiplier}, NumAdditionalPlayers={EnemyScalingState.Instance.NumAdditionalPlayers}, EasyPoolScalingPercent={EnemyScalingState.Instance.EasyPoolScalingPercent}"
                 )
             );
             PreviousRunModifiers.DamageMultiplier = EnemyScalingState.Instance.DamageMultiplier;
             PreviousRunModifiers.NumAdditionalPlayers = EnemyScalingState
                 .Instance
                 .NumAdditionalPlayers;
+            PreviousRunModifiers.EasyPoolScalingPercent = EnemyScalingState
+                .Instance
+                .EasyPoolScalingPercent;
             MainFile.Logger.Info(
                 MainFile.CreateLogMessage(
                     $"Stored {modifiers.Count} modifiers from custom run for Last Run button."
@@ -176,6 +179,8 @@ public class CustomRunUiPatches
                 PreviousRunModifiers.DamageMultiplier ?? 1f;
             EnemyScalingState.Instance.NumAdditionalPlayers =
                 PreviousRunModifiers.NumAdditionalPlayers ?? 0;
+            EnemyScalingState.Instance.EasyPoolScalingPercent =
+                PreviousRunModifiers.EasyPoolScalingPercent ?? 100f;
 
             // SetTickedModifiers only exists on sts2-beta; call via reflection so
             // this file compiles against sts2 main as well.

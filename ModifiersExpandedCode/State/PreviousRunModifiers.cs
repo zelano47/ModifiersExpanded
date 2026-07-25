@@ -20,4 +20,5 @@ public static class PreviousRunModifiers
 
     public static float? DamageMultiplier { get; set; }
     public static int? NumAdditionalPlayers { get; set; }
+    public static float? EasyPoolScalingPercent { get; set; }
 }

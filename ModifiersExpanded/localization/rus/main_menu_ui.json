@@ -11,7 +11,9 @@
   "MODIFIER_GROUP.MAP_MODIFIERS.title": "Модификаторы карты",
   "MODIFIER_GROUP.ENEMY_SCALING.title": "Масштабирование врагов",
   "MODIFIER_GROUP.ENEMY_SCALING.damage": "Множитель урона врагов",
+  "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale": "Масштаб слабых боёв (%)",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players": "Количество дополнительных игроков",
+  "MODIFIER_GROUP.ENEMY_SCALING.easy_pool_scale_short": "Слабые бои",
   "MODIFIER_GROUP.ENEMY_SCALING.num_players_short": "Игроки",
   "MODIFIER_GROUP.ENEMY_SCALING.damage_short": "Урон"
 }
