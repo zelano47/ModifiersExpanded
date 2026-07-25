@@ -11,9 +11,11 @@ public static class RunSidecarStateStore
 
     private sealed class SidecarData
     {
-        public int Version { get; set; } = 1;
+        public int Version { get; set; } = 3;
         public float EnemyDamageMultiplier { get; set; } = 1.0f;
+        public float EnemyHpMultiplier { get; set; } = 1.0f;
         public int EnemyAdditionalPlayers { get; set; }
+        public float EasyPoolScalingPercent { get; set; } = 100.0f;
         public TimerState.UrgencySnapshot? UrgencySnapshot { get; set; }
     }
 
@@ -29,7 +31,9 @@ public static class RunSidecarStateStore
             var sidecarData = new SidecarData
             {
                 EnemyDamageMultiplier = EnemyScalingState.Instance.DamageMultiplier,
+                EnemyHpMultiplier = EnemyScalingState.Instance.HpMultiplier,
                 EnemyAdditionalPlayers = EnemyScalingState.Instance.NumAdditionalPlayers,
+                EasyPoolScalingPercent = EnemyScalingState.Instance.EasyPoolScalingPercent,
                 UrgencySnapshot = TimerState.CaptureUrgencySnapshot(),
             };
 
@@ -77,7 +81,13 @@ public static class RunSidecarStateStore
             }
 
             EnemyScalingState.Instance.DamageMultiplier = sidecarData.EnemyDamageMultiplier;
+            EnemyScalingState.Instance.HpMultiplier = Math.Max(sidecarData.EnemyHpMultiplier, 1.0f);
             EnemyScalingState.Instance.NumAdditionalPlayers = sidecarData.EnemyAdditionalPlayers;
+            EnemyScalingState.Instance.EasyPoolScalingPercent = Math.Clamp(
+                sidecarData.EasyPoolScalingPercent,
+                0.0f,
+                100.0f
+            );
             TimerState.SetPendingUrgencySnapshot(sidecarData.UrgencySnapshot);
         }
         catch (Exception exception)
