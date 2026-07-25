@@ -56,7 +56,8 @@ public class EnemyScalingSection : CollapsibleSection
             ).GetFormattedText(),
             initialValue: EnemyScalingState.Instance.HpMultiplier,
             onValueChanged: OnHpSliderChanged,
-            formatter: v => FormatScalingValue(v)
+            formatter: v => FormatScalingValue(v),
+            maxValue: 4f
         );
 
         _playersSlider = new ScalingSlider(
@@ -114,19 +115,6 @@ public class EnemyScalingSection : CollapsibleSection
                 );
             }
 
-            if (PlayersModified())
-            {
-                if (sb.Length > 0)
-                {
-                    sb.Append(", ");
-                }
-                string playersShort = new LocString(
-                    "main_menu_ui",
-                    "MODIFIER_GROUP.ENEMY_SCALING.num_players_short"
-                ).GetFormattedText();
-                sb.Append($"{playersShort} +{EnemyScalingState.Instance.NumAdditionalPlayers}");
-            }
-
             if (HpModified())
             {
                 if (sb.Length > 0)
@@ -155,6 +143,19 @@ public class EnemyScalingSection : CollapsibleSection
                 sb.Append(
                     $"{easyPoolShort} {EnemyScalingState.Instance.EasyPoolScalingPercent:F0}%"
                 );
+            }
+
+            if (PlayersModified())
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append(", ");
+                }
+                string playersShort = new LocString(
+                    "main_menu_ui",
+                    "MODIFIER_GROUP.ENEMY_SCALING.num_players_short"
+                ).GetFormattedText();
+                sb.Append($"{playersShort} +{EnemyScalingState.Instance.NumAdditionalPlayers}");
             }
             suffix = $": {sb}";
         }

@@ -201,7 +201,16 @@ public static class ModifierList
                 r();
         };
 
-        // ── 2. Standalone tickboxes (good before bad, alphabetical within each) ──────────
+        // ── 2. Enemy Scaling section ─────────────────────────────────────────
+        var scalingTitle = new LocString(
+            "main_menu_ui",
+            "MODIFIER_GROUP.ENEMY_SCALING.title"
+        ).GetFormattedText();
+        var scalingSection = new EnemyScalingSection(scalingTitle, enemyScalingTickboxes);
+        ((Node)(object)container).AddChildSafely(scalingSection.Root);
+        sectionRefreshers.Add(scalingSection.Refresh);
+
+        // ── 3. Standalone tickboxes (good before bad, alphabetical within each) ──────────
         var standalones = tickboxes
             .Where(t =>
                 t != null && !tickboxToGroup.ContainsKey(t) && !(t.Modifier is EnemyScaling)
@@ -213,15 +222,8 @@ public static class ModifierList
             .ToList();
 
         foreach (var tickbox in standalones)
+        {
             ((Node)(object)container).AddChildSafely((Node)(object)tickbox);
-
-        // ── 3. Enemy Scaling section ─────────────────────────────────────────
-        var scalingTitle = new LocString(
-            "main_menu_ui",
-            "MODIFIER_GROUP.ENEMY_SCALING.title"
-        ).GetFormattedText();
-        var scalingSection = new EnemyScalingSection(scalingTitle, enemyScalingTickboxes);
-        ((Node)(object)container).AddChildSafely(scalingSection.Root);
-        sectionRefreshers.Add(scalingSection.Refresh);
+        }
     }
 }

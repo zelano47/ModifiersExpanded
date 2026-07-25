@@ -37,23 +37,26 @@ public partial class ScalingSlider : VBoxContainer
         AddThemeConstantOverride("separation", 2);
 
         var row = new HBoxContainer();
-        var nameLabel = new Label();
-        nameLabel.Text = label;
-        nameLabel.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        var nameLabel = new Label { Text = label, SizeFlagsHorizontal = SizeFlags.ExpandFill };
         nameLabel.AddThemeFontSizeOverride("font_size", 20);
-        _valueLabel = new Label();
-        _valueLabel.Text = formatter(initialValue);
-        _valueLabel.HorizontalAlignment = HorizontalAlignment.Right;
+        _valueLabel = new Label
+        {
+            Text = formatter(initialValue),
+            HorizontalAlignment = HorizontalAlignment.Right,
+        };
         row.AddChild(nameLabel);
         row.AddChild(_valueLabel);
 
-        Slider = new HSlider();
-        Slider.MinValue = minValue;
-        Slider.MaxValue = maxValue;
-        Slider.Step = step;
-        Slider.Value = initialValue;
-        Slider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-        Slider.CustomMinimumSize = new Vector2(0, 32);
+        Slider = new HSlider
+        {
+            MinValue = minValue,
+            MaxValue = maxValue,
+            Step = step,
+            Scrollable = false,
+            Value = initialValue,
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
+            CustomMinimumSize = new Vector2(0, 32),
+        };
 
         var capturedFormatter = formatter;
         Slider.ValueChanged += v =>
