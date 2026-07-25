@@ -82,8 +82,10 @@ public class ModifierCheckboxSection : CollapsibleSection
         if (_group.IsMutuallyExclusive && toggled.IsTicked)
         {
             foreach (var other in _tickboxes)
+            {
                 if (other != toggled)
-                    other.IsTicked = false;
+                    UntickAndEmit(other);
+            }
         }
         else if (
             toggled.Modifier != null
@@ -92,12 +94,28 @@ public class ModifierCheckboxSection : CollapsibleSection
         )
         {
             foreach (var other in _tickboxes)
+            {
                 if (
                     other.Modifier != null
                     && other != toggled
                     && _group.MutuallyExclusiveModifiers.Contains(other.Modifier.GetType())
                 )
-                    other.IsTicked = false;
+                    UntickAndEmit(other);
+            }
         }
+    }
+
+    // Programmatic IsTicked updates do not fire NTickbox.Toggled, so emit explicitly
+    // to keep NCustomRunModifiersList's selected-modifier state synchronized.
+    private static void UntickAndEmit(NRunModifierTickbox tickbox)
+    {
+        if (!tickbox.IsTicked)
+            return;
+
+        tickbox.IsTicked = false;
+        ((GodotObject)(object)tickbox).EmitSignal(
+            NTickbox.SignalName.Toggled,
+            new Variant[] { Variant.From<GodotObject>((GodotObject)(object)tickbox) }
+        );
     }
 }
