@@ -115,6 +115,24 @@ public class CustomRunUiPatches
             // parent is already ready), so _shaderMaterial has been cached.
             ((Node)(object)randomizeButton).AddSiblingSafely((Node?)(object)lastRunButton);
 
+            const int buttonSeparation = 12;
+            var buttonParent = ((Node)(object)randomizeButton).GetParent();
+            if (buttonParent is BoxContainer buttonContainer)
+            {
+                // The current layout gives the randomize button an expanding slot. The
+                // duplicate inherits that flag, leaving a large gap between their visuals.
+                randomizeButton.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
+                lastRunButton.SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter;
+                buttonContainer.AddThemeConstantOverride("separation", buttonSeparation);
+            }
+            else
+            {
+                // Compatibility with older layouts where the button parent was a Control.
+                lastRunButton.Position =
+                    randomizeButton.Position
+                    + new Vector2(randomizeButton.Size.X + buttonSeparation, 0);
+            }
+
             // Duplicate() leaves the ShaderMaterial as a shared resource — both buttons
             // would otherwise react to each other's hover events.  Give the new button its
             // own material copy and refresh the field that _Ready already cached.
