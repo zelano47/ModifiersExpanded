@@ -19,11 +19,25 @@ public class NeowsCondemnation : ModifierModel
     );
 
     private static List<RelicModel> BuildPoolOne() =>
-        [ModelDb.Relic<CursedCandy>().ToMutable(), ModelDb.Relic<CursedRod>().ToMutable()];
+        [
+            ModelDb.Relic<CursedCandy>().ToMutable(),
+            ModelDb.Relic<CursedRod>().ToMutable(),
+            ModelDb.Relic<CursedSeal>().ToMutable(),
+        ];
 
-    private static List<RelicModel> BuildPoolTwo() => [];
+    private static List<RelicModel> BuildPoolTwo() =>
+        [
+            ModelDb.Relic<EmptyLargeCapsule>().ToMutable(),
+            ModelDb.Relic<CursedHumidifier>().ToMutable(),
+            ModelDb.Relic<CursedMask>().ToMutable(),
+        ];
 
-    private static List<RelicModel> BuildPoolThree() => [];
+    private static List<RelicModel> BuildPoolThree() =>
+        [
+            ModelDb.Relic<StonePillow>().ToMutable(),
+            ModelDb.Relic<InertEctoplasm>().ToMutable(),
+            ModelDb.Relic<SmallHolster>().ToMutable(),
+        ];
 
     public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {

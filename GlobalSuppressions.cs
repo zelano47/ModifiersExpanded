@@ -9,13 +9,13 @@ using System.Diagnostics.CodeAnalysis;
     "Usage",
     "STS004:Model requires a pool",
     Justification = "<Pending>",
-    Scope = "type",
-    Target = "~T:ModifiersExpanded.ModifiersExpandedCode.Relics.CursedRod"
+    Scope = "namespace",
+    Target = "~N:ModifiersExpanded.ModifiersExpandedCode.Relics"
 )]
 [assembly: SuppressMessage(
     "Localization",
     "STS001:Symbol missing localization",
     Justification = "<Pending>",
-    Scope = "type",
-    Target = "~T:ModifiersExpanded.ModifiersExpandedCode.Relics.CursedRod"
+    Scope = "namespace",
+    Target = "~N:ModifiersExpanded.ModifiersExpandedCode.Relics"
 )]
