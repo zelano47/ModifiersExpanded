@@ -1,10 +1,13 @@
 using BaseLib.Abstracts;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.Models.RelicPools;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
+[Pool(typeof(EventRelicPool))]
 public class CursedSeal : CustomRelicModel
 {
     public override bool HasUponPickupEffect => true;

@@ -1,10 +1,13 @@
 using BaseLib.Abstracts;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.Models.RelicPools;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
+[Pool(typeof(EventRelicPool))]
 public class StonePillow : CustomRelicModel
 {
     public override decimal ModifyRestSiteHealAmount(Creature creature, decimal amount)
