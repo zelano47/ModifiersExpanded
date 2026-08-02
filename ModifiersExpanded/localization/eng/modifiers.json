@@ -46,5 +46,7 @@
   "SPRINT.title": "Sprint",
   "SPRINT.description": "The map is a single linear path with [blue]1[/blue] of each room type.",
   "ENEMY_SCALING.title": "Enemy Scaling",
-  "ENEMY_SCALING.description": "Custom difficulty scaling for enemies."
+  "ENEMY_SCALING.description": "Custom difficulty scaling for enemies.",
+  "NEOWS_CONDEMNATION.title": "Neow's Condemnation",
+  "NEOWS_CONDEMNATION.description": "At the start of your run, choose [red]1[/red] of [red]3[/red] negative [gold]Relic[/gold] rewards."
 }
