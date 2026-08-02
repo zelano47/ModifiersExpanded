@@ -32,7 +32,7 @@ public static class ModifierList
         (
             "STARTING_RELICS",
             false,
-            m => m is PraiseSnecko or Polymath or RelicSwap or NeowsBlessing,
+            m => m is PraiseSnecko or Polymath or RelicSwap or NeowsBlessing or NeowsCondemnation,
             null
         ),
         ("STARTING_CARDS", false, m => m is AllStar or Specialized or HighRoller, null),
