@@ -10,7 +10,9 @@ using MegaCrit.Sts2.Core.Nodes.Events;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 using ModifiersExpanded.ModifiersExpandedCode.Relics;
 
-public class NeowsCondemnation : ModifierModel
+namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
+
+public class NeowsCondemnation : AzModifier
 {
     private static readonly MethodInfo _setEventStateMethod = AccessTools.Method(
         typeof(EventModel),
@@ -100,7 +102,4 @@ public class NeowsCondemnation : ModifierModel
             $"NEOWS_CONDEMNATION.pages.INITIAL.options.{relic.Id.Entry}"
         );
     }
-
-    protected override string IconPath =>
-        nameof(NeowsCondemnation).ToSnakeCasePng().ModifierImagePath();
 }

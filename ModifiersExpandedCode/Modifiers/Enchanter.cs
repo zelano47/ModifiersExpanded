@@ -9,7 +9,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Enchanter : ModifierModel
+public class Enchanter : AzModifier
 {
     private static readonly Dictionary<Type, int> EnchantmentAmounts = new()
     {
@@ -106,6 +106,4 @@ public class Enchanter : ModifierModel
         }
         return true;
     }
-
-    protected override string IconPath => nameof(Enchanter).ToSnakeCasePng().ModifierImagePath();
 }

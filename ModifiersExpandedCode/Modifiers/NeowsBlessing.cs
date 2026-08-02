@@ -17,7 +17,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class NeowsBlessing : ModifierModel
+public class NeowsBlessing : AzModifier
 {
     // Neow's private option-pool property getters, accessed via reflection
     private static readonly MethodInfo _curseOptionsGetter = AccessTools.PropertyGetter(
@@ -169,7 +169,4 @@ public class NeowsBlessing : ModifierModel
             original.HoverTips
         ).WithRelic(relic);
     }
-
-    protected override string IconPath =>
-        nameof(NeowsBlessing).ToSnakeCasePng().ModifierImagePath();
 }

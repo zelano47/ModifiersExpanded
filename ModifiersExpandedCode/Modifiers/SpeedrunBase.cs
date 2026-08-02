@@ -6,7 +6,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public abstract class SpeedrunBase : ModifierModel
+public abstract class SpeedrunBase : AzModifier
 {
     public virtual float _timeLimit { get; set; }
 
@@ -38,6 +38,4 @@ public abstract class SpeedrunBase : ModifierModel
             }
         }
     }
-
-    protected override string IconPath => this.GetType().Name.ToSnakeCasePng().ModifierImagePath();
 }

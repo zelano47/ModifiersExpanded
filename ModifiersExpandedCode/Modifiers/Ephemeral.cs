@@ -5,7 +5,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Ephemeral : ModifierModel
+public class Ephemeral : AzModifier
 {
     public override bool TryModifyKeywordsInCombat(CardModel card, ISet<CardKeyword> keywords)
     {
@@ -25,6 +25,4 @@ public class Ephemeral : ModifierModel
 
         return keywords.Add(CardKeyword.Ethereal);
     }
-
-    protected override string IconPath => nameof(Ephemeral).ToSnakeCasePng().ModifierImagePath();
 }

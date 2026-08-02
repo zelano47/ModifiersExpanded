@@ -8,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Chimera : ModifierModel
+public class Chimera : AzModifier
 {
     public override bool ClearsPlayerDeck => true;
 
@@ -87,6 +87,4 @@ public class Chimera : ModifierModel
         CardCmd.PreviewCardPileAdd(results);
         await Cmd.CustomScaledWait(0.6f, 1.2f);
     }
-
-    protected override string IconPath => nameof(Chimera).ToSnakeCasePng().ModifierImagePath();
 }

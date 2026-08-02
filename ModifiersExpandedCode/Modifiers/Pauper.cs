@@ -8,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Pauper : ModifierModel
+public class Pauper : AzModifier
 {
     private int _relicCount = 0;
     private int _potionsCount = 0;
@@ -64,6 +64,4 @@ public class Pauper : ModifierModel
         rewards.AddRange(replacement);
         return true;
     }
-
-    protected override string IconPath => nameof(Pauper).ToSnakeCasePng().ModifierImagePath();
 }

@@ -6,7 +6,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class HighRoller : ModifierModel
+public class HighRoller : AzModifier
 {
     public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {
@@ -37,6 +37,4 @@ public class HighRoller : ModifierModel
         CardCmd.PreviewCardPileAdd(results);
         await Cmd.CustomScaledWait(0.6f, 1.2f);
     }
-
-    protected override string IconPath => nameof(HighRoller).ToSnakeCasePng().ModifierImagePath();
 }

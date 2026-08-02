@@ -6,7 +6,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Hubris : ModifierModel
+public class Hubris : AzModifier
 {
     protected override void AfterRunCreated(RunState runState)
     {
@@ -15,6 +15,4 @@ public class Hubris : ModifierModel
             CreatureCmd.SetMaxAndCurrentHp(player.Creature, 1m);
         }
     }
-
-    protected override string IconPath => nameof(Hubris).ToSnakeCasePng().ModifierImagePath();
 }

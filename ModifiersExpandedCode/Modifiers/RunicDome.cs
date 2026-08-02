@@ -5,7 +5,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class RunicDome : ModifierModel
+public class RunicDome : AzModifier
 {
     protected override void AfterRunCreated(RunState runState)
     {
@@ -14,6 +14,4 @@ public class RunicDome : ModifierModel
             player.MaxEnergy += 1;
         }
     }
-
-    protected override string IconPath => nameof(RunicDome).ToSnakeCasePng().ModifierImagePath();
 }
