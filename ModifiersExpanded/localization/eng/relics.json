@@ -12,7 +12,7 @@
   "MODIFIERSEXPANDED-CURSED_HUMIDIFIER.description": "Whenever you Rest at a [gold]Rest Site[/gold], lose [red]5[/red] Max HP.",
   "MODIFIERSEXPANDED-CURSED_HUMIDIFIER.flavor": "The mist clings to more than skin.",
   "MODIFIERSEXPANDED-CURSED_MASK.title": "Cursed Mask",
-  "MODIFIERSEXPANDED-CURSED_MASK.description": "At the start of combat, put a random [blue]Power[/blue] from your Draw Pile into your Hand. It costs [red]2[/red] additional [blue]Energy[/blue] this turn.",
+  "MODIFIERSEXPANDED-CURSED_MASK.description": "At the start of combat, put a random [gold]Power[/gold] from your Draw Pile into your Hand. It costs [red]2[/red] additional [gold]Energy[/gold] this turn.",
   "MODIFIERSEXPANDED-CURSED_MASK.flavor": "Its gems shine brightest when fed.",
   "MODIFIERSEXPANDED-EMPTY_LARGE_CAPSULE.title": "Empty Large Capsule",
   "MODIFIERSEXPANDED-EMPTY_LARGE_CAPSULE.description": "Upon pickup, add an additional [gold]Strike[/gold] and [gold]Defend[/gold] to your Deck.",
