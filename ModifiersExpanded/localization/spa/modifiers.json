@@ -46,5 +46,7 @@
   "MODIFIERSEXPANDED-SPRINT.title": "Esprint",
   "MODIFIERSEXPANDED-SPRINT.description": "El mapa es una única ruta lineal con [blue]1[/blue] sala de cada tipo.",
   "MODIFIERSEXPANDED-ENEMY_SCALING.title": "Escalado de enemigos",
-  "MODIFIERSEXPANDED-ENEMY_SCALING.description": "Ajuste personalizado de la dificultad de los enemigos."
+  "MODIFIERSEXPANDED-ENEMY_SCALING.description": "Ajuste personalizado de la dificultad de los enemigos.",
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.title": "Condena de Neow",
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "Al comienzo de la partida, elige [red]1[/red] de [red]3[/red] reliquias negativas."
 }

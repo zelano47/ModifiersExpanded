@@ -46,5 +46,7 @@
   "MODIFIERSEXPANDED-SPRINT.title": "Спринт",
   "MODIFIERSEXPANDED-SPRINT.description": "Карта представляет собой одну линейную дорожку с [blue]1[/blue] комнатой каждого типа.",
   "MODIFIERSEXPANDED-ENEMY_SCALING.title": "Масштабирование врагов",
-  "MODIFIERSEXPANDED-ENEMY_SCALING.description": "Настраиваемое масштабирование сложности врагов."
+  "MODIFIERSEXPANDED-ENEMY_SCALING.description": "Настраиваемое масштабирование сложности врагов.",
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.title": "Осуждение Неов",
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "В начале забега выберите [red]1[/red] из [red]3[/red] отрицательных реликвий."
 }

@@ -46,5 +46,7 @@
   "MODIFIERSEXPANDED-SPRINT.title": "冲刺",
   "MODIFIERSEXPANDED-SPRINT.description": "地图是一条单线路径，每种房间类型各有 [blue]1[/blue] 个。",
   "MODIFIERSEXPANDED-ENEMY_SCALING.title": "敌人缩放",
-  "MODIFIERSEXPANDED-ENEMY_SCALING.description": "自定义敌人的难度缩放。"
+  "MODIFIERSEXPANDED-ENEMY_SCALING.description": "自定义敌人的难度缩放。",
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.title": "涅奥的谴责",
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "在你的冒险开始时，选择 [red]1[/red] / [red]3[/red] 件负面遗物。"
 }
