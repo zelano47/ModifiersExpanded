@@ -10,7 +10,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class CursedHumidifier : CustomRelicModel
+public class CursedHumidifier : AzRelic
 {
     public override async Task AfterRestSiteHeal(Player player, bool isMimicked)
     {
@@ -29,8 +29,4 @@ public class CursedHumidifier : CustomRelicModel
     }
 
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    public override string PackedIconPath =>
-        nameof(CursedHumidifier).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath =>
-        nameof(CursedHumidifier).ToSnakeCasePng().BigRelicImagePath();
 }

@@ -15,7 +15,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class CursedCandy : CustomRelicModel
+public class CursedCandy : AzRelic
 {
     private bool _makeNextCardRewardMandatory;
     private CardReward? _mandatoryCardReward;
@@ -88,8 +88,4 @@ public class CursedCandy : CustomRelicModel
         return ReferenceEquals(_mandatoryCardReward, cardReward)
             && alternatives.RemoveAll(alternative => alternative.OptionId == "Skip") > 0;
     }
-
-    public override string PackedIconPath => nameof(CursedCandy).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath =>
-        nameof(CursedCandy).ToSnakeCasePng().BigRelicImagePath();
 }

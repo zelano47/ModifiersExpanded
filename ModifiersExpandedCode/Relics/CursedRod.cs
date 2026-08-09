@@ -11,7 +11,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class CursedRod : CustomRelicModel
+public class CursedRod : AzRelic
 {
     public int CombatsSeen { get; set; }
     public override int DisplayAmount => CombatsSeen % _invokeAfterNumCombats;
@@ -42,6 +42,4 @@ public class CursedRod : CustomRelicModel
     }
 
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    public override string PackedIconPath => nameof(CursedRod).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath => nameof(CursedRod).ToSnakeCasePng().BigRelicImagePath();
 }

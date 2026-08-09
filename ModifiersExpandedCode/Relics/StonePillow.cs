@@ -8,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class StonePillow : CustomRelicModel
+public class StonePillow : AzRelic
 {
     public override decimal ModifyRestSiteHealAmount(Creature creature, decimal amount)
     {
@@ -21,7 +21,4 @@ public class StonePillow : CustomRelicModel
     }
 
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    public override string PackedIconPath => nameof(StonePillow).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath =>
-        nameof(StonePillow).ToSnakeCasePng().BigRelicImagePath();
 }

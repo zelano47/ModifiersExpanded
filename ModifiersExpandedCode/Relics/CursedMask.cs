@@ -13,7 +13,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class CursedMask : CustomRelicModel
+public class CursedMask : AzRelic
 {
     public override async Task BeforeHandDraw(
         Player player,
@@ -43,7 +43,4 @@ public class CursedMask : CustomRelicModel
     }
 
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    public override string PackedIconPath => nameof(CursedMask).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath =>
-        nameof(CursedMask).ToSnakeCasePng().BigRelicImagePath();
 }

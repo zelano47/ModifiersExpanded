@@ -8,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class CursedSeal : CustomRelicModel
+public class CursedSeal : AzRelic
 {
     public override bool HasUponPickupEffect => true;
 
@@ -23,7 +23,4 @@ public class CursedSeal : CustomRelicModel
     }
 
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    public override string PackedIconPath => nameof(CursedSeal).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath =>
-        nameof(CursedSeal).ToSnakeCasePng().BigRelicImagePath();
 }

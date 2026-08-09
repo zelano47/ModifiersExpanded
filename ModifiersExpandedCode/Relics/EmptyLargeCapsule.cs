@@ -10,7 +10,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class EmptyLargeCapsule : CustomRelicModel
+public class EmptyLargeCapsule : AzRelic
 {
     public override bool HasUponPickupEffect => true;
 
@@ -36,8 +36,4 @@ public class EmptyLargeCapsule : CustomRelicModel
         );
 
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    public override string PackedIconPath =>
-        nameof(EmptyLargeCapsule).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath =>
-        nameof(EmptyLargeCapsule).ToSnakeCasePng().BigRelicImagePath();
 }

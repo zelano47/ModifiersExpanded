@@ -8,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
 [Pool(typeof(EventRelicPool))]
-public class InertEctoplasm : CustomRelicModel
+public class InertEctoplasm : AzRelic
 {
     public override decimal ModifyGoldGained(Player player, decimal amount) =>
         player == Owner ? 0m : amount;
@@ -24,8 +24,4 @@ public class InertEctoplasm : CustomRelicModel
     }
 
     public override RelicRarity Rarity => RelicRarity.Ancient;
-    public override string PackedIconPath =>
-        nameof(InertEctoplasm).ToSnakeCasePng().RelicImagePath();
-    protected override string BigIconPath =>
-        nameof(InertEctoplasm).ToSnakeCasePng().BigRelicImagePath();
 }
