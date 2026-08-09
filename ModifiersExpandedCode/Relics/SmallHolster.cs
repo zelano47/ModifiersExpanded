@@ -7,7 +7,6 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Relics;
 
-// TODO: FIX, DOESN'T WORK
 [Pool(typeof(EventRelicPool))]
 public class SmallHolster : CustomRelicModel
 {
