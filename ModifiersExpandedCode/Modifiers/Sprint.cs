@@ -7,12 +7,10 @@ using ModifiersExpanded.ModifiersExpandedCode.Map;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Sprint : ModifierModel
+public class Sprint : AzModifier
 {
     public override ActMap ModifyGeneratedMap(IRunState runState, ActMap map, int actIndex)
     {
         return new SprintMap(runState.Act.HasSecondBoss);
     }
-
-    protected override string IconPath => nameof(Sprint).ToSnakeCasePng().ModifierImagePath();
 }

@@ -8,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class LoneWolf : ModifierModel
+public class LoneWolf : AzModifier
 {
     // Scale initial enemies when entering a combat room.
     public override Task AfterRoomEntered(AbstractRoom room)
@@ -101,6 +101,4 @@ public class LoneWolf : ModifierModel
                 combatState.RunState.CurrentActIndex
             );
     }
-
-    protected override string IconPath => nameof(LoneWolf).ToSnakeCasePng().ModifierImagePath();
 }

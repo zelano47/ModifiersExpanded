@@ -6,7 +6,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Map;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Marathon : ModifierModel
+public class Marathon : AzModifier
 {
     public override ActMap ModifyGeneratedMap(IRunState runState, ActMap map, int actIndex)
     {
@@ -22,6 +22,4 @@ public class Marathon : ModifierModel
             runState.Act.HasSecondBoss
         );
     }
-
-    protected override string IconPath => nameof(Marathon).ToSnakeCasePng().ModifierImagePath();
 }

@@ -5,7 +5,9 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
-public class RelicSwap : ModifierModel
+namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
+
+public class RelicSwap : AzModifier
 {
     public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {
@@ -35,6 +37,4 @@ public class RelicSwap : ModifierModel
 
         await RelicCmd.Replace(original, replace.ToMutable());
     }
-
-    protected override string IconPath => nameof(RelicSwap).ToSnakeCasePng().ModifierImagePath();
 }

@@ -6,7 +6,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Polymath : ModifierModel
+public class Polymath : AzModifier
 {
     public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {
@@ -43,6 +43,4 @@ public class Polymath : ModifierModel
             await RelicCmd.Obtain(ModelDb.Relic<DivineRight>().ToMutable(), player);
         }
     }
-
-    protected override string IconPath => nameof(Polymath).ToSnakeCasePng().ModifierImagePath();
 }

@@ -12,7 +12,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class BodyDouble : ModifierModel
+public class BodyDouble : AzModifier
 {
     public override bool ClearsPlayerDeck => true;
 
@@ -79,6 +79,4 @@ public class BodyDouble : ModifierModel
         Func<CardModel, bool> filter = (CardModel c) => c.Type != CardType.Attack;
         return options.WithCardPoolsAndFilter(options.CardPools.ToList(), filter);
     }
-
-    protected override string IconPath => nameof(BodyDouble).ToSnakeCasePng().ModifierImagePath();
 }

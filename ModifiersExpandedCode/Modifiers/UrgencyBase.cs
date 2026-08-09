@@ -10,7 +10,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public abstract class UrgencyBase : ModifierModel
+public abstract class UrgencyBase : AzModifier
 {
     public virtual float TimeLimit { get; set; }
     public float StartTime { get; set; }
@@ -85,6 +85,4 @@ public abstract class UrgencyBase : ModifierModel
             }
         }
     }
-
-    protected override string IconPath => this.GetType().Name.ToSnakeCasePng().ModifierImagePath();
 }

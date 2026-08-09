@@ -8,7 +8,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class Phalanx : ModifierModel
+public class Phalanx : AzModifier
 {
     public override async Task AfterRoomEntered(AbstractRoom room)
     {
@@ -53,6 +53,4 @@ public class Phalanx : ModifierModel
             null
         );
     }
-
-    protected override string IconPath => nameof(Phalanx).ToSnakeCasePng().ModifierImagePath();
 }

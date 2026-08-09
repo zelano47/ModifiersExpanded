@@ -7,7 +7,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class ColorlessCards : ModifierModel
+public class ColorlessCards : AzModifier
 {
     protected override void AfterRunCreated(RunState runState)
     {
@@ -74,7 +74,4 @@ public class ColorlessCards : ModifierModel
             options.CardPoolFilter
         );
     }
-
-    protected override string IconPath =>
-        nameof(ColorlessCards).ToSnakeCasePng().ModifierImagePath();
 }

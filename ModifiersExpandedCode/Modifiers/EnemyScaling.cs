@@ -9,7 +9,9 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 using ModifiersExpanded.ModifiersExpandedCode.State;
 using ModifiersExpanded.ModifiersExpandedCode.Utils;
 
-public class EnemyScaling : ModifierModel
+namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
+
+public class EnemyScaling : AzModifier
 {
     EnemyScalingState State { get; } = EnemyScalingState.Instance;
 
@@ -160,6 +162,4 @@ public class EnemyScaling : ModifierModel
         // Example: base 2.0x with 50% easy-pool scaling => 1.5x.
         return 1m + (multiplier - 1m) * easyPoolScalingRatio;
     }
-
-    protected override string IconPath => this.GetType().Name.ToSnakeCasePng().ModifierImagePath();
 }

@@ -51,6 +51,7 @@ public class ModelDbPatches
                 ModelDb.Modifier<HighRoller>(),
                 ModelDb.Modifier<Sprint>(),
                 ModelDb.Modifier<EnemyScaling>(),
+                ModelDb.Modifier<NeowsCondemnation>(),
             };
             __result = patched;
         }

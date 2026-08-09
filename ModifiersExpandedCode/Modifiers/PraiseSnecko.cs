@@ -5,7 +5,7 @@ using ModifiersExpanded.ModifiersExpandedCode.Extensions;
 
 namespace ModifiersExpanded.ModifiersExpandedCode.Modifiers;
 
-public class PraiseSnecko : ModifierModel
+public class PraiseSnecko : AzModifier
 {
     public override Func<Task> GenerateNeowOption(EventModel eventModel)
     {
@@ -19,6 +19,4 @@ public class PraiseSnecko : ModifierModel
             return;
         await RelicCmd.Obtain(ModelDb.Relic<SneckoEye>().ToMutable(), player);
     }
-
-    protected override string IconPath => nameof(PraiseSnecko).ToSnakeCasePng().ModifierImagePath();
 }
