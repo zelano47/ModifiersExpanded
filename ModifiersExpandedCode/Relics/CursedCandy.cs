@@ -34,6 +34,7 @@ public class CursedCandy : CustomRelicModel
             return Task.CompletedTask;
         }
         CombatsSeen++;
+        InvokeDisplayAmountChanged();
         return Task.CompletedTask;
     }
 

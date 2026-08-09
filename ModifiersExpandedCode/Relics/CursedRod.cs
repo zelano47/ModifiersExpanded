@@ -25,6 +25,7 @@ public class CursedRod : CustomRelicModel
             return Task.CompletedTask;
         }
         CombatsSeen++;
+        InvokeDisplayAmountChanged();
         if (CombatsSeen % _invokeAfterNumCombats == 0)
         {
             Flash();
