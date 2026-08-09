@@ -21,7 +21,7 @@ public class CursedMask : CustomRelicModel
         ICombatState combatState
     )
     {
-        if (player != Owner || Owner.PlayerCombatState?.TurnNumber > 1)
+        if (player != Owner || Owner.PlayerCombatState.TurnNumber > 1)
         {
             return;
         }
@@ -37,7 +37,8 @@ public class CursedMask : CustomRelicModel
 
         CardModel power = player.RunState.Rng.CombatCardSelection.NextItem(powers)!;
         Flash();
-        power.EnergyCost.AddUntilPlayed(2);
+        power.EnergyCost.AddThisTurnOrUntilPlayed(2);
+        power.InvokeEnergyCostChanged();
         await CardPileCmd.Add(power, PileType.Hand);
     }
 
