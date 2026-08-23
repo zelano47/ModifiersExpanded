@@ -48,5 +48,7 @@
   "MODIFIERSEXPANDED-ENEMY_SCALING.title": "エネミースケーリング",
   "MODIFIERSEXPANDED-ENEMY_SCALING.description": "敵の難易度スケーリングをカスタムする。",
   "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.title": "ネオーの断罪",
-  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "ラン開始時、マイナス効果を持つレリック[red]3[/red]つの中から[red]1[/red]つを選ぶ。"
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "ラン開始時、マイナス効果を持つレリック[red]3[/red]つの中から[red]1[/red]つを選ぶ。",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.title": "ダブルトラブル",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.description": "各章の最後にボス [red]2[/red] 体と戦う。"
 }

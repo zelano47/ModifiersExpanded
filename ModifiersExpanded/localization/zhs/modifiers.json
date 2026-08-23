@@ -48,5 +48,7 @@
   "MODIFIERSEXPANDED-ENEMY_SCALING.title": "敌人缩放",
   "MODIFIERSEXPANDED-ENEMY_SCALING.description": "自定义敌人的难度缩放。",
   "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.title": "涅奥的谴责",
-  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "在你的冒险开始时，选择 [red]1[/red] / [red]3[/red] 件负面遗物。"
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "在你的冒险开始时，选择 [red]1[/red] / [red]3[/red] 件负面遗物。",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.title": "成双成对",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.description": "在每幕结尾与 [red]2[/red] 个首领战斗。"
 }

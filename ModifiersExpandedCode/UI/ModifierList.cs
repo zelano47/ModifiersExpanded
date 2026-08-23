@@ -39,7 +39,8 @@ public static class ModifierList
         (
             "MAP_MODIFIERS",
             false,
-            m => m is BigGameHunter or Marathon or DeadlyEvents or Flight or Sprint,
+            m =>
+                m is BigGameHunter or Marathon or DeadlyEvents or Flight or Sprint or DoubleTrouble,
             m => m is Marathon or Sprint
         ),
         (

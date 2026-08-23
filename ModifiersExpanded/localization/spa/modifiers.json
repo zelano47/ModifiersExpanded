@@ -48,5 +48,7 @@
   "MODIFIERSEXPANDED-ENEMY_SCALING.title": "Escalado de enemigos",
   "MODIFIERSEXPANDED-ENEMY_SCALING.description": "Ajuste personalizado de la dificultad de los enemigos.",
   "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.title": "Condena de Neow",
-  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "Al comienzo de la partida, elige [red]1[/red] de [red]3[/red] reliquias negativas."
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "Al comienzo de la partida, elige [red]1[/red] de [red]3[/red] reliquias negativas.",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.title": "Doble problema",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.description": "Lucha contra [red]2[/red] Jefes al final de cada Acto."
 }

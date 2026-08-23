@@ -48,5 +48,7 @@
   "MODIFIERSEXPANDED-ENEMY_SCALING.title": "Масштабирование врагов",
   "MODIFIERSEXPANDED-ENEMY_SCALING.description": "Настраиваемое масштабирование сложности врагов.",
   "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.title": "Осуждение Неов",
-  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "В начале забега выберите [red]1[/red] из [red]3[/red] отрицательных реликвий."
+  "MODIFIERSEXPANDED-NEOWS_CONDEMNATION.description": "В начале забега выберите [red]1[/red] из [red]3[/red] отрицательных реликвий.",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.title": "Двойная беда",
+  "MODIFIERSEXPANDED-DOUBLE_TROUBLE.description": "Сразитесь с [red]2[/red] Боссами в конце каждого Акта."
 }
